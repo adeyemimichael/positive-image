@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
-import Input from '../components/UI/Input';
-import Select from '../components/UI/Select';
-import TextArea from '../components/UI/TextArea';
-import Button from '../components/UI/Button';
+import Input from '../components/ui/Input';
+import Select from '../components/ui/Select';
+import TextArea from '../components/ui/TextArea';
+import Button from '../components/ui/Button';
 import { Student } from '../types';
 import { generateId } from '../utils/helpers';
 

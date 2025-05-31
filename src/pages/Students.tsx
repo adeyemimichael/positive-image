@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { Search, ChevronDown, ChevronUp } from 'lucide-react';
 import { students } from '../data/mock-data';
 import { Student } from '../types';
-import Card from '../components/UI/Card';
-import Input from '../components/UI/Input';
+import Card from '../components/ui/Card';
+import Input from '../components/ui/Input';
 import { formatDate, filterArrayBySearchTerm } from '../utils/helpers';
 
 const Students: React.FC = () => {

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
-import Input from '../components/UI/Input';
-import TextArea from '../components/UI/TextArea';
-import Button from '../components/UI/Button';
+import Input from '../components/ui/Input';
+import TextArea from '../components/ui/TextArea';
+import Button from '../components/ui/Button';
 import { ContactMessage } from '../types';
 import { generateId } from '../utils/helpers';
 

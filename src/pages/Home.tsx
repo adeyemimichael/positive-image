@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { BookOpen, Users, Award, UserPlus, ChevronLeft, ChevronRight } from 'lucide-react';
-import Button from '../components/UI/Button';
-import Card from '../components/UI/Card';
+import Button from '../components/ui/Button';
+import Card from '../components/ui/Card';
 
 const Home: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -95,7 +95,7 @@ const Home: React.FC = () => {
               variants={fadeInUp}
               className="text-xl text-white/90 mb-8"
             >
-              Nurturing minds, building character, and creating future leaders in Amuloko, Ibadan.
+              Nurturing minds, building character, and creating future leaders.
             </motion.p>
             <motion.div 
               variants={fadeInUp}

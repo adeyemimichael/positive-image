@@ -3,8 +3,8 @@ import { motion } from 'framer-motion';
 import { Search, Mail } from 'lucide-react';
 import { teachers } from '../data/mock-data';
 import { Teacher } from '../types';
-import Card from '../components/UI/Card';
-import Input from '../components/UI/Input';
+import Card from '../components/ui/Card';
+import Input from '../components/ui/Input';
 import { filterArrayBySearchTerm } from '../utils/helpers';
 
 const Teachers: React.FC = () => {
