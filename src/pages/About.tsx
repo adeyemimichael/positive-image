@@ -136,6 +136,211 @@ const About: React.FC = () => {
         </div>
       </section>
 
+      {/* School Anthem Section */}
+      <section className="py-20 bg-gradient-to-br from-primary-50 to-secondary-50">
+        <div className="container mx-auto px-4">
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeIn}
+            className="text-center max-w-4xl mx-auto mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-primary-700 mb-4">
+              Our School Anthem
+            </h2>
+            <p className="text-gray-600 text-lg">
+              The song that unites us all and embodies our school spirit and values.
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-12 items-start">
+            {/* Anthem Lyrics */}
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeIn}
+              className="bg-white rounded-2xl shadow-xl p-8 border border-primary-100"
+            >
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-heading font-bold text-primary-700 mb-2">
+                  "Rise Up, Positive Image"
+                </h3>
+                <p className="text-gray-600 italic">Official School Anthem</p>
+              </div>
+
+              <div className="space-y-6 text-gray-700 leading-relaxed">
+                <div className="text-center">
+                  <h4 className="font-semibold text-primary-600 mb-3">Verse 1:</h4>
+                  <p className="italic">
+                    In the heart of Amuloko we stand,<br />
+                    Positive Image, our cherished land,<br />
+                    With books in hand and dreams so bright,<br />
+                    We march forward into the light.
+                  </p>
+                </div>
+
+                <div className="text-center bg-primary-50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-primary-600 mb-3">Chorus:</h4>
+                  <p className="italic font-medium">
+                    Rise up, rise up, Positive Image strong,<br />
+                    Together we sing our victory song,<br />
+                    Excellence, integrity, our guiding way,<br />
+                    Building tomorrow, starting today!
+                  </p>
+                </div>
+
+                <div className="text-center">
+                  <h4 className="font-semibold text-primary-600 mb-3">Verse 2:</h4>
+                  <p className="italic">
+                    Teachers guide us with wisdom true,<br />
+                    Knowledge and character, we pursue,<br />
+                    From nursery class to senior year,<br />
+                    We grow in strength, we persevere.
+                  </p>
+                </div>
+
+                <div className="text-center bg-secondary-50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-secondary-600 mb-3">Bridge:</h4>
+                  <p className="italic">
+                    Green and white, our colors proud,<br />
+                    We lift our voices strong and loud,<br />
+                    Positive Image, forever we'll be,<br />
+                    United in our destiny!
+                  </p>
+                </div>
+
+                <div className="text-center text-sm text-gray-500 mt-8 pt-4 border-t border-gray-200">
+                  <p>Written by: Mrs. Adebayo Folake</p>
+                  <p>Composed by: Mr. Johnson Olumide</p>
+                  <p>© 2005 Positive Image Schools</p>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Media Player Section */}
+            <motion.div 
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeIn}
+              className="bg-white rounded-2xl shadow-xl p-8 border border-primary-100"
+            >
+              <div className="text-center mb-8">
+                <h3 className="text-2xl font-heading font-bold text-primary-700 mb-2">
+                  Listen to Our Anthem
+                </h3>
+                <p className="text-gray-600">Experience the spirit of Positive Image Schools</p>
+              </div>
+
+              {/* Custom Audio Player */}
+              <div className="bg-gradient-to-br from-primary-600 to-primary-700 rounded-2xl p-6 text-white mb-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h4 className="font-semibold text-lg">Positive Image Anthem</h4>
+                    <p className="text-primary-200 text-sm">School Choir Performance</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-primary-200 text-sm">Duration</p>
+                    <p className="font-semibold">3:45</p>
+                  </div>
+                </div>
+
+                {/* Audio Element */}
+                <audio 
+                  controls 
+                  className="w-full mb-4"
+                  style={{
+                    filter: 'invert(1) hue-rotate(180deg)',
+                    borderRadius: '8px'
+                  }}
+                >
+                  <source src="/audio/school-anthem.mp3" type="audio/mpeg" />
+                  <source src="/audio/school-anthem.ogg" type="audio/ogg" />
+                  Your browser does not support the audio element.
+                </audio>
+
+                <div className="flex items-center justify-between text-sm text-primary-200">
+                  <span>🎵 Recorded: 2023</span>
+                  <span>🎤 School Choir</span>
+                  <span>🎼 Live Performance</span>
+                </div>
+              </div>
+
+              {/* Additional Info */}
+              <div className="space-y-4">
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-semibold text-gray-800 mb-2">About This Recording</h4>
+                  <p className="text-gray-600 text-sm">
+                    This beautiful rendition was performed by our school choir during the 
+                    2023 Founders' Day celebration. The choir consists of 45 talented 
+                    students from various grade levels.
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="bg-primary-50 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-primary-600">45</div>
+                    <div className="text-sm text-gray-600">Choir Members</div>
+                  </div>
+                  <div className="bg-secondary-50 rounded-lg p-4 text-center">
+                    <div className="text-2xl font-bold text-secondary-600">18</div>
+                    <div className="text-sm text-gray-600">Years Sung</div>
+                  </div>
+                </div>
+
+                {/* Download Options */}
+                <div className="pt-4 border-t border-gray-200">
+                  <h4 className="font-semibold text-gray-800 mb-3">Download Options</h4>
+                  <div className="flex flex-wrap gap-2">
+                    <button className="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm hover:bg-primary-700 transition-colors">
+                      MP3 Format
+                    </button>
+                    <button className="px-4 py-2 bg-secondary-600 text-white rounded-lg text-sm hover:bg-secondary-700 transition-colors">
+                      Sheet Music
+                    </button>
+                    <button className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition-colors">
+                      Lyrics PDF
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Anthem Performance Schedule */}
+          <motion.div 
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeIn}
+            className="mt-16 bg-white rounded-2xl shadow-lg p-8 border border-primary-100"
+          >
+            <h3 className="text-2xl font-heading font-bold text-primary-700 mb-6 text-center">
+              When We Sing Our Anthem
+            </h3>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="text-center p-4 bg-primary-50 rounded-lg">
+                <div className="text-3xl mb-2">🌅</div>
+                <h4 className="font-semibold text-primary-700">Morning Assembly</h4>
+                <p className="text-gray-600 text-sm">Every school day at 7:45 AM</p>
+              </div>
+              <div className="text-center p-4 bg-secondary-50 rounded-lg">
+                <div className="text-3xl mb-2">🎉</div>
+                <h4 className="font-semibold text-secondary-700">Special Events</h4>
+                <p className="text-gray-600 text-sm">Graduations, Sports Day, Cultural Day</p>
+              </div>
+              <div className="text-center p-4 bg-green-50 rounded-lg">
+                <div className="text-3xl mb-2">🏆</div>
+                <h4 className="font-semibold text-green-700">Achievements</h4>
+                <p className="text-gray-600 text-sm">Award ceremonies and celebrations</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* Key Information */}
       <section className="py-20">
         <div className="container mx-auto px-4">
