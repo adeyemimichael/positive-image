@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, GraduationCap } from 'lucide-react';
 import { motion } from 'framer-motion';
 
+
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -48,17 +49,45 @@ const Header: React.FC = () => {
         }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <Link to="/" className="flex items-center">
-          <GraduationCap
-            size={36}
-            className={`${scrolled ? 'text-primary-700' : 'text-white'} mr-2`}
-          />
-          <span
-            className={`font-heading font-bold text-xl ${scrolled ? 'text-primary-700' : 'text-white'
-              }`}
-          >
-            Positive Image Schools
-          </span>
+        <Link to="/" className="flex items-center group">
+          {/* Logo Image */}
+          <div className="relative">
+            <img
+              src="/logo.png" // You can replace this with your actual logo path
+              alt="Positive Image Schools Logo"
+              className={`transition-all duration-300 ${
+                scrolled ? 'h-12 w-12' : 'h-14 w-14'
+              } object-contain mr-3 group-hover:scale-105`}
+              onError={(e) => {
+                // Fallback to icon if image fails to load
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              }}
+            />
+            {/* Fallback Icon (hidden by default) */}
+            <GraduationCap
+              size={scrolled ? 48 : 56}
+              className={`hidden ${scrolled ? 'text-[#1B1464]' : 'text-white'} mr-3 group-hover:scale-105 transition-all duration-300`}
+            />
+          </div>
+          
+          {/* School Name */}
+          <div className="flex flex-col">
+            <span
+              className={`font-heading font-bold transition-all duration-300 ${
+                scrolled ? 'text-[#1B1464] text-lg' : 'text-white text-xl'
+              } leading-tight`}
+            >
+              Positive Image Schools
+            </span>
+            <span
+              className={`font-medium transition-all duration-300 ${
+                scrolled ? 'text-[#6FC1FF] text-xs' : 'text-[#FFF4B2] text-sm'
+              } leading-tight`}
+            >
+              Excellence in Education
+            </span>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}
@@ -69,9 +98,9 @@ const Header: React.FC = () => {
                 key={link.path}
                 to={link.path}
                 className={`font-medium transition-colors duration-200 ${scrolled
-                  ? 'text-gray-800 hover:text-primary-600'
-                  : 'text-white hover:text-secondary-300'
-                  } ${location.pathname === link.path ? 'border-b-2 border-secondary-500' : ''}`}
+                  ? 'text-[#1B1464] hover:text-[#D6261D]'
+                  : 'text-white hover:text-[#FFF4B2]'
+                  } ${location.pathname === link.path ? 'border-b-2 border-[#6FC1FF]' : ''}`}
               >
                 {link.name}
               </Link>
@@ -80,8 +109,8 @@ const Header: React.FC = () => {
           <Link
             to="/register"
             className={`px-6 py-2 rounded-full font-medium transition-all duration-200 ${scrolled
-              ? 'bg-primary-600 text-white hover:bg-primary-700'
-              : 'bg-secondary-500 text-white hover:bg-secondary-600'
+              ? 'bg-[#D6261D] text-white hover:bg-[#D6261D]/90'
+              : 'bg-[#FFF4B2] text-[#1B1464] hover:bg-[#FFF4B2]/90'
               } shadow-lg hover:shadow-xl transform hover:scale-105`}
           >
             Register Now
@@ -92,7 +121,7 @@ const Header: React.FC = () => {
         <div className="md:hidden">
           <button
             onClick={toggleMenu}
-            className={`p-2 focus:outline-none ${scrolled ? 'text-gray-800' : 'text-white'
+            className={`p-2 focus:outline-none ${scrolled ? 'text-[#1B1464]' : 'text-white'
               }`}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -115,7 +144,7 @@ const Header: React.FC = () => {
                 <Link
                   key={link.path}
                   to={link.path}
-                  className={`font-medium py-2 transition-colors duration-200 text-gray-800 hover:text-primary-600 ${location.pathname === link.path ? 'text-primary-600 font-semibold' : ''
+                  className={`font-medium py-2 transition-colors duration-200 text-[#1B1464] hover:text-[#D6261D] ${location.pathname === link.path ? 'text-[#D6261D] font-semibold' : ''
                     }`}
                 >
                   {link.name}
@@ -123,7 +152,7 @@ const Header: React.FC = () => {
               ))}
               <Link
                 to="/register"
-                className="bg-primary-600 text-white px-6 py-3 rounded-full font-medium text-center hover:bg-primary-700 transition-colors duration-200 mt-4"
+                className="bg-[#D6261D] text-white px-6 py-3 rounded-full font-medium text-center hover:bg-[#D6261D]/90 transition-colors duration-200 mt-4"
               >
                 Register Now
               </Link>

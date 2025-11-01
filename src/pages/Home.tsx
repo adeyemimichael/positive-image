@@ -10,28 +10,28 @@ const Home: React.FC = () => {
 
   const schoolContent = [
     {
-      url: 'https://images.pexels.com/photos/8617557/pexels-photo-8617557.jpeg',
-      caption: 'Our Modern Campus',
+      url: '/ceo2.jpg',
+      caption: 'Dedicated staffs',
       title: 'Welcome to Positive Image Schools',
       subtitle: 'Where Excellence Meets Innovation',
       description: 'Nurturing minds, building character, and creating future leaders in our state-of-the-art facilities.'
     },
     {
-      url: 'https://images.pexels.com/photos/8617960/pexels-photo-8617960.jpeg',
-      caption: 'State-of-the-art Library',
+      url: '/outing3.jpg',
+      caption: 'Events',
       title: 'Discover Knowledge at Positive Image Schools',
       subtitle: 'Your Gateway to Academic Excellence',
       description: 'Empowering students with world-class resources and innovative learning environments.'
     },
     {
-      url: 'https://images.pexels.com/photos/8617914/pexels-photo-8617914.jpeg',
+      url: '/asa2.JPG',
       caption: 'Science Laboratory',
       title: 'Explore Science at Positive Image Schools',
       subtitle: 'Where Curiosity Meets Discovery',
       description: 'Inspiring the next generation of scientists, innovators, and critical thinkers.'
     },
     {
-      url: 'https://images.pexels.com/photos/8617477/pexels-photo-8617477.jpeg',
+      url: '/students.jpg',
       caption: 'Sports Facilities',
       title: 'Achieve Greatness at Positive Image Schools',
       subtitle: 'Building Champions in Every Field',
@@ -78,129 +78,153 @@ const Home: React.FC = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative h-screen bg-gradient-to-r from-primary-800 to-primary-700 flex items-center overflow-hidden">
+      <section className="relative h-screen bg-[#1B1464] to-[#D6261D] flex items-center overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute inset-0 bg-[url('https://images.pexels.com/photos/8617557/pexels-photo-8617557.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')] bg-cover bg-center opacity-20"></div>
+          <div className="absolute inset-0 bg-[url('/asa.jpg')] bg-cover bg-center opacity-20"></div>
         </div>
 
         <div className="container mx-auto px-4 z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
-            <motion.div
-              initial="hidden"
-              animate="visible"
-              variants={{
-                hidden: { opacity: 0 },
-                visible: {
-                  opacity: 1,
-                  transition: {
-                    staggerChildren: 0.3
-                  }
-                }
-              }}
-              className="max-w-2xl"
-            >
-              <motion.h1
-                variants={fadeInUp}
-                className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white mb-4"
-              >
-                Welcome to <span className="text-secondary-400">Positive Image Schools</span>
-              </motion.h1>
-              <motion.p
-                variants={fadeInUp}
-                className="text-xl text-white/90 mb-8"
-              >
-                Nurturing minds, building character, and creating future leaders.
-              </motion.p>
+            {/* Left Content - Animated Text */}
+            <div className="max-w-2xl">
+              {/* Animated Title */}
+              <div className="overflow-hidden mb-4">
+                <motion.h1
+                  key={`title-${currentSlide}`}
+                  initial={{ y: 100, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -100, opacity: 0 }}
+                  transition={{ duration: 0.8, ease: "easeOut" }}
+                  className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white"
+                >
+                  {schoolContent[currentSlide].title.split(' ').slice(0, -3).join(' ')}{' '}
+                  <span className="text-[#FFF4B2]">
+                    {schoolContent[currentSlide].title.split(' ').slice(-3).join(' ')}
+                  </span>
+                </motion.h1>
+              </div>
+
+              {/* Animated Subtitle */}
+              <div className="overflow-hidden mb-2">
+                <motion.h2
+                  key={`subtitle-${currentSlide}`}
+                  initial={{ y: 50, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -50, opacity: 0 }}
+                  transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
+                  className="text-2xl md:text-3xl font-heading font-semibold text-[#6FC1FF] mb-4"
+                >
+                  {schoolContent[currentSlide].subtitle}
+                </motion.h2>
+              </div>
+
+              {/* Animated Description */}
+              <div className="overflow-hidden mb-8">
+                <motion.p
+                  key={`description-${currentSlide}`}
+                  initial={{ y: 30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -30, opacity: 0 }}
+                  transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
+                  className="text-xl text-white/90"
+                >
+                  {schoolContent[currentSlide].description}
+                </motion.p>
+              </div>
+              {/* Animated Buttons */}
               <motion.div
-                variants={fadeInUp}
+                key={`buttons-${currentSlide}`}
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
                 className="flex flex-wrap gap-4"
               >
                 <Link to="/register">
-                  <Button variant="secondary" size="lg">
+                  <button className="px-8 py-4 bg-[#FFF4B2] text-[#1B1464] rounded-full font-bold text-lg hover:bg-[#FFF4B2]/90 transition-all duration-300 shadow-lg transform hover:scale-105">
                     Enroll Now
-                  </Button>
+                  </button>
                 </Link>
                 <Link to="/about">
-                  <Button variant="outline" size="lg" className="bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white/20">
+                  <button className="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white text-white rounded-full font-semibold hover:bg-white/20 transition-all duration-300">
                     Learn More
-                  </Button>
+                  </button>
                 </Link>
               </motion.div>
-            </motion.div>
+            </div>
 
-            {/* Right Side - Irregular Circular Image Slider */}
+            {/* Right Side - Bigger Organic Bubble Image Slider */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8, x: 100 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
               transition={{ duration: 1, delay: 0.5 }}
               className="relative hidden lg:block"
             >
-              {/* Organic Bubble Container */}
-              <div className="relative w-[550px] h-[550px] mx-auto">
-                {/* Enhanced Background Decorative Shapes */}
-                <div className="absolute -top-12 -left-12 w-40 h-40 bg-gradient-to-br from-secondary-400/30 to-secondary-300/20 rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute -bottom-16 -right-16 w-48 h-48 bg-gradient-to-br from-primary-300/25 to-primary-400/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
-                <div className="absolute top-1/3 -left-16 w-32 h-32 bg-gradient-to-br from-secondary-500/35 to-secondary-400/20 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2.5s' }}></div>
-                <div className="absolute top-1/5 -right-8 w-28 h-28 bg-gradient-to-br from-primary-400/30 to-primary-300/20 rounded-full blur-xl animate-pulse" style={{ animationDelay: '0.8s' }}></div>
-                <div className="absolute bottom-1/4 right-1/4 w-24 h-24 bg-gradient-to-br from-yellow-400/20 to-yellow-300/15 rounded-full blur-lg animate-pulse" style={{ animationDelay: '3s' }}></div>
+              {/* Larger Organic Bubble Container */}
+              <div className="relative w-[650px] h-[650px] mx-auto">
+                {/* Enhanced Background Decorative Shapes with Brand Colors */}
+                <div className="absolute -top-16 -left-16 w-48 h-48 bg-gradient-to-br from-[#6FC1FF]/30 to-[#6FC1FF]/20 rounded-full blur-3xl animate-pulse"></div>
+                <div className="absolute -bottom-20 -right-20 w-56 h-56 bg-gradient-to-br from-[#D6261D]/25 to-[#D6261D]/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+                <div className="absolute top-1/3 -left-20 w-40 h-40 bg-gradient-to-br from-[#FFF4B2]/35 to-[#FFF4B2]/20 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2.5s' }}></div>
+                <div className="absolute top-1/5 -right-12 w-36 h-36 bg-gradient-to-br from-[#1B1464]/30 to-[#1B1464]/20 rounded-full blur-xl animate-pulse" style={{ animationDelay: '0.8s' }}></div>
+                <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-gradient-to-br from-[#6FC1FF]/25 to-[#6FC1FF]/15 rounded-full blur-lg animate-pulse" style={{ animationDelay: '3s' }}></div>
 
-                {/* Main Organic Bubble Shape */}
+                {/* Main Larger Organic Bubble Shape */}
                 <div
                   className="relative w-full h-full overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-all duration-1000 group"
                   style={{
                     borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
-                    background: 'linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.05) 100%)',
+                    background: 'linear-gradient(135deg, rgba(255,244,178,0.2) 0%, rgba(111,193,255,0.1) 50%, rgba(255,255,255,0.05) 100%)',
                     backdropFilter: 'blur(20px)',
-                    border: '4px solid rgba(255,255,255,0.3)',
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+                    border: '4px solid rgba(255,244,178,0.4)',
+                    boxShadow: '0 25px 50px -12px rgba(27, 20, 100, 0.25), inset 0 1px 0 rgba(255, 244, 178, 0.3)'
                   }}
                 >
-                  {/* Inner glow effect */}
+                  {/* Inner glow effect with brand colors */}
                   <div
                     className="absolute inset-2 rounded-full opacity-50"
                     style={{
                       borderRadius: '60% 40% 30% 70% / 60% 30% 70% 40%',
-                      background: 'linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%)',
+                      background: 'linear-gradient(135deg, rgba(111,193,255,0.1) 0%, transparent 50%)',
                     }}
                   ></div>
-                  {/* Image Slider */}
+                  {/* Synced Image Slider */}
                   <div className="relative w-full h-full">
-                    {schoolImages.map((image, index) => (
+                    {schoolContent.map((content, index) => (
                       <motion.div
                         key={index}
                         initial={{ opacity: 0 }}
                         animate={{
                           opacity: currentSlide === index ? 1 : 0,
-                          scale: currentSlide === index ? 1 : 1.1
+                          scale: currentSlide === index ? 1 : 1.1,
+                          rotate: currentSlide === index ? 0 : 2
                         }}
-                        transition={{ duration: 0.8 }}
+                        transition={{ duration: 0.8, ease: "easeInOut" }}
                         className="absolute inset-0"
                       >
                         <img
-                          src={image.url}
-                          alt={image.caption}
+                          src={content.url}
+                          alt={content.caption}
                           className="w-full h-full object-cover"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#1B1464]/60 via-transparent to-transparent"></div>
                         <div className="absolute bottom-8 left-8 right-8">
-                          <div className="bg-black/40 backdrop-blur-sm rounded-2xl p-4 border border-white/20">
-                            <p className="text-white font-semibold text-xl text-center">{image.caption}</p>
+                          <div className="bg-[#1B1464]/60 backdrop-blur-sm rounded-2xl p-4 border border-[#FFF4B2]/30">
+                            <p className="text-[#FFF4B2] font-semibold text-xl text-center">{content.caption}</p>
                           </div>
                         </div>
                       </motion.div>
                     ))}
                   </div>
 
-                  {/* Enhanced Navigation Dots */}
+                  {/* Enhanced Navigation Dots with Brand Colors */}
                   <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 flex gap-4">
-                    {schoolImages.map((_, index) => (
+                    {schoolContent.map((_, index) => (
                       <button
                         key={index}
                         onClick={() => setCurrentSlide(index)}
                         className={`rounded-full transition-all duration-500 shadow-lg ${currentSlide === index
-                          ? 'w-12 h-4 bg-gradient-to-r from-secondary-400 to-secondary-500 shadow-secondary-400/50'
-                          : 'w-4 h-4 bg-white/60 hover:bg-white/80 hover:scale-110'
+                          ? 'w-12 h-4 bg-gradient-to-r from-[#FFF4B2] to-[#6FC1FF] shadow-[#FFF4B2]/50'
+                          : 'w-4 h-4 bg-white/60 hover:bg-[#6FC1FF]/80 hover:scale-110'
                           }`}
                       />
                     ))}
@@ -214,7 +238,7 @@ const Home: React.FC = () => {
                     className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10"
                   >
                     <button className="w-16 h-16 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all duration-300 group">
-                      <div className="w-0 h-0 border-l-[12px] border-l-primary-600 border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent ml-1 group-hover:border-l-primary-700"></div>
+                      <div className="w-0 h-0 border-l-[12px] border-l-[#1B1464] border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent ml-1 group-hover:border-l-[#D6261D]"></div>
                     </button>
                   </motion.div>
                 </div>
@@ -227,8 +251,8 @@ const Home: React.FC = () => {
                   className="absolute -top-12 -right-12 bg-white/95 backdrop-blur-sm rounded-3xl p-5 shadow-2xl transform hover:scale-110 transition-all duration-300"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-primary-100 to-primary-200 rounded-full flex items-center justify-center shadow-lg">
-                      <Users size={28} className="text-primary-600" />
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#6FC1FF]/20 to-[#6FC1FF]/40 rounded-full flex items-center justify-center shadow-lg">
+                      <Users size={28} className="text-[#1B1464]" />
                     </div>
                     <div>
                       <p className="text-lg font-bold text-gray-800">1000+</p>
@@ -244,8 +268,8 @@ const Home: React.FC = () => {
                   className="absolute -bottom-12 -left-12 bg-white/95 backdrop-blur-sm rounded-3xl p-5 shadow-2xl transform hover:scale-110 transition-all duration-300"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-secondary-100 to-secondary-200 rounded-full flex items-center justify-center shadow-lg">
-                      <Award size={28} className="text-secondary-600" />
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#FFF4B2]/60 to-[#FFF4B2]/80 rounded-full flex items-center justify-center shadow-lg">
+                      <Award size={28} className="text-[#D6261D]" />
                     </div>
                     <div>
                       <p className="text-lg font-bold text-gray-800">15+</p>
@@ -261,8 +285,8 @@ const Home: React.FC = () => {
                   className="absolute top-1/2 -left-16 transform -translate-y-1/2 bg-white/95 backdrop-blur-sm rounded-3xl p-5 shadow-2xl hover:scale-110 transition-all duration-300"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center shadow-lg">
-                      <BookOpen size={28} className="text-green-600" />
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#6FC1FF]/20 to-[#6FC1FF]/40 rounded-full flex items-center justify-center shadow-lg">
+                      <BookOpen size={28} className="text-[#1B1464]" />
                     </div>
                     <div>
                       <p className="text-lg font-bold text-gray-800">25+</p>
@@ -278,8 +302,8 @@ const Home: React.FC = () => {
                   className="absolute top-1/4 -right-16 bg-white/95 backdrop-blur-sm rounded-3xl p-5 shadow-2xl hover:scale-110 transition-all duration-300"
                 >
                   <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-purple-100 to-purple-200 rounded-full flex items-center justify-center shadow-lg">
-                      <UserPlus size={28} className="text-purple-600" />
+                    <div className="w-14 h-14 bg-gradient-to-br from-[#FFF4B2]/60 to-[#FFF4B2]/80 rounded-full flex items-center justify-center shadow-lg">
+                      <UserPlus size={28} className="text-[#D6261D]" />
                     </div>
                     <div>
                       <p className="text-lg font-bold text-gray-800">50+</p>
@@ -332,12 +356,12 @@ const Home: React.FC = () => {
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
-                src={schoolImages[currentSlide].url}
-                alt={schoolImages[currentSlide].caption}
+                src={schoolContent[currentSlide].url}
+                alt={schoolContent[currentSlide].caption}
                 className="w-full h-full object-cover"
               />
-              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
-                <p className="text-white text-xl font-heading">{schoolImages[currentSlide].caption}</p>
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#1B1464]/70 to-transparent p-6">
+                <p className="text-[#FFF4B2] text-xl font-heading">{schoolContent[currentSlide].caption}</p>
               </div>
             </div>
 
@@ -355,11 +379,11 @@ const Home: React.FC = () => {
             </button>
 
             <div className="flex justify-center mt-4 gap-2">
-              {schoolImages.map((_, index) => (
+              {schoolContent.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all ${currentSlide === index ? 'bg-primary-700 w-6' : 'bg-gray-300'
+                  className={`w-3 h-3 rounded-full transition-all ${currentSlide === index ? 'bg-[#1B1464] w-6' : 'bg-gray-300'
                     }`}
                 />
               ))}
@@ -584,6 +608,233 @@ const Home: React.FC = () => {
         </div>
       </section>
 
+
+      {/* Announcements Section */}
+      <section className="py-20 bg-gradient-to-br from-gray-50 to-[#6FC1FF]/10">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            className="text-center mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-[#1B1464] mb-4">
+              Latest Announcements
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Stay updated with the latest news, events, and important information from Positive Image Schools
+            </p>
+          </motion.div>
+
+          <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* Featured Announcement */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={fadeInUp}
+              className="bg-white rounded-2xl shadow-xl overflow-hidden border border-[#6FC1FF]/20"
+            >
+              <div className="relative h-64 overflow-hidden">
+                <img
+                  src="https://images.pexels.com/photos/8617557/pexels-photo-8617557.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  alt="School Event"
+                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute top-4 left-4">
+                  <span className="bg-[#D6261D] text-white px-3 py-1 rounded-full text-sm font-semibold">
+                    URGENT
+                  </span>
+                </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+              </div>
+              <div className="p-6">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-2 h-2 bg-[#D6261D] rounded-full"></div>
+                  <span className="text-sm text-gray-500">December 15, 2024</span>
+                </div>
+                <h3 className="text-xl font-bold text-[#1B1464] mb-3">
+                  2025 Academic Session Registration Now Open!
+                </h3>
+                <p className="text-gray-600 mb-4 leading-relaxed">
+                  We are excited to announce that registration for the 2025 academic session is now open.
+                  Early bird discount of 15% available for registrations completed before January 31st, 2025.
+                </p>
+                <div className="flex items-center justify-between">
+                  <Link to="/register">
+                    <button className="bg-[#FFF4B2] text-[#1B1464] px-6 py-2 rounded-full font-semibold hover:bg-[#FFF4B2]/80 transition-colors">
+                      Register Now
+                    </button>
+                  </Link>
+                  <span className="text-sm text-[#6FC1FF] font-medium">Limited Spaces</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Announcements List */}
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              variants={staggerContainer}
+              className="space-y-6"
+            >
+              {/* Individual Announcement Cards */}
+              <motion.div
+                variants={fadeInUp}
+                className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#6FC1FF] hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-[#6FC1FF]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <BookOpen size={20} className="text-[#1B1464]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs text-gray-500">Dec 10, 2024</span>
+                      <span className="bg-[#6FC1FF]/20 text-[#1B1464] px-2 py-1 rounded text-xs font-medium">
+                        Academic
+                      </span>
+                    </div>
+                    <h4 className="font-semibold text-[#1B1464] mb-2">
+                      Mid-Term Examination Schedule Released
+                    </h4>
+                    <p className="text-gray-600 text-sm">
+                      The mid-term examination timetable for all classes has been published.
+                      Students and parents can download it from our portal.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                variants={fadeInUp}
+                className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#FFF4B2] hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-[#FFF4B2]/60 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Users size={20} className="text-[#D6261D]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs text-gray-500">Dec 8, 2024</span>
+                      <span className="bg-[#FFF4B2]/60 text-[#D6261D] px-2 py-1 rounded text-xs font-medium">
+                        Event
+                      </span>
+                    </div>
+                    <h4 className="font-semibold text-[#1B1464] mb-2">
+                      Annual Cultural Day - December 20th
+                    </h4>
+                    <p className="text-gray-600 text-sm">
+                      Join us for our annual cultural celebration featuring performances,
+                      traditional displays, and cultural exhibitions by our talented students.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                variants={fadeInUp}
+                className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#D6261D] hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-[#D6261D]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <Award size={20} className="text-[#D6261D]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs text-gray-500">Dec 5, 2024</span>
+                      <span className="bg-[#D6261D]/20 text-[#D6261D] px-2 py-1 rounded text-xs font-medium">
+                        Achievement
+                      </span>
+                    </div>
+                    <h4 className="font-semibold text-[#1B1464] mb-2">
+                      Students Win State Science Competition
+                    </h4>
+                    <p className="text-gray-600 text-sm">
+                      Congratulations to our SS2 students who emerged winners in the
+                      Oyo State Science and Technology Competition 2024.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div
+                variants={fadeInUp}
+                className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#6FC1FF] hover:shadow-xl transition-shadow duration-300"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 bg-[#6FC1FF]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                    <UserPlus size={20} className="text-[#1B1464]" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs text-gray-500">Dec 1, 2024</span>
+                      <span className="bg-[#6FC1FF]/20 text-[#1B1464] px-2 py-1 rounded text-xs font-medium">
+                        Notice
+                      </span>
+                    </div>
+                    <h4 className="font-semibold text-[#1B1464] mb-2">
+                      Parent-Teacher Conference Scheduled
+                    </h4>
+                    <p className="text-gray-600 text-sm">
+                      The first term parent-teacher conference is scheduled for December 18th.
+                      Please confirm your attendance with your child's class teacher.
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+
+              {/* View All Button */}
+              <motion.div
+                variants={fadeInUp}
+                className="text-center pt-4"
+              >
+                <button className="bg-[#1B1464] text-white px-8 py-3 rounded-full font-semibold hover:bg-[#1B1464]/90 transition-colors duration-300 shadow-lg">
+                  View All Announcements
+                </button>
+              </motion.div>
+            </motion.div>
+          </div>
+
+          {/* Quick Links */}
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+            className="mt-16 bg-gradient-to-r from-[#1B1464] to-[#D6261D] rounded-2xl p-8 text-white"
+          >
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold mb-2">Stay Connected</h3>
+              <p className="text-white/90">Never miss important updates from Positive Image Schools</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-6">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <BookOpen size={24} className="text-[#FFF4B2]" />
+                </div>
+                <h4 className="font-semibold mb-2">Academic Portal</h4>
+                <p className="text-sm text-white/80">Access grades, assignments, and academic resources</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Users size={24} className="text-[#FFF4B2]" />
+                </div>
+                <h4 className="font-semibold mb-2">Parent Portal</h4>
+                <p className="text-sm text-white/80">Stay updated on your child's progress and school events</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Award size={24} className="text-[#FFF4B2]" />
+                </div>
+                <h4 className="font-semibold mb-2">Newsletter</h4>
+                <p className="text-sm text-white/80">Subscribe to our monthly newsletter for updates</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-r from-primary-800 to-primary-800 text-white">
         <div className="container mx-auto px-4">
