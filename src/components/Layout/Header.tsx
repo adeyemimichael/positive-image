@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, GraduationCap } from 'lucide-react';
 import { motion } from 'framer-motion';
-
+import Logo from "./../../../public/logo.jpg"
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,11 +53,10 @@ const Header: React.FC = () => {
           {/* Logo Image */}
           <div className="relative">
             <img
-              src="/logo.png" // You can replace this with your actual logo path
+              src={Logo}
               alt="Positive Image Schools Logo"
-              className={`transition-all duration-300 ${
-                scrolled ? 'h-12 w-12' : 'h-14 w-14'
-              } object-contain mr-3 group-hover:scale-105`}
+              className={`transition-all duration-300 ${scrolled ? 'h-12 w-12' : 'h-14 w-14'
+                } object-contain mr-3 group-hover:scale-105`}
               onError={(e) => {
                 // Fallback to icon if image fails to load
                 e.currentTarget.style.display = 'none';
@@ -70,22 +69,20 @@ const Header: React.FC = () => {
               className={`hidden ${scrolled ? 'text-[#1B1464]' : 'text-white'} mr-3 group-hover:scale-105 transition-all duration-300`}
             />
           </div>
-          
+
           {/* School Name */}
           <div className="flex flex-col">
             <span
-              className={`font-heading font-bold transition-all duration-300 ${
-                scrolled ? 'text-[#1B1464] text-lg' : 'text-white text-xl'
-              } leading-tight`}
+              className={`font-heading font-bold transition-all duration-300 ${scrolled ? 'text-[#1B1464] text-lg' : 'text-white text-xl'
+                } leading-tight`}
             >
-              Positive Image Schools
+              Positive Image Group of Schools
             </span>
             <span
-              className={`font-medium transition-all duration-300 ${
-                scrolled ? 'text-[#6FC1FF] text-xs' : 'text-[#FFF4B2] text-sm'
-              } leading-tight`}
+              className={`font-medium transition-all duration-300 ${scrolled ? 'text-[#6FC1FF] text-md' : 'text-[#FFF4B2] text-sm'
+                } leading-tight`}
             >
-              Excellence in Education
+              The Real Image Maker
             </span>
           </div>
         </Link>

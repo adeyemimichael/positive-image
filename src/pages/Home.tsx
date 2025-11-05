@@ -131,42 +131,36 @@ const Home: React.FC = () => {
                   {schoolContent[currentSlide].description}
                 </motion.p>
               </div>
-              {/* Animated Buttons */}
-              <motion.div
-                key={`buttons-${currentSlide}`}
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-                className="flex flex-wrap gap-4"
-              >
+              {/* Static Call-to-Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 mt-8">
                 <Link to="/register">
-                  <button className="px-8 py-4 bg-[#FFF4B2] text-[#1B1464] rounded-full font-bold text-lg hover:bg-[#FFF4B2]/90 transition-all duration-300 shadow-lg transform hover:scale-105">
+                  <button className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-[#FFF4B2] text-[#1B1464] rounded-full font-bold text-base sm:text-lg hover:bg-[#FFF4B2]/90 transition-all duration-300 shadow-lg transform hover:scale-105">
                     Enroll Now
                   </button>
                 </Link>
                 <Link to="/about">
-                  <button className="px-8 py-4 bg-white/10 backdrop-blur-sm border-2 border-white text-white rounded-full font-semibold hover:bg-white/20 transition-all duration-300">
+                  <button className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-white/10 backdrop-blur-sm border-2 border-white text-white rounded-full font-semibold hover:bg-white/20 transition-all duration-300">
                     Learn More
                   </button>
                 </Link>
-              </motion.div>
+              </div>
             </div>
 
-            {/* Right Side - Bigger Organic Bubble Image Slider */}
+            {/* Right Side - Organic Bubble Image Slider */}
             <motion.div
               initial={{ opacity: 0, scale: 0.8, x: 100 }}
               animate={{ opacity: 1, scale: 1, x: 0 }}
               transition={{ duration: 1, delay: 0.5 }}
-              className="relative hidden lg:block"
+              className="relative mt-8 lg:mt-0"
             >
-              {/* Larger Organic Bubble Container */}
-              <div className="relative w-[650px] h-[650px] mx-auto">
-                {/* Enhanced Background Decorative Shapes with Brand Colors */}
-                <div className="absolute -top-16 -left-16 w-48 h-48 bg-gradient-to-br from-[#6FC1FF]/30 to-[#6FC1FF]/20 rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute -bottom-20 -right-20 w-56 h-56 bg-gradient-to-br from-[#D6261D]/25 to-[#D6261D]/15 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
-                <div className="absolute top-1/3 -left-20 w-40 h-40 bg-gradient-to-br from-[#FFF4B2]/35 to-[#FFF4B2]/20 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '2.5s' }}></div>
-                <div className="absolute top-1/5 -right-12 w-36 h-36 bg-gradient-to-br from-[#1B1464]/30 to-[#1B1464]/20 rounded-full blur-xl animate-pulse" style={{ animationDelay: '0.8s' }}></div>
-                <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-gradient-to-br from-[#6FC1FF]/25 to-[#6FC1FF]/15 rounded-full blur-lg animate-pulse" style={{ animationDelay: '3s' }}></div>
+              {/* Responsive Organic Bubble Container */}
+              <div className="relative w-[280px] h-[280px] sm:w-[350px] sm:h-[350px] lg:w-[450px] lg:h-[450px] xl:w-[500px] xl:h-[500px] mx-auto">
+                {/* Background Decorative Shapes - Reduced Size */}
+                <div className="absolute -top-12 -left-12 w-32 h-32 bg-gradient-to-br from-[#6FC1FF]/30 to-[#6FC1FF]/20 rounded-full blur-2xl animate-pulse"></div>
+                <div className="absolute -bottom-14 -right-14 w-36 h-36 bg-gradient-to-br from-[#D6261D]/25 to-[#D6261D]/15 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1.5s' }}></div>
+                <div className="absolute top-1/3 -left-14 w-28 h-28 bg-gradient-to-br from-[#FFF4B2]/35 to-[#FFF4B2]/20 rounded-full blur-xl animate-pulse" style={{ animationDelay: '2.5s' }}></div>
+                <div className="absolute top-1/5 -right-8 w-24 h-24 bg-gradient-to-br from-[#1B1464]/30 to-[#1B1464]/20 rounded-full blur-lg animate-pulse" style={{ animationDelay: '0.8s' }}></div>
+                <div className="absolute bottom-1/4 right-1/4 w-20 h-20 bg-gradient-to-br from-[#6FC1FF]/25 to-[#6FC1FF]/15 rounded-full blur-md animate-pulse" style={{ animationDelay: '3s' }}></div>
 
                 {/* Main Larger Organic Bubble Shape */}
                 <div
@@ -407,12 +401,12 @@ const Home: React.FC = () => {
               </p>
             </div>
 
-            {/* Bento Grid Layout */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
+            {/* Improved Bento Grid Layout */}
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4 max-w-6xl mx-auto">
               {/* Large featured image */}
               <motion.div
                 variants={fadeInUp}
-                className="col-span-2 row-span-2 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
+                className="col-span-2 md:col-span-3 row-span-2 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer min-h-[200px] md:min-h-[300px]"
               >
                 <img
                   src="https://images.pexels.com/photos/8617557/pexels-photo-8617557.jpeg?auto=compress&cs=tinysrgb&w=800"
@@ -426,10 +420,10 @@ const Home: React.FC = () => {
                 </div>
               </motion.div>
 
-              {/* Smaller images */}
+              {/* Medium images */}
               <motion.div
                 variants={fadeInUp}
-                className="relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
+                className="md:col-span-2 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
               >
                 <img
                   src="https://images.pexels.com/photos/8617960/pexels-photo-8617960.jpeg?auto=compress&cs=tinysrgb&w=400"
@@ -444,7 +438,7 @@ const Home: React.FC = () => {
 
               <motion.div
                 variants={fadeInUp}
-                className="relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
+                className="md:col-span-1 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
               >
                 <img
                   src="https://images.pexels.com/photos/8617914/pexels-photo-8617914.jpeg?auto=compress&cs=tinysrgb&w=400"
@@ -459,7 +453,7 @@ const Home: React.FC = () => {
 
               <motion.div
                 variants={fadeInUp}
-                className="relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
+                className="md:col-span-2 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
               >
                 <img
                   src="https://images.pexels.com/photos/8617477/pexels-photo-8617477.jpeg?auto=compress&cs=tinysrgb&w=400"
@@ -474,7 +468,7 @@ const Home: React.FC = () => {
 
               <motion.div
                 variants={fadeInUp}
-                className="relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
+                className="md:col-span-1 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
               >
                 <img
                   src="https://images.pexels.com/photos/8617704/pexels-photo-8617704.jpeg?auto=compress&cs=tinysrgb&w=400"
@@ -490,7 +484,7 @@ const Home: React.FC = () => {
               {/* Tall image */}
               <motion.div
                 variants={fadeInUp}
-                className="row-span-2 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
+                className="col-span-2 md:col-span-3 row-span-1 md:row-span-2 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer min-h-[150px] md:min-h-[200px]"
               >
                 <img
                   src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=400"
