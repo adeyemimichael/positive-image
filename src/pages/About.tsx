@@ -42,9 +42,9 @@ const About: React.FC = () => {
               variants={fadeIn}
             >
               <h2 className="text-3xl font-heading font-bold text-primary-700 mb-6">Our Story</h2>
-              <p className="text-gray-700 mb-4 leading-relaxed">
-                Positive Image Schools was founded in 2005 with a vision to provide quality education 
-                to children in Amuloko, Ibadan. What started as a small school with just three classrooms 
+              <p className="text-gray-700 text-lg mb-4 leading-relaxed">
+                Positive Image Schools was founded in 2003 with a vision to provide quality education 
+                to children in Ibadan. What started as a small school with just three classrooms 
                 has grown into a respected educational institution serving hundreds of students.
               </p>
               <p className="text-gray-700 mb-4 leading-relaxed">
@@ -65,7 +65,7 @@ const About: React.FC = () => {
               className="rounded-lg overflow-hidden shadow-xl"
             >
               <img 
-                src="https://images.pexels.com/photos/8617704/pexels-photo-8617704.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" 
+                src="./public/fullstaff.jpg" 
                 alt="School building" 
                 className="w-full h-full object-cover"
               />
@@ -165,7 +165,7 @@ const About: React.FC = () => {
             >
               <div className="text-center mb-8">
                 <h3 className="text-2xl font-heading font-bold text-primary-700 mb-2">
-                  "Rise Up, Positive Image"
+                  Positive Image"
                 </h3>
                 <p className="text-gray-600 italic">Official School Anthem</p>
               </div>
@@ -174,48 +174,43 @@ const About: React.FC = () => {
                 <div className="text-center">
                   <h4 className="font-semibold text-primary-600 mb-3">Verse 1:</h4>
                   <p className="italic">
-                    In the heart of Amuloko we stand,<br />
-                    Positive Image, our cherished land,<br />
-                    With books in hand and dreams so bright,<br />
-                    We march forward into the light.
+                   Positive! Positive!! Positive Image There I go, there you go<br/>
+                   Go to learn for life, May the God of Universe, Make me reach my goal,<br/> In future to become a future leader.
                   </p>
                 </div>
 
                 <div className="text-center bg-primary-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-primary-600 mb-3">Chorus:</h4>
+                  <h4 className="font-semibold text-primary-600 mb-3">Verse 2.</h4>
                   <p className="italic font-medium">
-                    Rise up, rise up, Positive Image strong,<br />
-                    Together we sing our victory song,<br />
-                    Excellence, integrity, our guiding way,<br />
-                    Building tomorrow, starting today!
+                    No matter what situation, I will still be there.<br/>
+                      Because I want to become Success in my life.<br/>
+                        No matter what devil say, No controversy,<br/>
+                          Positive! Positive!! Positive Image.
+
                   </p>
                 </div>
 
                 <div className="text-center">
-                  <h4 className="font-semibold text-primary-600 mb-3">Verse 2:</h4>
+                  <h4 className="font-semibold text-primary-600 mb-3">Verse 3.</h4>
                   <p className="italic">
-                    Teachers guide us with wisdom true,<br />
-                    Knowledge and character, we pursue,<br />
-                    From nursery class to senior year,<br />
-                    We grow in strength, we persevere.
+                    Proprietor, our teachers and our Parents Let us reason together,<br/>
+                    To make a progress. Payment of our School levies is our concern.<br/>
+                    Divided we fall, United we stand.
+
                   </p>
                 </div>
 
                 <div className="text-center bg-secondary-50 p-4 rounded-lg">
                   <h4 className="font-semibold text-secondary-600 mb-3">Bridge:</h4>
                   <p className="italic">
-                    Green and white, our colors proud,<br />
-                    We lift our voices strong and loud,<br />
-                    Positive Image, forever we'll be,<br />
-                    United in our destiny!
+                    Glory! Glory! Glory! Positive Image<br/>
+                      Wisdom embassy, Positive Image, No matter what devil say,<br/>
+                        We will overcome
+                          Overcome, Overcome, Positive Image.
                   </p>
                 </div>
 
-                <div className="text-center text-sm text-gray-500 mt-8 pt-4 border-t border-gray-200">
-                  <p>Written by: Mrs. Adebayo Folake</p>
-                  <p>Composed by: Mr. Johnson Olumide</p>
-                  <p>© 2005 Positive Image Schools</p>
-                </div>
+              
               </div>
             </motion.div>
 
@@ -274,18 +269,17 @@ const About: React.FC = () => {
                   <h4 className="font-semibold text-gray-800 mb-2">About This Recording</h4>
                   <p className="text-gray-600 text-sm">
                     This beautiful rendition was performed by our school choir during the 
-                    2023 Founders' Day celebration. The choir consists of 45 talented 
-                    students from various grade levels.
+                    2023 Founders' Day celebration. 
                   </p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="bg-primary-50 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-primary-600">45</div>
+                    <div className="text-2xl font-bold text-primary-600">15</div>
                     <div className="text-sm text-gray-600">Choir Members</div>
                   </div>
                   <div className="bg-secondary-50 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-secondary-600">18</div>
+                    <div className="text-2xl font-bold text-secondary-600">20+</div>
                     <div className="text-sm text-gray-600">Years Sung</div>
                   </div>
                 </div>
@@ -297,9 +291,7 @@ const About: React.FC = () => {
                     <button className="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm hover:bg-primary-700 transition-colors">
                       MP3 Format
                     </button>
-                    <button className="px-4 py-2 bg-secondary-600 text-white rounded-lg text-sm hover:bg-secondary-700 transition-colors">
-                      Sheet Music
-                    </button>
+                    
                     <button className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition-colors">
                       Lyrics PDF
                     </button>

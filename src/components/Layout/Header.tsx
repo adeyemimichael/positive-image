@@ -43,7 +43,7 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`fixed w-full z-50 transition-all duration-300 ${scrolled
+      className={`fixed w-full  z-50 transition-all duration-300 ${scrolled
         ? 'bg-white shadow-md py-6'
         : 'bg-transparent py-8'
         }`}
@@ -55,7 +55,7 @@ const Header: React.FC = () => {
             <img
               src={Logo}
               alt="Positive Image Schools Logo"
-              className={`transition-all duration-300 ${scrolled ? 'h-12 w-12' : 'h-14 w-14'
+              className={`transition-all duration-300 ${scrolled ? 'h-24 w-24' : 'h-24 w-24'
                 } object-contain mr-3 group-hover:scale-105`}
               onError={(e) => {
                 // Fallback to icon if image fails to load
@@ -71,9 +71,9 @@ const Header: React.FC = () => {
           </div>
 
           {/* School Name */}
-          <div className="flex flex-col">
+          <div className="md:flex flex-col hidden">
             <span
-              className={`font-heading font-bold transition-all duration-300 ${scrolled ? 'text-[#1B1464] text-lg' : 'text-white text-xl'
+              className={`font-heading font-bold transition-all duration-300 ${scrolled ? 'text-[#1B1464] md:text-2xl ' : 'text-white  md:text-2xl  '
                 } leading-tight`}
             >
               Positive Image Group of Schools
@@ -118,7 +118,7 @@ const Header: React.FC = () => {
         <div className="md:hidden">
           <button
             onClick={toggleMenu}
-            className={`p-2 focus:outline-none ${scrolled ? 'text-[#1B1464]' : 'text-white'
+            className={`p-2 focus:outline-none ${scrolled ? 'text-[#1B1464]' : 'text-[#1B1464]'
               }`}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}

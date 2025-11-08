@@ -78,12 +78,12 @@ const Home: React.FC = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative h-screen bg-[#1B1464] to-[#D6261D] flex items-center overflow-hidden">
-        <div className="absolute inset-0 overflow-hidden">
+      <section className="relative h-screen bg-[#1B1464] to-[#D6261D] flex items-center overflow-hidden md:my-0 mt-24">
+        <div className="absolute inset-0 overflow-hidden ">
           <div className="absolute inset-0 bg-[url('/asa.jpg')] bg-cover bg-center opacity-20"></div>
         </div>
 
-        <div className="container mx-auto px-4 z-10">
+        <div className="container mx-auto px-4 z-10 ">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Content - Animated Text */}
             <div className="max-w-2xl">
@@ -225,7 +225,7 @@ const Home: React.FC = () => {
                   </div>
 
                   {/* Floating Play Button */}
-                  <motion.div
+                  {/* <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ duration: 0.5, delay: 2 }}
@@ -234,7 +234,7 @@ const Home: React.FC = () => {
                     <button className="w-16 h-16 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-2xl hover:scale-110 transition-all duration-300 group">
                       <div className="w-0 h-0 border-l-[12px] border-l-[#1B1464] border-t-[8px] border-t-transparent border-b-[8px] border-b-transparent ml-1 group-hover:border-l-[#D6261D]"></div>
                     </button>
-                  </motion.div>
+                  </motion.div> */}
                 </div>
 
                 {/* Floating Info Cards - Repositioned for larger bubble */}
@@ -266,7 +266,7 @@ const Home: React.FC = () => {
                       <Award size={28} className="text-[#D6261D]" />
                     </div>
                     <div>
-                      <p className="text-lg font-bold text-gray-800">15+</p>
+                      <p className="text-lg font-bold text-gray-800">10+</p>
                       <p className="text-sm text-gray-600">Awards</p>
                     </div>
                   </div>
@@ -283,7 +283,7 @@ const Home: React.FC = () => {
                       <BookOpen size={28} className="text-[#1B1464]" />
                     </div>
                     <div>
-                      <p className="text-lg font-bold text-gray-800">25+</p>
+                      <p className="text-lg font-bold text-gray-800">20+</p>
                       <p className="text-sm text-gray-600">Years</p>
                     </div>
                   </div>
