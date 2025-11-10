@@ -6,8 +6,10 @@ import About from './pages/About';
 import Register from './pages/Register';
 import Teachers from './pages/Teachers';
 import Contact from './pages/Contact';
-import Managements from './pages/Mangements';
+import Management from './pages/Mangements';
 import Gallery from './pages/Gallery';
+import Payment from './pages/Payment';
+import RegistrationSuccess from './pages/RegistrationSuccess';
 
 function App() {
   return (
@@ -17,10 +19,12 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/management" element={<Managements />} />
+          <Route path="/management" element={<Management />} />
           <Route path="/teachers" element={<Teachers />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/gallery" element={<Gallery />} />
+          <Route path="/payment" element={<Payment />} />
+          <Route path="/registration-success" element={<RegistrationSuccess />} />
         </Routes>
       </Layout>
     </Router>
