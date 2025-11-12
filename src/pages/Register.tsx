@@ -8,8 +8,13 @@ import Select from '../components/ui/Select';
 import TextArea from '../components/ui/TextArea';
 import Button from '../components/ui/Button';
 import { generateId } from '../utils/helpers';
+import { sendRegistrationEmail } from '../utils/emailService';
+import { sendRegistrationWithFormspree } from '../utils/formspreeService';
 
 interface RegistrationFormData {
+  // Campus Information
+  campus: string;
+  
   // Student Information
   fullName: string;
   dateOfBirth: string;
@@ -21,13 +26,13 @@ interface RegistrationFormData {
   bloodGroup: string;
   medicalConditions: string;
   passportPhoto: FileList;
-  
+
   // Academic Information
   classApplyingFor: string;
   previousSchool: string;
   previousClass: string;
   reasonForLeaving: string;
-  
+
   // Parent/Guardian Information
   fatherName: string;
   fatherOccupation: string;
@@ -41,7 +46,7 @@ interface RegistrationFormData {
   guardianRelationship: string;
   guardianPhone: string;
   guardianEmail: string;
-  
+
   // Contact Information
   homeAddress: string;
   city: string;
@@ -50,7 +55,7 @@ interface RegistrationFormData {
   emergencyContactName: string;
   emergencyContactPhone: string;
   emergencyContactRelationship: string;
-  
+
   // Additional Information
   specialNeeds: string;
   extracurricularInterests: string;
@@ -63,11 +68,13 @@ const Register: React.FC = () => {
   const [selectedClass, setSelectedClass] = useState('');
   const [passportPreview, setPassportPreview] = useState<string | null>(null);
   const [passportFile, setPassportFile] = useState<File | null>(null);
+  const [selectedCampus, setSelectedCampus] = useState('');
+  const [showForm, setShowForm] = useState(false);
   const navigate = useNavigate();
-  
-  const { 
-    register, 
-    handleSubmit, 
+
+  const {
+    register,
+    handleSubmit,
     formState: { errors },
     watch,
     reset,
@@ -75,6 +82,31 @@ const Register: React.FC = () => {
   } = useForm<RegistrationFormData>();
 
   const watchedClass = watch('classApplyingFor');
+
+  const campusOptions = [
+    {
+      value: 'amuloko',
+      label: 'Akoyoyo, Amuloko Ona-Ara Campus',
+      address: 'Amuloko, Ona-Ara Local Government, Ibadan, Oyo State',
+      description: 'Our main campus with state-of-the-art facilities and comprehensive programs'
+    },
+    {
+      value: 'odeyale',
+      label: 'Odeyale Akanran Campus',
+      address: 'Odeyale, Akanran, Ibadan, Oyo State',
+      description: 'Modern campus with specialized learning environments and innovative teaching methods'
+    }
+  ];
+
+  const handleCampusSelection = (campus: string) => {
+    setSelectedCampus(campus);
+    setValue('campus', campus);
+    
+    // Show form with animation delay
+    setTimeout(() => {
+      setShowForm(true);
+    }, 300);
+  };
 
   const handlePassportUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -84,7 +116,7 @@ const Register: React.FC = () => {
         alert('Please select an image file');
         return;
       }
-      
+
       // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         alert('File size must be less than 5MB');
@@ -92,23 +124,29 @@ const Register: React.FC = () => {
       }
 
       setPassportFile(file);
-      
+
       // Create preview
       const reader = new FileReader();
       reader.onload = (e) => {
         setPassportPreview(e.target?.result as string);
       };
       reader.readAsDataURL(file);
-      
-      // Set form value
-      setValue('passportPhoto', event.target.files as FileList);
+
+      // Set form value properly for validation
+      setValue('passportPhoto', event.target.files as FileList, {
+        shouldValidate: true,
+        shouldDirty: true
+      });
     }
   };
 
   const removePassportPhoto = () => {
     setPassportFile(null);
     setPassportPreview(null);
-    setValue('passportPhoto', null as any);
+    setValue('passportPhoto', null as any, {
+      shouldValidate: true,
+      shouldDirty: true
+    });
   };
 
   const classOptions = [
@@ -134,45 +172,87 @@ const Register: React.FC = () => {
   };
 
   const nigerianStates = [
-    'Abia', 'Adamawa', 'Akwa Ibom', 'Anambra', 'Bauchi', 'Bayelsa', 'Benue', 'Borno', 
-    'Cross River', 'Delta', 'Ebonyi', 'Edo', 'Ekiti', 'Enugu', 'FCT', 'Gombe', 'Imo', 
-    'Jigawa', 'Kaduna', 'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara', 'Lagos', 'Nasarawa', 
-    'Niger', 'Ogun', 'Ondo', 'Osun', 'Oyo', 'Plateau', 'Rivers', 'Sokoto', 'Taraba', 
+    'Abia', 'Adamawa', 'Akwa Ibom', 'Anambra', 'Bauchi', 'Bayelsa', 'Benue', 'Borno',
+    'Cross River', 'Delta', 'Ebonyi', 'Edo', 'Ekiti', 'Enugu', 'FCT', 'Gombe', 'Imo',
+    'Jigawa', 'Kaduna', 'Kano', 'Katsina', 'Kebbi', 'Kogi', 'Kwara', 'Lagos', 'Nasarawa',
+    'Niger', 'Ogun', 'Ondo', 'Osun', 'Oyo', 'Plateau', 'Rivers', 'Sokoto', 'Taraba',
     'Yobe', 'Zamfara'
   ];
 
   const onSubmit = async (data: RegistrationFormData) => {
+    console.log('Form submitted with data:', data);
     setIsSubmitting(true);
-    
-    // Store registration data in localStorage for payment page
-    const registrationData = {
-      ...data,
-      id: generateId(),
-      registrationDate: new Date().toISOString().split('T')[0],
-      registrationFee: getRegistrationFee(data.classApplyingFor)
-    };
-    
-    localStorage.setItem('pendingRegistration', JSON.stringify(registrationData));
-    
-    // Navigate to payment page
-    navigate('/payment', { 
-      state: { 
-        registrationData,
-        fee: getRegistrationFee(data.classApplyingFor),
+
+    try {
+      // Store registration data in localStorage for payment page
+      const registrationData = {
+        ...data,
+        id: generateId(),
+        registrationDate: new Date().toISOString().split('T')[0],
+        registrationFee: getRegistrationFee(data.classApplyingFor),
+        campus: selectedCampus
+      };
+
+      console.log('Registration data prepared:', registrationData);
+      localStorage.setItem('pendingRegistration', JSON.stringify(registrationData));
+
+      // Send email to admin
+      const emailData = {
         studentName: data.fullName,
-        className: data.classApplyingFor
-      } 
-    });
-    
-    setIsSubmitting(false);
+        campus: campusOptions.find(c => c.value === selectedCampus)?.label || selectedCampus,
+        className: data.classApplyingFor,
+        registrationFee: getRegistrationFee(data.classApplyingFor),
+        parentEmail: data.fatherEmail || data.motherEmail || 'Not provided',
+        parentPhone: data.fatherPhone || data.motherPhone || 'Not provided',
+        registrationData
+      };
+
+      // Send email notification to admin
+      // Choose one of these methods:
+      
+      // Method 1: EmailJS (requires EmailJS setup)
+      const emailSent = await sendRegistrationEmail(emailData);
+      
+      // Method 2: Formspree (simpler, uncomment to use)
+      // const emailSent = await sendRegistrationWithFormspree(registrationData);
+      
+      if (!emailSent) {
+        console.warn('Failed to send email notification to admin');
+        // You might want to show a warning to the user
+        alert('Registration submitted but email notification failed. Please contact admin directly.');
+      } else {
+        console.log('Email notification sent successfully to admin');
+      }
+      // Navigate to payment page
+      console.log('Navigating to payment page...');
+      navigate('/payment', {
+        state: {
+          registrationData,
+          fee: getRegistrationFee(data.classApplyingFor),
+          studentName: data.fullName,
+          className: data.classApplyingFor,
+          campus: campusOptions.find(c => c.value === selectedCampus)?.label
+        }
+      });
+    } catch (error) {
+      console.error('Error during form submission:', error);
+      alert('There was an error submitting your registration. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const onError = (errors: any) => {
+    console.log('Form validation errors:', errors);
+    alert('Please fill in all required fields before proceeding.');
   };
 
   return (
     <div>
       {/* Header */}
-      <section className="pt-32 pb-20 bg-gradient-to-r from-[#1B1464] to-[#D6261D]">
+      <section className="pt-32 pb-20 bg-gradient-to-r from-[#1B1464] to-[#6B46C1]">
         <div className="container mx-auto px-4">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -182,7 +262,7 @@ const Register: React.FC = () => {
             <p className="text-xl opacity-90 mb-6">
               Join our community of learners and begin your educational journey with us.
             </p>
-            
+
             {/* Registration Form Image */}
             <div className="mb-8">
               {/* <img 
@@ -192,7 +272,7 @@ const Register: React.FC = () => {
               /> */}
               <p className="text-sm mt-2 text-[#FFF4B2]">Sample of our registration form</p>
             </div>
-            
+
             {/* Fee Information */}
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 max-w-2xl mx-auto">
               <h3 className="text-2xl font-bold text-[#FFF4B2] mb-4">Registration Fees</h3>
@@ -213,23 +293,117 @@ const Register: React.FC = () => {
         </div>
       </section>
 
+      {/* Campus Selection */}
+      {!selectedCampus && (
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="max-w-4xl mx-auto text-center"
+            >
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-[#1B1464] mb-6">
+                Choose Your Campus
+              </h2>
+              <p className="text-lg text-gray-600 mb-12">
+                Select the campus where you'd like to register your child
+              </p>
+              
+              <div className="grid md:grid-cols-2 gap-8">
+                {campusOptions.map((campus) => (
+                  <motion.div
+                    key={campus.value}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="bg-white rounded-2xl shadow-lg border-2 border-gray-100 hover:border-[#6FC1FF] transition-all duration-300 cursor-pointer overflow-hidden"
+                    onClick={() => handleCampusSelection(campus.value)}
+                  >
+                    <div className="p-8">
+                      <div className="w-16 h-16 bg-gradient-to-r from-[#1B1464] to-[#6B46C1] rounded-full flex items-center justify-center mx-auto mb-6">
+                        <span className="text-white font-bold text-xl">
+                          {campus.label.charAt(0)}
+                        </span>
+                      </div>
+                      
+                      <h3 className="text-xl font-bold text-[#1B1464] mb-3">
+                        {campus.label}
+                      </h3>
+                      
+                      <p className="text-gray-600 mb-4 text-sm">
+                        {campus.address}
+                      </p>
+                      
+                      <p className="text-gray-700 mb-6">
+                        {campus.description}
+                      </p>
+                      
+                      <button className="bg-gradient-to-r from-[#6FC1FF] to-[#6B46C1] text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105">
+                        Select This Campus
+                      </button>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+        </section>
+      )}
+
       {/* Registration Form */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-3xl mx-auto bg-white rounded-lg shadow-lg p-8"
-          >
-            <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      {selectedCampus && (
+        <section className="py-20">
+          <div className="container mx-auto px-4">
+            {/* Campus Selection Summary */}
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="max-w-6xl mx-auto mb-8"
+            >
+              <div className="bg-gradient-to-r from-[#6FC1FF]/10 to-[#FFF4B2]/20 rounded-2xl p-6 border border-[#6FC1FF]/20">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <h3 className="text-lg font-bold text-[#1B1464]">
+                      Selected Campus: {campusOptions.find(c => c.value === selectedCampus)?.label}
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      {campusOptions.find(c => c.value === selectedCampus)?.address}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => {
+                      setSelectedCampus('');
+                      setShowForm(false);
+                    }}
+                    className="text-[#D6261D] hover:text-[#D6261D]/80 font-semibold text-sm"
+                  >
+                    Change Campus
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: showForm ? 1 : 0, y: showForm ? 0 : 20 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-10"
+            >
+            <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-10">
+              {/* Hidden Campus Field */}
+              <input
+                type="hidden"
+                {...register("campus", { value: selectedCampus })}
+              />
+              
               {/* Student Information */}
-              <div className="bg-gray-50 rounded-2xl p-6">
+              <div className="bg-gray-50 rounded-2xl p-8">
                 <h2 className="text-2xl font-heading font-semibold text-[#1B1464] mb-6 flex items-center">
                   <span className="bg-[#6FC1FF] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">1</span>
                   Student Information
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <Input
                     id="fullName"
                     label="Full Name *"
@@ -250,11 +424,10 @@ const Register: React.FC = () => {
                           <input
                             type="file"
                             accept="image/*"
-                            onChange={handlePassportUpload}
                             className="hidden"
                             id="passportUpload"
-                            {...register("passportPhoto", { 
-                              required: "Passport photograph is required" 
+                            {...register("passportPhoto", {
+                              onChange: handlePassportUpload
                             })}
                           />
                           <label
@@ -297,7 +470,7 @@ const Register: React.FC = () => {
                         </div>
                       )}
                     </div>
-                    
+
                     {/* Photo Requirements */}
                     <div className="mt-3 p-3 bg-[#FFF4B2]/20 rounded-lg">
                       <h4 className="text-sm font-semibold text-[#1B1464] mb-2 flex items-center">
@@ -314,7 +487,7 @@ const Register: React.FC = () => {
                       </ul>
                     </div>
                   </div>
-                  
+
                   <Input
                     id="dateOfBirth"
                     label="Date of Birth *"
@@ -322,7 +495,7 @@ const Register: React.FC = () => {
                     {...register("dateOfBirth", { required: "Date of birth is required" })}
                     error={errors.dateOfBirth?.message}
                   />
-                  
+
                   <Select
                     id="gender"
                     label="Gender *"
@@ -333,7 +506,7 @@ const Register: React.FC = () => {
                     {...register("gender", { required: "Gender is required" })}
                     error={errors.gender?.message}
                   />
-                  
+
                   <Select
                     id="stateOfOrigin"
                     label="State of Origin *"
@@ -341,7 +514,7 @@ const Register: React.FC = () => {
                     {...register("stateOfOrigin", { required: "State of origin is required" })}
                     error={errors.stateOfOrigin?.message}
                   />
-                  
+
                   <Input
                     id="localGovernment"
                     label="Local Government Area *"
@@ -349,7 +522,7 @@ const Register: React.FC = () => {
                     {...register("localGovernment", { required: "LGA is required" })}
                     error={errors.localGovernment?.message}
                   />
-                  
+
                   <Input
                     id="nationality"
                     label="Nationality *"
@@ -357,7 +530,7 @@ const Register: React.FC = () => {
                     {...register("nationality", { required: "Nationality is required" })}
                     error={errors.nationality?.message}
                   />
-                  
+
                   <Input
                     id="religion"
                     label="Religion"
@@ -365,7 +538,7 @@ const Register: React.FC = () => {
                     {...register("religion")}
                     error={errors.religion?.message}
                   />
-                  
+
                   <Select
                     id="bloodGroup"
                     label="Blood Group"
@@ -383,7 +556,7 @@ const Register: React.FC = () => {
                     {...register("bloodGroup")}
                     error={errors.bloodGroup?.message}
                   />
-                  
+
                   <div className="md:col-span-2">
                     <TextArea
                       id="medicalConditions"
@@ -397,12 +570,12 @@ const Register: React.FC = () => {
               </div>
 
               {/* Academic Information */}
-              <div className="bg-[#6FC1FF]/10 rounded-2xl p-6">
+              <div className="bg-[#6FC1FF]/10 rounded-2xl p-8">
                 <h2 className="text-2xl font-heading font-semibold text-[#1B1464] mb-6 flex items-center">
-                  <span className="bg-[#D6261D] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</span>
+                  <span className="bg-[#6B46C1] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">2</span>
                   Academic Information
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <div>
                     <Select
                       id="classApplyingFor"
@@ -419,7 +592,7 @@ const Register: React.FC = () => {
                       </div>
                     )}
                   </div>
-                  
+
                   <Input
                     id="previousSchool"
                     label="Previous School"
@@ -427,7 +600,7 @@ const Register: React.FC = () => {
                     {...register("previousSchool")}
                     error={errors.previousSchool?.message}
                   />
-                  
+
                   <Input
                     id="previousClass"
                     label="Previous Class"
@@ -435,7 +608,7 @@ const Register: React.FC = () => {
                     {...register("previousClass")}
                     error={errors.previousClass?.message}
                   />
-                  
+
                   <Input
                     id="reasonForLeaving"
                     label="Reason for Leaving Previous School"
@@ -447,16 +620,16 @@ const Register: React.FC = () => {
               </div>
 
               {/* Parent/Guardian Information */}
-              <div className="bg-[#FFF4B2]/20 rounded-2xl p-6">
+              <div className="bg-[#FFF4B2]/20 rounded-2xl p-8">
                 <h2 className="text-2xl font-heading font-semibold text-[#1B1464] mb-6 flex items-center">
-                  <span className="bg-[#FFF4B2] text-[#1B1464] rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">3</span>
+                  <span className="bg-[#6FC1FF] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">3</span>
                   Parent/Guardian Information
                 </h2>
-                
+
                 {/* Father's Information */}
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold text-[#D6261D] mb-4">Father's Information</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <Input
                       id="fatherName"
                       label="Father's Full Name *"
@@ -464,7 +637,7 @@ const Register: React.FC = () => {
                       {...register("fatherName", { required: "Father's name is required" })}
                       error={errors.fatherName?.message}
                     />
-                    
+
                     <Input
                       id="fatherOccupation"
                       label="Father's Occupation *"
@@ -472,12 +645,12 @@ const Register: React.FC = () => {
                       {...register("fatherOccupation", { required: "Father's occupation is required" })}
                       error={errors.fatherOccupation?.message}
                     />
-                    
+
                     <Input
                       id="fatherPhone"
                       label="Father's Phone Number *"
                       placeholder="Enter father's phone number"
-                      {...register("fatherPhone", { 
+                      {...register("fatherPhone", {
                         required: "Father's phone number is required",
                         pattern: {
                           value: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
@@ -486,7 +659,7 @@ const Register: React.FC = () => {
                       })}
                       error={errors.fatherPhone?.message}
                     />
-                    
+
                     <Input
                       id="fatherEmail"
                       label="Father's Email"
@@ -506,7 +679,7 @@ const Register: React.FC = () => {
                 {/* Mother's Information */}
                 <div className="mb-6">
                   <h3 className="text-lg font-semibold text-[#D6261D] mb-4">Mother's Information</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <Input
                       id="motherName"
                       label="Mother's Full Name *"
@@ -514,7 +687,7 @@ const Register: React.FC = () => {
                       {...register("motherName", { required: "Mother's name is required" })}
                       error={errors.motherName?.message}
                     />
-                    
+
                     <Input
                       id="motherOccupation"
                       label="Mother's Occupation *"
@@ -522,12 +695,12 @@ const Register: React.FC = () => {
                       {...register("motherOccupation", { required: "Mother's occupation is required" })}
                       error={errors.motherOccupation?.message}
                     />
-                    
+
                     <Input
                       id="motherPhone"
                       label="Mother's Phone Number *"
                       placeholder="Enter mother's phone number"
-                      {...register("motherPhone", { 
+                      {...register("motherPhone", {
                         required: "Mother's phone number is required",
                         pattern: {
                           value: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
@@ -536,7 +709,7 @@ const Register: React.FC = () => {
                       })}
                       error={errors.motherPhone?.message}
                     />
-                    
+
                     <Input
                       id="motherEmail"
                       label="Mother's Email"
@@ -556,7 +729,7 @@ const Register: React.FC = () => {
                 {/* Guardian Information (if different) */}
                 <div>
                   <h3 className="text-lg font-semibold text-[#D6261D] mb-4">Guardian Information (if different from parents)</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <Input
                       id="guardianName"
                       label="Guardian's Full Name"
@@ -564,7 +737,7 @@ const Register: React.FC = () => {
                       {...register("guardianName")}
                       error={errors.guardianName?.message}
                     />
-                    
+
                     <Input
                       id="guardianRelationship"
                       label="Relationship to Student"
@@ -572,7 +745,7 @@ const Register: React.FC = () => {
                       {...register("guardianRelationship")}
                       error={errors.guardianRelationship?.message}
                     />
-                    
+
                     <Input
                       id="guardianPhone"
                       label="Guardian's Phone Number"
@@ -580,7 +753,7 @@ const Register: React.FC = () => {
                       {...register("guardianPhone")}
                       error={errors.guardianPhone?.message}
                     />
-                    
+
                     <Input
                       id="guardianEmail"
                       label="Guardian's Email"
@@ -594,12 +767,12 @@ const Register: React.FC = () => {
               </div>
 
               {/* Contact Information */}
-              <div className="bg-gray-50 rounded-2xl p-6">
+              <div className="bg-gray-50 rounded-2xl p-8">
                 <h2 className="text-2xl font-heading font-semibold text-[#1B1464] mb-6 flex items-center">
                   <span className="bg-[#6FC1FF] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">4</span>
                   Contact Information
                 </h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                   <div className="md:col-span-2">
                     <TextArea
                       id="homeAddress"
@@ -609,7 +782,7 @@ const Register: React.FC = () => {
                       error={errors.homeAddress?.message}
                     />
                   </div>
-                  
+
                   <Input
                     id="city"
                     label="City *"
@@ -617,7 +790,7 @@ const Register: React.FC = () => {
                     {...register("city", { required: "City is required" })}
                     error={errors.city?.message}
                   />
-                  
+
                   <Select
                     id="state"
                     label="State *"
@@ -625,7 +798,7 @@ const Register: React.FC = () => {
                     {...register("state", { required: "State is required" })}
                     error={errors.state?.message}
                   />
-                  
+
                   <Input
                     id="postalCode"
                     label="Postal Code"
@@ -633,7 +806,7 @@ const Register: React.FC = () => {
                     {...register("postalCode")}
                     error={errors.postalCode?.message}
                   />
-                  
+
                   <Input
                     id="emergencyContactName"
                     label="Emergency Contact Name *"
@@ -641,12 +814,12 @@ const Register: React.FC = () => {
                     {...register("emergencyContactName", { required: "Emergency contact name is required" })}
                     error={errors.emergencyContactName?.message}
                   />
-                  
+
                   <Input
                     id="emergencyContactPhone"
                     label="Emergency Contact Phone *"
                     placeholder="Enter emergency contact phone"
-                    {...register("emergencyContactPhone", { 
+                    {...register("emergencyContactPhone", {
                       required: "Emergency contact phone is required",
                       pattern: {
                         value: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
@@ -655,7 +828,7 @@ const Register: React.FC = () => {
                     })}
                     error={errors.emergencyContactPhone?.message}
                   />
-                  
+
                   <Input
                     id="emergencyContactRelationship"
                     label="Emergency Contact Relationship *"
@@ -667,7 +840,7 @@ const Register: React.FC = () => {
               </div>
 
               {/* Additional Information */}
-              <div className="bg-[#6FC1FF]/10 rounded-2xl p-6">
+              <div className="bg-[#6FC1FF]/10 rounded-2xl p-8">
                 <h2 className="text-2xl font-heading font-semibold text-[#1B1464] mb-6 flex items-center">
                   <span className="bg-[#D6261D] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-bold mr-3">5</span>
                   Additional Information
@@ -680,7 +853,7 @@ const Register: React.FC = () => {
                     {...register("specialNeeds")}
                     error={errors.specialNeeds?.message}
                   />
-                  
+
                   <TextArea
                     id="extracurricularInterests"
                     label="Extracurricular Interests"
@@ -688,7 +861,7 @@ const Register: React.FC = () => {
                     {...register("extracurricularInterests")}
                     error={errors.extracurricularInterests?.message}
                   />
-                  
+
                   <Select
                     id="howDidYouHearAboutUs"
                     label="How did you hear about us?"
@@ -703,7 +876,7 @@ const Register: React.FC = () => {
                     {...register("howDidYouHearAboutUs")}
                     error={errors.howDidYouHearAboutUs?.message}
                   />
-                  
+
                   <TextArea
                     id="additionalComments"
                     label="Additional Comments"
@@ -739,6 +912,7 @@ const Register: React.FC = () => {
           </motion.div>
         </div>
       </section>
+      )}
     </div>
   );
 };
