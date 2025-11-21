@@ -61,15 +61,15 @@ const Footer: React.FC = () => {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <MapPin size={20} className="text-secondary-500 mr-2 mt-1 flex-shrink-0" />
-                <span>Amuloko Area, Ibadan, Oyo State, Nigeria</span>
+                <span>13 Sangogade Street Akoyoyo Area Amuloko, Ibadan</span>
               </li>
               <li className="flex items-center">
                 <Phone size={20} className="text-secondary-500 mr-2 flex-shrink-0" />
-                <span>+234 803 123 4567</span>
+                <span>+234 8152122218 / +234 8165318587</span>
               </li>
               <li className="flex items-center">
                 <Mail size={20} className="text-secondary-500 mr-2 flex-shrink-0" />
-                <span>info@positiveimagesch.edu.ng</span>
+                <span>positiveimageschools@gmail.com</span>
               </li>
             </ul>
           </div>

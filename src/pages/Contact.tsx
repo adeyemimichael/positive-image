@@ -172,12 +172,22 @@ const Contact: React.FC = () => {
                     </div>
                     <div>
                       <h3 className="font-medium text-gray-800 mb-1">Our Location</h3>
-                      <p className="text-gray-600">
-                        123 Education Road<br />
-                        Amuloko Area<br />
-                        Ibadan, Oyo State<br />
-                        Nigeria
-                      </p>
+                   <div className='flex flex-row gap-6'> 
+                    
+                    <div className=''> 
+                       <p className="text-gray-700">13 Sangogade Street</p>
+                  <p className="text-gray-700">Akoyoyo Area</p>
+                  <p className="text-gray-700"> Amuloko, Ibadan, Oyo State</p>
+                  <p className="text-gray-700">Nigeria</p> </div>
+                    <div className=''>
+                      <h2 className='text-black '>Location 2</h2>
+                        <p className="text-gray-700">Elebolo Junction,</p>
+                                        <p className="text-gray-700">Opposite Petrocam Gas Station Odeyale</p>
+                                        <p className="text-gray-700"> Ajia, Ibadan, Oyo State</p>
+                                        <p className="text-gray-700">Nigeria</p>
+                    </div>
+                   </div>
+                   
                     </div>
                   </div>
                   
@@ -188,8 +198,8 @@ const Contact: React.FC = () => {
                     <div>
                       <h3 className="font-medium text-gray-800 mb-1">Email Us</h3>
                       <p className="text-gray-600">
-                        info@positiveimagesch.edu.ng<br />
-                        admissions@positiveimagesch.edu.ng
+                        positiveimageschools@gmail.com<br />
+                       
                       </p>
                     </div>
                   </div>
@@ -201,8 +211,9 @@ const Contact: React.FC = () => {
                     <div>
                       <h3 className="font-medium text-gray-800 mb-1">Call Us</h3>
                       <p className="text-gray-600">
-                        +234 803 123 4567<br />
-                        +234 905 678 9012
+                        +234 816 531 8587<br />
+                        +234 815 212 2218
+                        
                       </p>
                     </div>
                   </div>

@@ -1,16 +1,16 @@
 // Email configuration
 export const EMAIL_CONFIG = {
   // Replace with your actual admin email
-  ADMIN_EMAIL: 'admin@yourschool.com',
+  ADMIN_EMAIL: 'ayobami732000@gmail.com',
   
   // Email service settings
   SERVICE_TYPE: 'emailjs',
   
   // EmailJS configuration - Get these from https://www.emailjs.com/
   EMAILJS: {
-    SERVICE_ID: 'service_xxxxxxx',    // Replace with your EmailJS service ID
-    TEMPLATE_ID: 'template_xxxxxxx',  // Replace with your EmailJS template ID
-    USER_ID: 'user_xxxxxxxxxxxxxxx'   // Replace with your EmailJS public key
+    SERVICE_ID: 'service_0wu7xdp',    // Replace with your EmailJS service ID
+    TEMPLATE_ID: 'template_dq5strk',  // Replace with your EmailJS template ID
+    USER_ID: 'NMjtbweOtdss-RG02'   // Replace with your EmailJS public key
   },
   
   // Email templates

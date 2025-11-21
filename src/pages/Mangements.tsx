@@ -8,7 +8,7 @@ interface ManagementMember {
   position: string;
   bio: string;
   image: string;
-  images?: string[]; // Multiple images for slideshow
+  images?: string[]; 
   email: string;
   phone: string;
   linkedin?: string;
@@ -35,8 +35,8 @@ const Management: React.FC = () => {
        "./ceo.jpg",
        
       ],
-      email: "ceo@positiveimage.edu.ng",
-      phone: "+234 803 123 4567",
+      email: "specialoladapo@gmail.com",
+      phone: "+234 8165318587",
       linkedin: "https://linkedin.com/in/SpecialOladapo",
       achievements: [
         "7+ years in educational leadership",
@@ -80,7 +80,7 @@ const Management: React.FC = () => {
       name: "Mrs. Grace Ogundimu",
       position: "Head of Teachers",
       bio: "Mrs. Grace Ogundimu leads our teaching staff and coordinates professional development. With her extensive experience in pedagogy, she ensures our teachers deliver quality education.",
-      image: "https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800",
+      image: "",
       email: "head.teachers@positiveimage.edu.ng",
       phone: "+234 803 123 4570",
       achievements: [
@@ -92,17 +92,15 @@ const Management: React.FC = () => {
     },
     {
       id: 5,
-      name: "Mr. Tunde Akinola",
+      name: "Babatunde Bosede Janet ",
       position: "Bursar",
-      bio: "Mr. Tunde Akinola manages the school's financial operations and ensures fiscal responsibility. His expertise in accounting and finance keeps our institution financially stable.",
-      image: "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=800",
-      email: "bursar@positiveimage.edu.ng",
-      phone: "+234 803 123 4571",
+      bio: "Miss Babatunde Bosede Janet manages the school's financial operations and ensures fiscal responsibility. Her expertise in accounting and finance is excellent.",
+      image: "./staffpositive5.jpg",
+      email: "",
+      phone: "",
       achievements: [
-        "B.Sc. Accounting, ACA qualified",
-        "12+ years in financial management",
-        "Financial Excellence Award 2021",
-        "Budget planning specialist"
+        "Economics and Social Studies (NCE)",
+        
       ]
     },
     {
@@ -166,7 +164,7 @@ const Management: React.FC = () => {
                 className="bg-gray-100 rounded-lg shadow-lg overflow-hidden border-2 border-gray-300"
               >
                 <div className="grid md:grid-cols-2 gap-0">
-                  {/* CEO Info - Now on Left */}
+                  {/* CEO Info */}
                   <div className="p-8 flex flex-col justify-center">
                     <h2 className="text-3xl font-bold text-black mb-2">{ceo.name}</h2>
                     <p className="text-xl text-blue-600 font-semibold mb-4">{ceo.position}</p>
@@ -206,7 +204,7 @@ const Management: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* CEO Image - Now on Right, Full Coverage */}
+                  {/* CEO Image  */}
                   <div 
                     className="cursor-pointer relative overflow-hidden group"
                     onClick={() => openImageSlideshow(ceo)}

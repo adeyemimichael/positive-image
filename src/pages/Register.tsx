@@ -86,14 +86,14 @@ const Register: React.FC = () => {
   const campusOptions = [
     {
       value: 'amuloko',
-      label: 'Akoyoyo, Amuloko Ona-Ara Campus',
-      address: 'Amuloko, Ona-Ara Local Government, Ibadan, Oyo State',
+      label: 'Akoyoyo, Amuloko  Campus',
+      address: '13 Sangogade Street Akoyoyo Area, Amuloko, Ibadan, Oyo State',
       description: 'Our main campus with state-of-the-art facilities and comprehensive programs'
     },
     {
       value: 'odeyale',
-      label: 'Odeyale Akanran Campus',
-      address: 'Odeyale, Akanran, Ibadan, Oyo State',
+      label: ' Odeyale Ajia ( Elebolo Junction) Campus ',
+      address: ' Elebolo Junction Opposite Petrocam Gas Station Odeyale Ajia ',
       description: 'Modern campus with specialized learning environments and innovative teaching methods'
     }
   ];
@@ -415,7 +415,7 @@ const Register: React.FC = () => {
                   {/* Passport Photo Upload */}
                   <div className="md:col-span-2">
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Passport Photograph *
+                      Passport Photograph (Optional)
                     </label>
                     <div className="flex items-start gap-4">
                       {/* Upload Area */}

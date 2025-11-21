@@ -44,7 +44,7 @@ const About: React.FC = () => {
               <h2 className="text-3xl font-heading font-bold text-primary-700 mb-6">Our Story</h2>
               <p className="text-gray-700 text-lg mb-4 leading-relaxed">
                 Positive Image Schools was founded in 2003 with a vision to provide quality education 
-                to children in Ibadan. What started as a small school with just three classrooms 
+                to children in and around Ibadan. What started as a divine idea
                 has grown into a respected educational institution serving hundreds of students.
               </p>
               <p className="text-gray-700 mb-4 leading-relaxed">
@@ -106,10 +106,10 @@ const About: React.FC = () => {
                 </div>
                 <h3 className="text-2xl font-heading font-semibold text-primary-700">Our Mission</h3>
               </div>
-              <p className="text-gray-700 leading-relaxed">
-                To provide a holistic educational experience that nurtures intellectual growth, 
-                develops character, and empowers students to become responsible citizens who 
-                positively impact their communities.
+              <p className="text-gray-700 text-lg leading-relaxed">
+                To offer standard and qualitative education to all <br/>
+               To contribute to the transformation of societies through qualitative teaching <br/>
+                To make all children, stars in their fields of learning, careers and gifts.
               </p>
             </motion.div>
 
@@ -126,10 +126,9 @@ const About: React.FC = () => {
                 </div>
                 <h3 className="text-2xl font-heading font-semibold text-primary-700">Our Vision</h3>
               </div>
-              <p className="text-gray-700 leading-relaxed">
-                To be the leading educational institution in Ibadan, recognized for academic 
-                excellence, innovative teaching methods, and producing well-rounded graduates 
-                who are prepared to excel in a rapidly changing global environment.
+              <p className="text-gray-700  text-lg leading-relaxed">
+                To be a world class center for excellence  <br/>
+                To produce Graduates who are worthy in character.
               </p>
             </motion.div>
           </div>
@@ -387,13 +386,13 @@ const About: React.FC = () => {
                   <p className="text-gray-700">7:30 AM - 3:30 PM</p>
                 </div>
               </div>
-              <div className="flex items-start mb-4">
+              {/* <div className="flex items-start mb-4">
                 <Clock size={20} className="text-primary-700 mr-2 mt-1" />
                 <div>
                   <p className="font-medium">Saturday (Tutorial)</p>
                   <p className="text-gray-700">8:00 AM - 12:00 PM</p>
                 </div>
-              </div>
+              </div> */}
               <div className="flex items-start">
                 <Clock size={20} className="text-primary-700 mr-2 mt-1" />
                 <div>
@@ -413,14 +412,21 @@ const About: React.FC = () => {
               <h3 className="text-xl font-heading font-semibold text-primary-700 mb-4 border-b border-gray-200 pb-2">
                 Location
               </h3>
-              <div className="flex items-start">
-                <MapPin size={20} className="text-primary-700 mr-2 mt-1" />
-                <div>
-                  <p className="font-medium">Our Address</p>
-                  <p className="text-gray-700">123 Education Road</p>
-                  <p className="text-gray-700">Amuloko Area</p>
-                  <p className="text-gray-700">Ibadan, Oyo State</p>
+              <div className="flex items-start flex-col">
+                <MapPin size={24} className="text-primary-700 mr-2 mt-1 " />
+                <div className='w-full p-4 '>
+                  <p className="font-medium text-lg">Our Address</p>
+                  <p className="text-gray-700">13 Sangogade Street</p>
+                  <p className="text-gray-700">Akoyoyo Area</p>
+                  <p className="text-gray-700"> Amuloko, Ibadan, Oyo State</p>
                   <p className="text-gray-700">Nigeria</p>
+                </div>
+                 <div className='w-full p-4 '>
+                  <p className="font-medium text-lg">Our Address 2</p>
+                  <p className="text-gray-700">Elebolo Junction,</p>
+                                        <p className="text-gray-700">Opposite Petrocam Gas Station Odeyale</p>
+                                        <p className="text-gray-700"> Ajia, Ibadan, Oyo State</p>
+                                        <p className="text-gray-700">Nigeria</p>
                 </div>
               </div>
             </motion.div>
