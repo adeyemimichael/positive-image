@@ -43,9 +43,9 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`fixed w-full  z-50 transition-all duration-300 ${scrolled
-        ? 'bg-white shadow-md py-6'
-        : 'bg-transparent py-8'
+      className={`fixed w-full z-50 transition-all duration-300 ${scrolled
+        ? 'bg-white shadow-md py-8'
+        : 'bg-transparent py-12'
         }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
@@ -55,8 +55,8 @@ const Header: React.FC = () => {
             <img
               src={Logo}
               alt="Positive Image Schools Logo"
-              className={`transition-all duration-300 ${scrolled ? 'h-24 w-24' : 'h-24 w-24'
-                } object-contain mr-3 group-hover:scale-105`}
+              className={`transition-all duration-300 ${scrolled ? 'h-28 w-28' : 'h-32 w-32'
+                } object-contain group-hover:scale-105`}
               onError={(e) => {
                 // Fallback to icon if image fails to load
                 e.currentTarget.style.display = 'none';
@@ -65,25 +65,9 @@ const Header: React.FC = () => {
             />
             {/* Fallback Icon (hidden by default) */}
             <GraduationCap
-              size={scrolled ? 48 : 56}
-              className={`hidden ${scrolled ? 'text-[#1B1464]' : 'text-white'} mr-3 group-hover:scale-105 transition-all duration-300`}
+              size={scrolled ? 56 : 64}
+              className={`hidden ${scrolled ? 'text-[#1B1464]' : 'text-white'} group-hover:scale-105 transition-all duration-300`}
             />
-          </div>
-
-          {/* School Name */}
-          <div className="md:flex flex-col hidden">
-            <span
-              className={`font-heading font-bold transition-all duration-300 ${scrolled ? 'text-[#1B1464] md:text-2xl ' : 'text-white  md:text-2xl  '
-                } leading-tight`}
-            >
-              Positive Image Group of Schools
-            </span>
-            <span
-              className={`font-medium transition-all duration-300 ${scrolled ? 'text-[#6FC1FF] text-md' : 'text-[#FFF4B2] text-sm'
-                } leading-tight`}
-            >
-              The Real Image Maker
-            </span>
           </div>
         </Link>
 
@@ -105,7 +89,7 @@ const Header: React.FC = () => {
           </nav>
           <Link
             to="/register"
-            className={`px-6 py-2 rounded-full font-medium transition-all duration-200 ${scrolled
+            className={`px-8 py-3 rounded-2xl font-medium transition-all duration-200 ${scrolled
               ? 'bg-[#D6261D] text-white hover:bg-[#D6261D]/90'
               : 'bg-[#FFF4B2] text-[#1B1464] hover:bg-[#FFF4B2]/90'
               } shadow-lg hover:shadow-xl transform hover:scale-105`}
@@ -149,7 +133,7 @@ const Header: React.FC = () => {
               ))}
               <Link
                 to="/register"
-                className="bg-[#D6261D] text-white px-6 py-3 rounded-full font-medium text-center hover:bg-[#D6261D]/90 transition-colors duration-200 mt-4"
+                className="bg-[#D6261D] text-white px-8 py-4 rounded-2xl font-medium text-center hover:bg-[#D6261D]/90 transition-colors duration-200 mt-4"
               >
                 Register Now
               </Link>

@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, ZoomIn, ChevronLeft, ChevronRight, Upload, LogOut, Clock } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import AdminLogin from '../components/AdminLogin';
+import ImageUpload from '../components/ImageUpload';
+import { AdminAuth } from '../config/admin';
 
 interface GalleryImage {
   id: number;
@@ -15,8 +18,46 @@ const Gallery: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [showAdminLogin, setShowAdminLogin] = useState(false);
+  const [showImageUpload, setShowImageUpload] = useState(false);
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+  const [sessionTimeRemaining, setSessionTimeRemaining] = useState(0);
+  const [images, setImages] = useState<GalleryImage[]>([]);
 
-  const galleryImages: GalleryImage[] = [
+  // Check admin authentication on component mount
+  useEffect(() => {
+    const checkAuth = () => {
+      const isAuth = AdminAuth.isValidSession();
+      setIsAdminAuthenticated(isAuth);
+      if (isAuth) {
+        setSessionTimeRemaining(AdminAuth.getSessionTimeRemaining());
+      }
+    };
+
+    checkAuth();
+    
+    // Check every minute for session expiry
+    const interval = setInterval(checkAuth, 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Load images from localStorage or use default images
+  useEffect(() => {
+    const savedImages = localStorage.getItem('gallery_images');
+    if (savedImages) {
+      try {
+        const parsedImages = JSON.parse(savedImages);
+        setImages([...defaultGalleryImages, ...parsedImages]);
+      } catch (error) {
+        console.error('Error loading saved images:', error);
+        setImages(defaultGalleryImages);
+      }
+    } else {
+      setImages(defaultGalleryImages);
+    }
+  }, []);
+
+  const defaultGalleryImages: GalleryImage[] = [
     {
       id: 1,
       url: 'https://images.pexels.com/photos/8617557/pexels-photo-8617557.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -106,8 +147,34 @@ const Gallery: React.FC = () => {
   const categories = ['All', 'Campus', 'Facilities', 'Student Life', 'Sports', 'Events'];
 
   const filteredImages = selectedCategory === 'All' 
-    ? galleryImages 
-    : galleryImages.filter(img => img.category === selectedCategory);
+    ? images 
+    : images.filter(img => img.category === selectedCategory);
+
+  const handleAdminLogin = () => {
+    setShowAdminLogin(true);
+  };
+
+  const handleAdminLoginSuccess = () => {
+    setIsAdminAuthenticated(true);
+    setSessionTimeRemaining(AdminAuth.getSessionTimeRemaining());
+  };
+
+  const handleAdminLogout = () => {
+    AdminAuth.clearSession();
+    setIsAdminAuthenticated(false);
+    setSessionTimeRemaining(0);
+  };
+
+  const handleImageUpload = (imageData: any) => {
+    const newImages = [...images, imageData];
+    setImages(newImages);
+    
+    // Save to localStorage (in real app, this would be saved to database)
+    const uploadedImages = newImages.filter(img => img.uploadDate);
+    localStorage.setItem('gallery_images', JSON.stringify(uploadedImages));
+    
+    setShowImageUpload(false);
+  };
 
   const openImageModal = (image: GalleryImage) => {
     setSelectedImage(image);
@@ -131,9 +198,56 @@ const Gallery: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4">
         {/* Header Section */}
         <div className="text-center mb-16">
-          <h1 className="text-5xl font-bold text-black mb-6">
-            School Gallery
-          </h1>
+          <div className="flex justify-between items-start mb-6">
+            <div className="flex-1">
+              <h1 className="text-5xl font-bold text-black mb-6">
+                School Gallery
+              </h1>
+            </div>
+            
+            {/* Admin Controls */}
+            <div className="flex flex-col items-end gap-2">
+              {isAdminAuthenticated ? (
+                <div className="bg-white rounded-2xl shadow-lg p-4 border border-green-200">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-sm font-semibold text-green-700">Admin Authenticated</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2 text-xs text-gray-600 mb-3">
+                    <Clock size={14} />
+                    <span>Session: {sessionTimeRemaining} minutes remaining</span>
+                  </div>
+                  
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setShowImageUpload(true)}
+                      className="bg-gradient-to-r from-[#6FC1FF] to-[#6B46C1] text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center gap-2 text-sm"
+                    >
+                      <Upload size={16} />
+                      Upload Image
+                    </button>
+                    <button
+                      onClick={handleAdminLogout}
+                      className="bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-600 transition-colors flex items-center gap-2 text-sm"
+                    >
+                      <LogOut size={16} />
+                      Logout
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={handleAdminLogin}
+                  className="bg-gradient-to-r from-[#1B1464] to-[#6B46C1] text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 flex items-center gap-2"
+                >
+                  <Upload size={20} />
+                  Admin Upload
+                </button>
+              )}
+            </div>
+          </div>
+          
           <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">
             Explore our beautiful campus, modern facilities, and vibrant school life through these photos.
           </p>
@@ -306,6 +420,20 @@ const Gallery: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Admin Login Modal */}
+      <AdminLogin
+        isOpen={showAdminLogin}
+        onClose={() => setShowAdminLogin(false)}
+        onSuccess={handleAdminLoginSuccess}
+      />
+
+      {/* Image Upload Modal */}
+      <ImageUpload
+        isOpen={showImageUpload}
+        onClose={() => setShowImageUpload(false)}
+        onUpload={handleImageUpload}
+      />
     </div>
   );
 };
