@@ -44,7 +44,7 @@ const Header: React.FC = () => {
   return (
     <header
       className={`fixed w-full z-50 transition-all duration-300 ${scrolled
-        ? 'bg-white shadow-md py-8'
+        ? 'bg-white shadow-md py-4'
         : 'bg-transparent py-12'
         }`}
     >
@@ -55,7 +55,7 @@ const Header: React.FC = () => {
             <img
               src={Logo}
               alt="Positive Image Schools Logo"
-              className={`transition-all duration-300 ${scrolled ? 'h-28 w-28' : 'h-32 w-32'
+              className={`transition-all duration-300 ${scrolled ? 'h-20 w-28' : 'h-20 w-32'
                 } object-contain group-hover:scale-105`}
               onError={(e) => {
                 // Fallback to icon if image fails to load

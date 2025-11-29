@@ -121,7 +121,7 @@ const Payment: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-[#6FC1FF]/10 pt-32 pb-16">
+    <div className="min-h-screen bg-gray-50 pt-32 pb-16">
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Header */}
         <motion.div
@@ -191,7 +191,7 @@ const Payment: React.FC = () => {
             
             <div className="space-y-6">
               {/* Bank Transfer Details */}
-              <div className="bg-gradient-to-r from-[#1B1464] to-[#D6261D] rounded-xl p-6 text-white">
+              <div className="bg-[#1B1464] rounded-xl p-6 text-white">
                 <h3 className="text-xl font-bold mb-4">Bank Transfer Details</h3>
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
