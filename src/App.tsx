@@ -9,6 +9,7 @@ import Contact from './pages/Contact';
 import Management from './pages/Mangements';
 import Gallery from './pages/Gallery';
 import Payment from './pages/Payment';
+import PaymentCallback from './pages/PaymentCallback';
 import RegistrationSuccess from './pages/RegistrationSuccess';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/payment" element={<Payment />} />
+          <Route path="/payment-callback" element={<PaymentCallback />} />
           <Route path="/registration-success" element={<RegistrationSuccess />} />
         </Routes>
       </Layout>

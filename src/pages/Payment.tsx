@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { CheckCircle, Copy, Clock, AlertCircle, ArrowLeft } from 'lucide-react';
+import { CheckCircle, Copy, Clock, AlertCircle, ArrowLeft, CreditCard } from 'lucide-react';
+import { paystackService } from '../services/paystackService';
+import { PAYSTACK_CONFIG } from '../config/paystack';
 
 interface PaymentProps {
   registrationData?: any;
@@ -44,19 +46,50 @@ const Payment: React.FC = () => {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const handlePayWithPaystack = async () => {
+    setIsSubmitting(true);
+    
+    try {
+      // Initialize payment with Paystack via backend
+      const paymentData = {
+        email: registrationData.fatherEmail || registrationData.motherEmail || 'parent@example.com',
+        amount: fee || 0,
+        reference: paymentReference,
+        metadata: {
+          studentName: studentName || '',
+          className: className || '',
+          campus: registrationData.campus || '',
+          registrationId: registrationData.id || '',
+          registrationDate: registrationData.registrationDate || ''
+        }
+      };
+
+      const response = await paystackService.initializePayment(paymentData);
+
+      if (response.status && response.data?.authorization_url) {
+        // Redirect to Paystack payment page
+        window.location.href = response.data.authorization_url;
+      } else {
+        throw new Error('Failed to initialize payment');
+      }
+    } catch (error) {
+      console.error('Payment error:', error);
+      alert('Failed to initialize payment. Please try again.');
+      setIsSubmitting(false);
+    }
+  };
+
   const handlePaymentConfirmation = async () => {
     setIsSubmitting(true);
     
-    // Simulate payment verification process
+    // Simulate payment verification process for bank transfer
     setTimeout(async () => {
       try {
-        // In a real application, you would verify the payment with your payment processor
-        // For now, we'll simulate a successful payment
-        
         const completedRegistration = {
           ...registrationData,
           paymentReference,
-          paymentStatus: 'completed',
+          paymentStatus: 'pending_verification',
+          paymentMethod: 'bank_transfer',
           paymentDate: new Date().toISOString(),
           paymentAmount: fee
         };
@@ -65,7 +98,7 @@ const Payment: React.FC = () => {
         localStorage.setItem('completedRegistration', JSON.stringify(completedRegistration));
         localStorage.removeItem('pendingRegistration');
 
-        // Send email notifications (simulated)
+        // Send email notifications
         await sendEmailNotifications(completedRegistration);
 
         setPaymentStatus('completed');
@@ -289,21 +322,38 @@ const Payment: React.FC = () => {
                 Please make the transfer using the details above, then click the button below to confirm.
               </p>
               
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <div className="flex flex-col gap-4">
+                {/* Paystack Online Payment Button */}
                 <button
-                  onClick={() => navigate('/register')}
-                  className="flex items-center justify-center px-6 py-3 border-2 border-[#1B1464] text-[#1B1464] rounded-full font-semibold hover:bg-[#1B1464] hover:text-white transition-colors"
+                  onClick={handlePayWithPaystack}
+                  disabled={isSubmitting}
+                  className="flex items-center justify-center px-8 py-4 bg-gradient-to-r from-[#00C3F7] to-[#0BA4DB] text-white rounded-2xl font-bold text-lg hover:shadow-xl transition-all transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  <ArrowLeft size={20} className="mr-2" />
-                  Back to Registration
+                  <CreditCard size={24} className="mr-3" />
+                  {isSubmitting ? 'Processing...' : 'Pay Online with Paystack'}
                 </button>
-                
+
+                <div className="flex items-center gap-4 my-2">
+                  <div className="flex-1 border-t border-gray-300"></div>
+                  <span className="text-gray-500 font-medium">OR</span>
+                  <div className="flex-1 border-t border-gray-300"></div>
+                </div>
+
+                {/* Bank Transfer Confirmation Button */}
                 <button
                   onClick={handlePaymentConfirmation}
                   disabled={isSubmitting}
-                  className="px-8 py-3 bg-[#D6261D] text-white rounded-full font-semibold hover:bg-[#D6261D]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="px-8 py-4 bg-[#1B1464] text-white rounded-2xl font-semibold hover:bg-[#1B1464]/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? 'Verifying Payment...' : 'I have made the payment'}
+                  {isSubmitting ? 'Verifying...' : 'I have made bank transfer'}
+                </button>
+
+                <button
+                  onClick={() => navigate('/register')}
+                  className="flex items-center justify-center px-6 py-3 border-2 border-gray-300 text-gray-700 rounded-2xl font-semibold hover:bg-gray-50 transition-colors mt-2"
+                >
+                  <ArrowLeft size={20} className="mr-2" />
+                  Back to Registration
                 </button>
               </div>
             </div>

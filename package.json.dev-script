@@ -1,0 +1,13 @@
+// Add this to your package.json scripts section:
+
+"scripts": {
+  "dev": "vite",
+  "dev:api": "vercel dev",
+  "build": "tsc && vite build",
+  "preview": "vite preview"
+}
+
+// For local development with API routes, use:
+// npm run dev:api
+
+// This will start both your Vite dev server and Vercel API routes locally
