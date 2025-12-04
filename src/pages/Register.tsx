@@ -858,8 +858,11 @@ const Register: React.FC = () => {
                     id="extracurricularInterests"
                     label="Extracurricular Interests"
                     placeholder="List student's interests in sports, arts, music, etc."
-                    {...register("extracurricularInterests")}
+                    {...register("extracurricularInterests", {
+                      required: "Please list at least one extracurricular interest"
+                    })}
                     error={errors.extracurricularInterests?.message}
+                    required
                   />
 
                   <Select

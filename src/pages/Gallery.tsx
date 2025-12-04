@@ -253,7 +253,7 @@ const Gallery: React.FC = () => {
           </p>
           
           {/* Bold Call to Action */}
-          <div className="bg-gradient-to-r from-blue-600 to-green-600 rounded-2xl p-8 mb-12 shadow-2xl">
+          <div className="bg-[#1B1464]/90 rounded-2xl p-8 mb-12 shadow-2xl">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               🎓 ENROLL YOUR CHILD TODAY! 🎓
             </h2>
@@ -261,7 +261,7 @@ const Gallery: React.FC = () => {
               Give your child the best education at Positive Image Schools
             </p>
             <Link to="/register">
-              <button className="px-8 py-4 bg-white text-blue-600 rounded-full font-bold text-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg transform hover:scale-105">
+              <button className="px-8 py-4 bg-[#FFF4B2] text-[#1B1464] rounded-full font-bold text-lg hover:bg-white hover:text-[#1B1464] transition-colors duration-300 shadow-lg transform hover:scale-105">
                 REGISTER NOW - LIMITED SPACES AVAILABLE!
               </button>
             </Link>
@@ -327,7 +327,7 @@ const Gallery: React.FC = () => {
 
         {/* Another Call to Action */}
         <div className="mt-20 text-center">
-          <div className="bg-gradient-to-r from-green-600 to-blue-600 rounded-2xl p-8 shadow-2xl">
+          <div className="bg-[#1B1464]/90 rounded-2xl p-8 shadow-2xl">
             <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Ready to Join Our School Family?
             </h2>
@@ -336,12 +336,12 @@ const Gallery: React.FC = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/register">
-                <button className="px-8 py-4 bg-white text-green-600 rounded-full font-bold text-lg hover:bg-gray-100 transition-colors duration-300 shadow-lg">
+                <button className="px-8 py-4 bg-[#FFF4B2] text-[#1B1464] rounded-full font-bold text-lg hover:bg-white hover:text-[#1B1464] transition-colors duration-300 shadow-lg transform hover:scale-105">
                   ENROLL NOW
                 </button>
               </Link>
               <Link to="/contact">
-                <button className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-bold text-lg hover:bg-white hover:text-green-600 transition-colors duration-300">
+                <button className="px-8 py-4 bg-transparent border-2 border-white text-white rounded-full font-bold text-lg hover:bg-white hover:text-[#1B1464] transition-colors duration-300">
                   CONTACT US
                 </button>
               </Link>

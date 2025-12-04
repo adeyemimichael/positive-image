@@ -66,7 +66,7 @@ const Header: React.FC = () => {
             {/* Fallback Icon (hidden by default) */}
             <GraduationCap
               size={scrolled ? 56 : 64}
-              className={`hidden ${scrolled ? 'text-[#1B1464]' : 'text-white'} group-hover:scale-105 transition-all duration-300`}
+              className={`hidden ${scrolled ? 'text-[#1B1464]' : 'text-gray-700'} group-hover:scale-105 transition-all duration-300`}
             />
           </div>
         </Link>
@@ -80,7 +80,7 @@ const Header: React.FC = () => {
                 to={link.path}
                 className={`font-medium transition-colors duration-200 ${scrolled
                   ? 'text-[#1B1464] hover:text-[#D6261D]'
-                  : 'text-white hover:text-[#FFF4B2]'
+                  : 'text-gray-300 hover:text-[#D6261D]'
                   } ${location.pathname === link.path ? 'border-b-2 border-[#6FC1FF]' : ''}`}
               >
                 {link.name}
@@ -102,7 +102,7 @@ const Header: React.FC = () => {
         <div className="md:hidden">
           <button
             onClick={toggleMenu}
-            className={`p-2 focus:outline-none ${scrolled ? 'text-[#1B1464]' : 'text-[#1B1464]'
+            className={`p-2 focus:outline-none ${scrolled ? 'text-[#1B1464]' : 'text-gray-700'
               }`}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
