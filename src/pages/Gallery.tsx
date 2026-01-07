@@ -222,7 +222,7 @@ const Gallery: React.FC = () => {
                   <div className="flex gap-2">
                     <button
                       onClick={() => setShowImageUpload(true)}
-                      className="bg-gradient-to-r from-[#6FC1FF] to-[#6B46C1] text-white px-4 py-2 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 flex items-center gap-2 text-sm"
+                      className="bg-gradient-to-r from-[#6FC1FF] to-[#6B46C1] text-white px-4 py-2 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-2 text-sm cursor-pointer transform active:scale-95"
                     >
                       <Upload size={16} />
                       Upload Image
@@ -239,7 +239,7 @@ const Gallery: React.FC = () => {
               ) : (
                 <button
                   onClick={handleAdminLogin}
-                  className="bg-gradient-to-r from-[#1B1464] to-[#6B46C1] text-white px-6 py-3 rounded-full font-semibold hover:shadow-lg transition-all duration-300 flex items-center gap-2"
+                  className="bg-gradient-to-r from-[#1B1464] to-[#6B46C1] text-white px-6 py-3 rounded-full font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-2 cursor-pointer transform active:scale-95"
                 >
                   <Upload size={20} />
                   Admin Upload
