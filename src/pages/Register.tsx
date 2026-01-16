@@ -218,8 +218,8 @@ const Register: React.FC = () => {
       
       if (!emailSent) {
         console.warn('Failed to send email notification to admin');
-        // You might want to show a warning to the user
-        alert('Registration submitted but email notification failed. Please contact admin directly.');
+        // Don't show alert - registration is still successful
+        // The admin can check registrations from the system
       } else {
         console.log('Email notification sent successfully to admin');
       }

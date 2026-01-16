@@ -1,36 +1,34 @@
 // Admin configuration for gallery uploads
 export const ADMIN_CONFIG = {
-  // Set your admin email here - only this email can upload images
-  ADMIN_EMAIL: 'admin@positiveimage.edu.ng', // Replace with your actual admin email
+  // Admin password for gallery uploads
+  ADMIN_PASSWORD: 'adminadmin',
   
-  // Session duration (in milliseconds) - 24 hours
-  SESSION_DURATION: 24 * 60 * 60 * 1000,
+  // Session duration (in milliseconds) - 2 hours
+  SESSION_DURATION: 2 * 60 * 60 * 1000,
   
   // Storage keys for local storage
   STORAGE_KEYS: {
     ADMIN_SESSION: 'admin_gallery_session',
-    ADMIN_EMAIL: 'admin_email',
     SESSION_EXPIRY: 'admin_session_expiry'
   }
 };
 
 // Admin authentication functions
 export const AdminAuth = {
-  // Check if email is admin email
-  isAdminEmail: (email: string): boolean => {
-    return email.toLowerCase().trim() === ADMIN_CONFIG.ADMIN_EMAIL.toLowerCase().trim();
+  // Check if password is correct
+  isValidPassword: (password: string): boolean => {
+    return password === ADMIN_CONFIG.ADMIN_PASSWORD;
   },
 
   // Create admin session
-  createSession: (email: string): boolean => {
-    if (!AdminAuth.isAdminEmail(email)) {
+  createSession: (password: string): boolean => {
+    if (!AdminAuth.isValidPassword(password)) {
       return false;
     }
 
     const expiryTime = Date.now() + ADMIN_CONFIG.SESSION_DURATION;
     
     localStorage.setItem(ADMIN_CONFIG.STORAGE_KEYS.ADMIN_SESSION, 'true');
-    localStorage.setItem(ADMIN_CONFIG.STORAGE_KEYS.ADMIN_EMAIL, email);
     localStorage.setItem(ADMIN_CONFIG.STORAGE_KEYS.SESSION_EXPIRY, expiryTime.toString());
     
     return true;
@@ -40,9 +38,8 @@ export const AdminAuth = {
   isValidSession: (): boolean => {
     const session = localStorage.getItem(ADMIN_CONFIG.STORAGE_KEYS.ADMIN_SESSION);
     const expiry = localStorage.getItem(ADMIN_CONFIG.STORAGE_KEYS.SESSION_EXPIRY);
-    const email = localStorage.getItem(ADMIN_CONFIG.STORAGE_KEYS.ADMIN_EMAIL);
 
-    if (!session || !expiry || !email) {
+    if (!session || !expiry) {
       return false;
     }
 
@@ -54,22 +51,13 @@ export const AdminAuth = {
       return false;
     }
 
-    return AdminAuth.isAdminEmail(email);
+    return true;
   },
 
   // Clear admin session
   clearSession: (): void => {
     localStorage.removeItem(ADMIN_CONFIG.STORAGE_KEYS.ADMIN_SESSION);
-    localStorage.removeItem(ADMIN_CONFIG.STORAGE_KEYS.ADMIN_EMAIL);
     localStorage.removeItem(ADMIN_CONFIG.STORAGE_KEYS.SESSION_EXPIRY);
-  },
-
-  // Get current admin email
-  getCurrentAdminEmail: (): string | null => {
-    if (AdminAuth.isValidSession()) {
-      return localStorage.getItem(ADMIN_CONFIG.STORAGE_KEYS.ADMIN_EMAIL);
-    }
-    return null;
   },
 
   // Get session time remaining (in minutes)

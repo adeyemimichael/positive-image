@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Lock, Mail, X, CheckCircle, AlertCircle } from 'lucide-react';
+import { Lock, Key, X, CheckCircle, AlertCircle } from 'lucide-react';
 import { AdminAuth } from '../config/admin';
 
 interface AdminLoginProps {
@@ -10,7 +10,7 @@ interface AdminLoginProps {
 }
 
 const AdminLogin: React.FC<AdminLoginProps> = ({ isOpen, onClose, onSuccess }) => {
-  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
 
@@ -22,14 +22,14 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isOpen, onClose, onSuccess }) =
     // Simulate a brief loading delay for better UX
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    if (AdminAuth.isAdminEmail(email)) {
-      const sessionCreated = AdminAuth.createSession(email);
+    if (AdminAuth.isValidPassword(password)) {
+      const sessionCreated = AdminAuth.createSession(password);
       if (sessionCreated) {
         setMessage({ type: 'success', text: 'Authentication successful!' });
         setTimeout(() => {
           onSuccess();
           onClose();
-          setEmail('');
+          setPassword('');
           setMessage(null);
         }, 1500);
       } else {
@@ -38,7 +38,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isOpen, onClose, onSuccess }) =
     } else {
       setMessage({ 
         type: 'error', 
-        text: 'Access denied. Only authorized admin can upload images. Please contact the administrator to upload your images.' 
+        text: 'Incorrect password. Access denied.' 
       });
     }
 
@@ -46,7 +46,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isOpen, onClose, onSuccess }) =
   };
 
   const handleClose = () => {
-    setEmail('');
+    setPassword('');
     setMessage(null);
     onClose();
   };
@@ -86,22 +86,22 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isOpen, onClose, onSuccess }) =
 
         {/* Description */}
         <p className="text-gray-600 mb-6">
-          Enter your admin email to upload images to the gallery. Only authorized administrators can add new photos.
+          Enter the admin password to upload images to the gallery. Only authorized administrators can add new photos.
         </p>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Admin Email Address
+              Admin Password
             </label>
             <div className="relative">
-              <Mail size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+              <Key size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
               <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your admin email"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter admin password"
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B1464] focus:border-transparent outline-none transition-all"
                 required
                 disabled={isLoading}
@@ -132,7 +132,7 @@ const AdminLogin: React.FC<AdminLoginProps> = ({ isOpen, onClose, onSuccess }) =
           {/* Submit Button */}
           <button
             type="submit"
-            disabled={isLoading || !email.trim()}
+            disabled={isLoading || !password.trim()}
             className="w-full bg-gradient-to-r from-[#1B1464] to-[#6B46C1] text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
           >
             {isLoading ? (

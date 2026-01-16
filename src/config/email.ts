@@ -8,7 +8,7 @@ export const EMAIL_CONFIG = {
   
   // EmailJS configuration - Get these from https://www.emailjs.com/
   EMAILJS: {
-    SERVICE_ID: 'service_0wu7xdp',    // Replace with your EmailJS service ID
+    SERVICE_ID: 'service_q7s7e7y',    // Replace with your EmailJS service ID
     TEMPLATE_ID: 'template_dq5strk',  // Replace with your EmailJS template ID
     USER_ID: 'NMjtbweOtdss-RG02'   // Replace with your EmailJS public key
   },

@@ -221,15 +221,14 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload }) 
           {/* Description */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description *
+              Description (Optional)
             </label>
             <textarea
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Enter image description"
+              placeholder="Enter image description (optional)"
               rows={3}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#1B1464] focus:border-transparent outline-none transition-all resize-none"
-              required
               disabled={isUploading}
             />
           </div>
@@ -266,7 +265,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload }) 
             </button>
             <button
               type="submit"
-              disabled={isUploading || !formData.file || !formData.title || !formData.description}
+              disabled={isUploading || !formData.file || !formData.title}
               className="flex-1 bg-gradient-to-r from-[#1B1464] to-[#6B46C1] text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {isUploading ? (

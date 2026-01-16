@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ZoomIn, ChevronLeft, ChevronRight, Upload, LogOut, Clock } from 'lucide-react';
+import { X, ZoomIn, ChevronLeft, ChevronRight, Upload, LogOut, Clock, Trash2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import AdminLogin from '../components/AdminLogin';
 import ImageUpload from '../components/ImageUpload';
@@ -12,6 +12,7 @@ interface GalleryImage {
   title: string;
   category: string;
   description: string;
+  uploadDate?: string;
 }
 
 const Gallery: React.FC = () => {
@@ -193,59 +194,28 @@ const Gallery: React.FC = () => {
     setSelectedImage(filteredImages[prevIndex]);
   };
 
+  const handleDeleteImage = (imageId: number) => {
+    // Filter out the deleted image
+    const updatedImages = images.filter(img => img.id !== imageId);
+    setImages(updatedImages);
+    
+    // Update localStorage
+    const uploadedImages = updatedImages.filter(img => img.uploadDate);
+    localStorage.setItem('gallery_images', JSON.stringify(uploadedImages));
+    
+    // Close the modal
+    setSelectedImage(null);
+  };
+
   return (
     <div className="min-h-screen bg-white pt-32 pb-16">
       <div className="max-w-7xl mx-auto px-4">
         {/* Header Section */}
         <div className="text-center mb-16">
-          <div className="flex justify-between items-start mb-6">
-            <div className="flex-1">
-              <h1 className="text-5xl font-bold text-black mb-6">
-                School Gallery
-              </h1>
-            </div>
-            
-            {/* Admin Controls */}
-            <div className="flex flex-col items-end gap-2">
-              {isAdminAuthenticated ? (
-                <div className="bg-white rounded-2xl shadow-lg p-4 border border-green-200">
-                  <div className="flex items-center gap-3 mb-3">
-                    <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-sm font-semibold text-green-700">Admin Authenticated</span>
-                  </div>
-                  
-                  <div className="flex items-center gap-2 text-xs text-gray-600 mb-3">
-                    <Clock size={14} />
-                    <span>Session: {sessionTimeRemaining} minutes remaining</span>
-                  </div>
-                  
-                  <div className="flex gap-2">
-                    <button
-                      onClick={() => setShowImageUpload(true)}
-                      className="bg-gradient-to-r from-[#6FC1FF] to-[#6B46C1] text-white px-4 py-2 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-2 text-sm cursor-pointer transform active:scale-95"
-                    >
-                      <Upload size={16} />
-                      Upload Image
-                    </button>
-                    <button
-                      onClick={handleAdminLogout}
-                      className="bg-gray-500 text-white px-4 py-2 rounded-lg font-semibold hover:bg-gray-600 transition-colors flex items-center gap-2 text-sm"
-                    >
-                      <LogOut size={16} />
-                      Logout
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <button
-                  onClick={handleAdminLogin}
-                  className="bg-gradient-to-r from-[#1B1464] to-[#6B46C1] text-white px-6 py-3 rounded-full font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-2 cursor-pointer transform active:scale-95"
-                >
-                  <Upload size={20} />
-                  Admin Upload
-                </button>
-              )}
-            </div>
+          <div className="mb-6">
+            <h1 className="text-5xl font-bold text-black mb-6">
+              School Gallery
+            </h1>
           </div>
           
           <p className="text-xl text-gray-700 max-w-3xl mx-auto mb-8">
@@ -324,6 +294,48 @@ const Gallery: React.FC = () => {
             </motion.div>
           ))}
         </motion.div>
+
+        {/* Admin Controls */}
+        <div className="mt-12 flex justify-center">
+          {isAdminAuthenticated ? (
+            <div className="bg-white rounded-2xl shadow-lg p-6 border border-green-200">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-lg font-semibold text-green-700">Admin Panel</span>
+              </div>
+              
+              <div className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+                <Clock size={16} />
+                <span>Session: {sessionTimeRemaining} minutes remaining</span>
+              </div>
+              
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowImageUpload(true)}
+                  className="bg-gradient-to-r from-[#6FC1FF] to-[#6B46C1] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-2 cursor-pointer transform active:scale-95"
+                >
+                  <Upload size={18} />
+                  Upload Image
+                </button>
+                <button
+                  onClick={handleAdminLogout}
+                  className="bg-gray-500 text-white px-6 py-3 rounded-lg font-semibold hover:bg-gray-600 transition-colors flex items-center gap-2"
+                >
+                  <LogOut size={18} />
+                  Logout
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={handleAdminLogin}
+              className="bg-gradient-to-r from-[#1B1464] to-[#6B46C1] text-white px-8 py-4 rounded-full font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-3 cursor-pointer transform active:scale-95"
+            >
+              <Upload size={24} />
+              Admin Upload
+            </button>
+          )}
+        </div>
 
         {/* Another Call to Action */}
         <div className="mt-20 text-center">
@@ -404,9 +416,25 @@ const Gallery: React.FC = () => {
               <div className="p-6 bg-white">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-2xl font-bold text-black">{selectedImage.title}</h3>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold">
-                    {selectedImage.category}
-                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm font-semibold">
+                      {selectedImage.category}
+                    </span>
+                    {/* Delete button - only visible for admins */}
+                    {isAdminAuthenticated && (
+                      <button
+                        onClick={() => {
+                          if (window.confirm('Are you sure you want to delete this image?')) {
+                            handleDeleteImage(selectedImage.id);
+                          }
+                        }}
+                        className="px-3 py-1 bg-red-100 text-red-600 rounded-full text-sm font-semibold hover:bg-red-200 transition-colors flex items-center gap-1"
+                      >
+                        <Trash2 size={16} />
+                        Delete
+                      </button>
+                    )}
+                  </div>
                 </div>
                 <p className="text-gray-700">{selectedImage.description}</p>
                 
