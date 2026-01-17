@@ -61,91 +61,175 @@ const Gallery: React.FC = () => {
   const defaultGalleryImages: GalleryImage[] = [
     {
       id: 1,
-      url: 'https://images.pexels.com/photos/8617557/pexels-photo-8617557.jpeg?auto=compress&cs=tinysrgb&w=800',
-      title: 'Main Campus Building',
-      category: 'Campus',
-      description: 'Our modern main building houses administrative offices and senior classrooms'
+      url: '/positive2/facility.jpeg',
+      title: 'School Facilities',
+      category: 'Facilities',
+      description: 'Our modern facilities provide excellent learning environment for students'
     },
     {
       id: 2,
-      url: 'https://images.pexels.com/photos/8617960/pexels-photo-8617960.jpeg?auto=compress&cs=tinysrgb&w=800',
-      title: 'State-of-the-art Library',
-      category: 'Facilities',
-      description: 'A quiet space for learning with thousands of books and digital resources'
+      url: '/positive2/primaryschool.jpeg',
+      title: 'Primary School Section',
+      category: 'Campus',
+      description: 'Dedicated primary school section with age-appropriate facilities'
     },
     {
       id: 3,
-      url: 'https://images.pexels.com/photos/8617914/pexels-photo-8617914.jpeg?auto=compress&cs=tinysrgb&w=800',
-      title: 'Science Laboratory',
+      url: '/positive2/practicals.jpeg',
+      title: 'Science Practicals',
       category: 'Facilities',
-      description: 'Fully equipped labs for physics, chemistry, and biology experiments'
+      description: 'Students engaged in hands-on science experiments and practicals'
     },
     {
       id: 4,
-      url: 'https://images.pexels.com/photos/8617477/pexels-photo-8617477.jpeg?auto=compress&cs=tinysrgb&w=800',
-      title: 'Sports Complex',
-      category: 'Sports',
-      description: 'Modern sports facilities including football field and basketball court'
+      url: '/positive2/practice.jpeg',
+      title: 'Practical Learning',
+      category: 'Student Life',
+      description: 'Interactive learning sessions with practical demonstrations'
     },
     {
       id: 5,
-      url: 'https://images.pexels.com/photos/8617704/pexels-photo-8617704.jpeg?auto=compress&cs=tinysrgb&w=800',
-      title: 'Modern Classrooms',
-      category: 'Campus',
-      description: 'Bright, spacious classrooms equipped with modern teaching aids'
+      url: '/positive2/schoolpractical.jpeg',
+      title: 'Laboratory Sessions',
+      category: 'Facilities',
+      description: 'Well-equipped laboratories for chemistry, physics, and biology'
     },
     {
       id: 6,
-      url: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800',
-      title: 'Student Activities',
-      category: 'Student Life',
-      description: 'Students engaged in various educational and recreational activities'
-    },
-    {
-      id: 7,
-      url: 'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800',
-      title: 'Computer Laboratory',
-      category: 'Facilities',
-      description: 'Modern computer lab with high-speed internet and latest software'
-    },
-    {
-      id: 8,
-      url: 'https://images.pexels.com/photos/3184465/pexels-photo-3184465.jpeg?auto=compress&cs=tinysrgb&w=800',
-      title: 'Art & Creativity Center',
-      category: 'Facilities',
-      description: 'Dedicated space for artistic expression and creative learning'
-    },
-    {
-      id: 9,
-      url: 'https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=800',
-      title: 'School Assembly',
+      url: '/positive2/studnetassembly.jpeg',
+      title: 'Morning Assembly',
       category: 'Student Life',
       description: 'Daily morning assembly fostering unity and school spirit'
     },
     {
+      id: 7,
+      url: '/positive2/ceoandstudent.JPG',
+      title: 'CEO with Students',
+      category: 'Student Life',
+      description: 'Our CEO engaging with students, fostering mentorship and guidance'
+    },
+    {
+      id: 8,
+      url: '/positive2/ceoandpupils.jpeg',
+      title: 'Leadership & Students',
+      category: 'Student Life',
+      description: 'Building strong relationships between leadership and students'
+    },
+    {
+      id: 9,
+      url: '/positive2/ceoandstud.jpg',
+      title: 'Student Engagement',
+      category: 'Student Life',
+      description: 'Active student participation in school activities'
+    },
+    {
       id: 10,
-      url: 'https://images.pexels.com/photos/8617557/pexels-photo-8617557.jpeg?auto=compress&cs=tinysrgb&w=800',
-      title: 'Graduation Ceremony',
-      category: 'Events',
-      description: 'Celebrating our graduates as they move to the next phase of their journey'
+      url: '/positive2/ceoandstud3.jpg',
+      title: 'Academic Excellence',
+      category: 'Student Life',
+      description: 'Celebrating academic achievements and student success'
     },
     {
       id: 11,
-      url: 'https://images.pexels.com/photos/8617960/pexels-photo-8617960.jpeg?auto=compress&cs=tinysrgb&w=800',
-      title: 'Cultural Day',
+      url: '/positive2/pastevent.jpeg',
+      title: 'School Events',
       category: 'Events',
-      description: 'Annual cultural celebration showcasing our rich Nigerian heritage'
+      description: 'Memorable moments from our school events and celebrations'
     },
     {
       id: 12,
-      url: 'https://images.pexels.com/photos/8617914/pexels-photo-8617914.jpeg?auto=compress&cs=tinysrgb&w=800',
-      title: 'Science Fair',
+      url: '/positive2/pastevent2.jpeg',
+      title: 'Past Events Highlights',
       category: 'Events',
-      description: 'Students presenting their innovative science projects and experiments'
+      description: 'Highlights from previous school events and activities'
+    },
+    {
+      id: 13,
+      url: '/positive2/eventspast.jpeg',
+      title: 'Event Celebrations',
+      category: 'Events',
+      description: 'Students and staff celebrating special occasions together'
+    },
+    {
+      id: 14,
+      url: '/positive2/smallexcursion.jpeg',
+      title: 'Educational Excursion',
+      category: 'Events',
+      description: 'Students on educational field trips and excursions'
+    },
+    {
+      id: 15,
+      url: '/positive2/ceoandstaff.jpg',
+      title: 'Leadership Team',
+      category: 'Campus',
+      description: 'Our dedicated CEO and staff working together for excellence'
+    },
+    {
+      id: 16,
+      url: '/positive2/staffs.jpg',
+      title: 'Teaching Staff',
+      category: 'Campus',
+      description: 'Our experienced and qualified teaching staff'
+    },
+    {
+      id: 17,
+      url: '/positive2/staffing.JPG',
+      title: 'Staff Team',
+      category: 'Campus',
+      description: 'Dedicated staff members committed to student success'
+    },
+    {
+      id: 18,
+      url: '/positive2/staffingcollections.jpg',
+      title: 'Staff Collection',
+      category: 'Campus',
+      description: 'Our diverse and talented team of educators'
+    },
+    {
+      id: 19,
+      url: '/fullstaff.JPG',
+      title: 'Full Staff Assembly',
+      category: 'Campus',
+      description: 'Complete staff team photo showcasing our educational family'
+    },
+    {
+      id: 20,
+      url: '/staffpositive.jpg',
+      title: 'Staff Group Photo',
+      category: 'Campus',
+      description: 'Our positive and enthusiastic teaching staff'
+    },
+    {
+      id: 21,
+      url: '/outing1.jpg',
+      title: 'School Outing',
+      category: 'Events',
+      description: 'Fun and educational school outings for students'
+    },
+    {
+      id: 22,
+      url: '/outing2.jpg',
+      title: 'Outdoor Activities',
+      category: 'Events',
+      description: 'Students enjoying outdoor learning experiences'
+    },
+    {
+      id: 23,
+      url: '/outing3.jpg',
+      title: 'Field Trip',
+      category: 'Events',
+      description: 'Educational field trips enhancing classroom learning'
+    },
+    {
+      id: 24,
+      url: '/students.jpg',
+      title: 'Our Students',
+      category: 'Student Life',
+      description: 'Bright and enthusiastic students of Positive Image Schools'
     }
   ];
 
-  const categories = ['All', 'Campus', 'Facilities', 'Student Life', 'Sports', 'Events'];
+  const categories = ['All', 'Campus', 'Facilities', 'Student Life', 'Events'];
 
   const filteredImages = selectedCategory === 'All' 
     ? images 

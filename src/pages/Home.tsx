@@ -10,29 +10,29 @@ const Home: React.FC = () => {
 
   const schoolContent = [
     {
-      url: '/ceo2.jpg',
-      caption: 'Dedicated staffs',
+      url: '/positive2/ceoandstaff.jpg',
+      caption: 'Dedicated Leadership & Staff',
       title: 'Welcome to Positive Image Schools',
       subtitle: 'Where Excellence Meets Innovation',
       description: 'Nurturing minds, building character, and creating future leaders in our state-of-the-art facilities.'
     },
     {
-      url: '/outing3.jpg',
-      caption: 'Events',
+      url: '/positive2/announcement.jpeg',
+      caption: 'Registration Now Open',
       title: 'Discover Knowledge at Positive Image Schools',
       subtitle: 'Your Gateway to Academic Excellence',
       description: 'Empowering students with world-class resources and innovative learning environments.'
     },
     {
-      url: '/asa2.JPG',
-      caption: 'Science Laboratory',
+      url: '/positive2/practicals.jpeg',
+      caption: 'Science Practicals',
       title: 'Explore Science at Positive Image Schools',
       subtitle: 'Where Curiosity Meets Discovery',
       description: 'Inspiring the next generation of scientists, innovators, and critical thinkers.'
     },
     {
-      url: '/students.jpg',
-      caption: 'Sports Facilities',
+      url: '/positive2/smallexcursion.jpeg',
+      caption: 'Educational Excursions',
       title: 'Achieve Greatness at Positive Image Schools',
       subtitle: 'Building Champions in Every Field',
       description: 'Developing well-rounded individuals through academic excellence and athletic achievement.'
@@ -409,13 +409,13 @@ const Home: React.FC = () => {
                 className="col-span-2 md:col-span-3 row-span-2 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer min-h-[200px] md:min-h-[300px]"
               >
                 <img
-                  src="https://images.pexels.com/photos/8617557/pexels-photo-8617557.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="Main Campus Building"
+                  src="/positive2/facility.jpeg"
+                  alt="School Facilities"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <h4 className="text-lg font-semibold">Main Campus</h4>
+                  <h4 className="text-lg font-semibold">School Facilities</h4>
                   <p className="text-sm">Modern learning environment</p>
                 </div>
               </motion.div>
@@ -426,23 +426,8 @@ const Home: React.FC = () => {
                 className="md:col-span-2 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
               >
                 <img
-                  src="https://images.pexels.com/photos/8617960/pexels-photo-8617960.jpeg?auto=compress&cs=tinysrgb&w=400"
-                  alt="Library"
-                  className="w-full h-32 md:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="absolute bottom-2 left-2 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <h4 className="text-sm font-semibold">Library</h4>
-                </div>
-              </motion.div>
-
-              <motion.div
-                variants={fadeInUp}
-                className="md:col-span-1 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
-              >
-                <img
-                  src="https://images.pexels.com/photos/8617914/pexels-photo-8617914.jpeg?auto=compress&cs=tinysrgb&w=400"
-                  alt="Science Lab"
+                  src="/positive2/practicals.jpeg"
+                  alt="Science Practicals"
                   className="w-full h-32 md:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -453,16 +438,31 @@ const Home: React.FC = () => {
 
               <motion.div
                 variants={fadeInUp}
-                className="md:col-span-2 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
+                className="md:col-span-1 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
               >
                 <img
-                  src="https://images.pexels.com/photos/8617477/pexels-photo-8617477.jpeg?auto=compress&cs=tinysrgb&w=400"
-                  alt="Sports Field"
+                  src="/positive2/practice.jpeg"
+                  alt="Practical Learning"
                   className="w-full h-32 md:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-2 left-2 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <h4 className="text-sm font-semibold">Sports Field</h4>
+                  <h4 className="text-sm font-semibold">Practicals</h4>
+                </div>
+              </motion.div>
+
+              <motion.div
+                variants={fadeInUp}
+                className="md:col-span-2 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
+              >
+                <img
+                  src="/positive2/smallexcursion.jpeg"
+                  alt="School Excursion"
+                  className="w-full h-32 md:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="absolute bottom-2 left-2 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <h4 className="text-sm font-semibold">Excursions</h4>
                 </div>
               </motion.div>
 
@@ -471,13 +471,13 @@ const Home: React.FC = () => {
                 className="md:col-span-1 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
               >
                 <img
-                  src="https://images.pexels.com/photos/8617704/pexels-photo-8617704.jpeg?auto=compress&cs=tinysrgb&w=400"
-                  alt="Classroom"
+                  src="/positive2/primaryschool.jpeg"
+                  alt="Primary School"
                   className="w-full h-32 md:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-2 left-2 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <h4 className="text-sm font-semibold">Classroom</h4>
+                  <h4 className="text-sm font-semibold">Primary School</h4>
                 </div>
               </motion.div>
 
@@ -487,8 +487,8 @@ const Home: React.FC = () => {
                 className="col-span-2 md:col-span-3 row-span-1 md:row-span-2 relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer min-h-[150px] md:min-h-[200px]"
               >
                 <img
-                  src="https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=400"
-                  alt="Students"
+                  src="/positive2/studnetassembly.jpeg"
+                  alt="Student Assembly"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -503,13 +503,13 @@ const Home: React.FC = () => {
                 className="relative overflow-hidden rounded-2xl shadow-lg group cursor-pointer"
               >
                 <img
-                  src="https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=400"
-                  alt="Computer Lab"
+                  src="/positive2/ceoandstudent.JPG"
+                  alt="CEO with Students"
                   className="w-full h-32 md:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-2 left-2 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <h4 className="text-sm font-semibold">Computer Lab</h4>
+                  <h4 className="text-sm font-semibold">Leadership</h4>
                 </div>
               </motion.div>
             </div>
@@ -632,8 +632,8 @@ const Home: React.FC = () => {
             >
               <div className="relative h-64 overflow-hidden">
                 <img
-                  src="https://images.pexels.com/photos/8617557/pexels-photo-8617557.jpeg?auto=compress&cs=tinysrgb&w=800"
-                  alt="School Event"
+                  src="/positive2/announcement.jpeg"
+                  alt="School Registration Announcement"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute top-4 left-4">
@@ -646,14 +646,14 @@ const Home: React.FC = () => {
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-2 h-2 bg-[#D6261D] rounded-full"></div>
-                  <span className="text-sm text-gray-500">December 15, 2024</span>
+                  <span className="text-sm text-gray-500">January 17, 2026</span>
                 </div>
                 <h3 className="text-xl font-bold text-[#1B1464] mb-3">
-                  2025 Academic Session Registration Now Open!
+                  2026 Academic Session Registration Now Open!
                 </h3>
                 <p className="text-gray-600 mb-4 leading-relaxed">
-                  We are excited to announce that registration for the 2025 academic session is now open.
-                  Early bird discount of 15% available for registrations completed before January 31st, 2025.
+                  We are excited to announce that registration for the 2026 academic session is now open.
+                  Early bird discount of 15% available for registrations completed before February 28th, 2026.
                 </p>
                 <div className="flex items-center justify-between">
                   <Link to="/register">

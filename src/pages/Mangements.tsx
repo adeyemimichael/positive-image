@@ -26,21 +26,13 @@ const Management: React.FC = () => {
       name: "Mr. Special Oladapo",
       position: "Chief Executive Officer",
       bio: "Mr. Special Oladapo is the visionary CEO of Positive Image Schools. With good experience in education and administration, His dedication to excellence has transformed the lives of hundreds of students.",
-      image:"./ceo2.jpg",
-      images: [
-        "./public/positive/ceo.jpg",
-        "./ceo2.jpg",
-       "./ceo32.jpg",
-      "./public/positive/ceo.jpg",
-       "./ceo.jpg",
-       
-      ],
+      image:"/positive/ceo1.jpg",
       email: "specialoladapo@gmail.com",
       phone: "+234 8165318587",
       linkedin: "https://linkedin.com/in/SpecialOladapo",
       achievements: [
         "7+ years in educational leadership",
-        "B.Ed. University of Ibadan, ",
+        "B.Ed. University of Ibadan",
         "Oyo State Education Excellence Award 2022"
       ],
       isCEO: true
@@ -50,7 +42,7 @@ const Management: React.FC = () => {
       name: "Mrs. Folake Adebayo",
       position: "Vice Principal (Academic)",
       bio: "Mrs. Folake Adebayo oversees all academic programs and curriculum development. With her Master's in Education and 18 years of teaching experience, she ensures our educational standards remain excellent and innovative.",
-      image: "https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800",
+      image: "/positive2/staffingcollections.jpg",
       email: "vp.academic@positiveimage.edu.ng",
       phone: "+234 803 123 4568",
       achievements: [
@@ -65,7 +57,7 @@ const Management: React.FC = () => {
       name: "Mr. Johnson Olumide",
       position: "Vice Principal (Administration)",
       bio: "Mr. Johnson Olumide manages daily operations and administrative functions. His MBA in Management and 15 years of experience in educational administration ensure smooth school operations.",
-      image: "https://images.pexels.com/photos/2182970/pexels-photo-2182970.jpeg?auto=compress&cs=tinysrgb&w=800",
+      image: "/positive2/staffs.jpg",
       email: "vp.admin@positiveimage.edu.ng",
       phone: "+234 803 123 4569",
       achievements: [
@@ -80,7 +72,7 @@ const Management: React.FC = () => {
       name: "Mrs. Grace Ogundimu",
       position: "Head of Teachers",
       bio: "Mrs. Grace Ogundimu leads our teaching staff and coordinates professional development. With her extensive experience in pedagogy, she ensures our teachers deliver quality education.",
-      image: "",
+      image: "/staffpositive2.jpg",
       email: "head.teachers@positiveimage.edu.ng",
       phone: "+234 803 123 4570",
       achievements: [
@@ -92,15 +84,14 @@ const Management: React.FC = () => {
     },
     {
       id: 5,
-      name: "Babatunde Bosede Janet ",
+      name: "Babatunde Bosede Janet",
       position: "Bursar",
       bio: "Miss Babatunde Bosede Janet manages the school's financial operations and ensures fiscal responsibility. Her expertise in accounting and finance is excellent.",
-      image: "./staffpositive5.jpg",
+      image: "/staffpositive5.jpg",
       email: "",
       phone: "",
       achievements: [
         "Economics and Social Studies (NCE)",
-        
       ]
     },
     {
@@ -108,7 +99,7 @@ const Management: React.FC = () => {
       name: "Mrs. Kemi Adeyemi",
       position: "Head of Student Affairs",
       bio: "Mrs. Kemi Adeyemi is dedicated to student welfare and development. Her background in guidance and counseling ensures every student receives proper support and guidance.",
-      image: "https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800",
+      image: "/positive2/staffing.JPG",
       email: "student.affairs@positiveimage.edu.ng",
       phone: "+234 803 123 4572",
       achievements: [
