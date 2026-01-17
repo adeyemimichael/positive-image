@@ -27,6 +27,11 @@ const Management: React.FC = () => {
       position: "Chief Executive Officer",
       bio: "Mr. Special Oladapo is the visionary CEO of Positive Image Schools. With good experience in education and administration, His dedication to excellence has transformed the lives of hundreds of students.",
       image:"/positive/ceo1.jpg",
+      images: [
+        "/positive/ceo1.jpg",
+        "/positive/ceo.JPG",
+        "/positive/ceo2.JPG"
+      ],
       email: "specialoladapo@gmail.com",
       phone: "+234 8165318587",
       linkedin: "https://linkedin.com/in/SpecialOladapo",
