@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle, Download, Mail, Phone, Home, Calendar } from 'lucide-react';
+import { generateReceiptPDF } from '../utils/pdfGenerator';
 
 const RegistrationSuccess: React.FC = () => {
   const location = useLocation();
@@ -16,31 +17,23 @@ const RegistrationSuccess: React.FC = () => {
   }, [registrationData, navigate]);
 
   const downloadReceipt = () => {
-    // Create a simple receipt content
-    const receiptContent = `
-POSITIVE IMAGE SCHOOLS
-Registration Receipt
-
-Student Name: ${registrationData?.fullName}
-Class: ${registrationData?.classApplyingFor}
-Registration Date: ${new Date().toLocaleDateString()}
-Payment Reference: ${paymentReference}
-Amount Paid: ₦${registrationData?.paymentAmount?.toLocaleString()}
-Payment Status: Completed
-
-Thank you for choosing Positive Image Schools!
-Contact us: info@positiveimage.edu.ng | +234 803 123 4567
-    `;
-
-    const blob = new Blob([receiptContent], { type: 'text/plain' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `Registration_Receipt_${paymentReference}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    window.URL.revokeObjectURL(url);
+    if (!registrationData || !paymentReference) return;
+    
+    // Generate PDF receipt
+    generateReceiptPDF(
+      registrationData.fullName,
+      paymentReference,
+      `₦${registrationData.paymentAmount?.toLocaleString()}`,
+      new Date().toLocaleDateString('en-GB', { 
+        day: '2-digit', 
+        month: 'long', 
+        year: 'numeric' 
+      }),
+      'Online Payment (Paystack)',
+      registrationData.classApplyingFor,
+      registrationData.guardianName || 'N/A',
+      registrationData.guardianPhone || 'N/A'
+    );
   };
 
   if (!registrationData) {

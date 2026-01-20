@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Mail, X, ZoomIn } from 'lucide-react';
+import { Search, X, ZoomIn } from 'lucide-react';
 import { teachers } from '../data/mock-data';
-import { Teacher } from '../types';
 import Card from '../components/ui/Card';
 import Input from '../components/ui/Input';
-import { filterArrayBySearchTerm } from '../utils/helpers';
 
 const Teachers: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -62,6 +60,49 @@ const Teachers: React.FC = () => {
               Meet our dedicated team of experienced educators and staff members who inspire and guide our students.
             </p>
           </motion.div>
+        </div>
+      </section>
+
+      {/* CEO and Staff Group Photos Section */}
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+            {/* CEO with Staff Photo */}
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              className="relative overflow-hidden rounded-2xl shadow-xl group"
+            >
+              <img 
+                src="/positive2/ceoandstaff.jpg" 
+                alt="CEO with Staff" 
+                className="w-full h-96 object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+                <h3 className="text-white text-xl font-bold">Leadership & Staff</h3>
+                <p className="text-white/90 text-sm">Our dedicated team working together</p>
+              </div>
+            </motion.div>
+
+            {/* Full Staff Photo */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="relative overflow-hidden rounded-2xl shadow-xl group"
+            >
+              <img 
+                src="/fullstaff.JPG" 
+                alt="Full Staff Team" 
+                className="w-full h-96 object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6">
+                <h3 className="text-white text-xl font-bold">Our Complete Team</h3>
+                <p className="text-white/90 text-sm">United in excellence and dedication</p>
+              </div>
+            </motion.div>
+          </div>
         </div>
       </section>
 
@@ -123,14 +164,14 @@ const Teachers: React.FC = () => {
                   transition={{ delay: 0.1 * index }}
                 >
                   <Card className="h-full overflow-hidden group hover:shadow-xl transition-all duration-300">
-                    {/* Image takes 70% of the card */}
+                    {/* Image takes most of the card */}
                     <div 
-                      className="h-80 overflow-hidden relative cursor-pointer"
-                      onClick={() => setSelectedImage({ url: teacher.photo, subject: teacher.subject })}
+                      className="h-96 overflow-hidden relative cursor-pointer"
+                      onClick={() => setSelectedImage({ url: teacher.photo, subject: teacher.name })}
                     >
                       <img 
                         src={teacher.photo} 
-                        alt={`${teacher.subject} Teacher`} 
+                        alt={teacher.name} 
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                       {/* Overlay gradient for better text readability */}
@@ -144,14 +185,14 @@ const Teachers: React.FC = () => {
                       </div>
                     </div>
                     
-                    {/* Subject info takes 30% of the card */}
-                    <div className="p-4 bg-gradient-to-r from-primary-50 to-secondary-50">
+                    {/* Staff name and qualification */}
+                    <div className="p-6 bg-gradient-to-r from-primary-50 to-secondary-50">
                       <div className="text-center">
-                        <h3 className="text-lg font-heading font-bold text-primary-700 mb-1">
-                          {teacher.subject}
+                        <h3 className="text-xl font-heading font-bold text-primary-700 mb-2">
+                          {teacher.name}
                         </h3>
-                        <p className="text-sm text-gray-600">
-                          {teacher.experience} years experience
+                        <p className="text-sm text-gray-600 italic">
+                          ({teacher.subject})
                         </p>
                       </div>
                     </div>
@@ -198,14 +239,14 @@ const Teachers: React.FC = () => {
               {/* Image */}
               <img
                 src={selectedImage.url}
-                alt={`${selectedImage.subject} Teacher`}
+                alt={selectedImage.subject}
                 className="w-full h-auto max-h-[80vh] object-contain"
               />
 
               {/* Image info */}
               <div className="p-6 bg-gradient-to-r from-primary-50 to-secondary-50">
                 <h3 className="text-2xl font-heading font-bold text-primary-700 text-center">
-                  {selectedImage.subject} Teacher
+                  {selectedImage.subject}
                 </h3>
               </div>
             </motion.div>

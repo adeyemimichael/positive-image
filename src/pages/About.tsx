@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Book, Clock, MapPin, Goal } from 'lucide-react';
+import { generateAnthemLyricsPDF } from '../utils/pdfGenerator';
 
 const About: React.FC = () => {
   const fadeIn = {
@@ -222,14 +223,28 @@ const About: React.FC = () => {
               className="bg-white rounded-2xl shadow-xl p-8 border border-primary-100"
             >
               <div className="text-center mb-8">
-                <h3 className="text-2xl font-heading font-bold text-primary-700 mb-2">
-                  Listen to Our Anthem
-                </h3>
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <h3 className="text-2xl font-heading font-bold text-primary-700">
+                    Listen to Our Anthem
+                  </h3>
+                  <span className="bg-[#FFF4B2] text-[#1B1464] px-3 py-1 rounded-full text-xs font-bold">
+                    COMING SOON
+                  </span>
+                </div>
                 <p className="text-gray-600">Experience the spirit of Positive Image Schools</p>
               </div>
 
               {/* Custom Audio Player */}
-              <div className="bg-gradient-to-br from-primary-600 to-primary-700 rounded-2xl p-6 text-white mb-6">
+              <div className="bg-gradient-to-br from-primary-600 to-primary-700 rounded-2xl p-6 text-white mb-6 relative">
+                {/* Coming Soon Overlay */}
+                <div className="absolute inset-0 bg-gray-900/50 backdrop-blur-sm rounded-2xl flex items-center justify-center z-10">
+                  <div className="text-center">
+                    <div className="text-4xl mb-3">🎵</div>
+                    <p className="text-xl font-bold mb-2">Audio Coming Soon</p>
+                    <p className="text-sm text-gray-200">We're preparing a special recording for you</p>
+                  </div>
+                </div>
+
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h4 className="font-semibold text-lg">Positive Image Anthem</h4>
@@ -267,8 +282,8 @@ const About: React.FC = () => {
                 <div className="bg-gray-50 rounded-lg p-4">
                   <h4 className="font-semibold text-gray-800 mb-2">About This Recording</h4>
                   <p className="text-gray-600 text-sm">
-                    This beautiful rendition was performed by our school choir during the 
-                    2023 Founders' Day celebration. 
+                    We are currently working on a beautiful rendition to be performed by our school choir. 
+                    The audio will be available soon for everyone to enjoy.
                   </p>
                 </div>
 
@@ -287,11 +302,17 @@ const About: React.FC = () => {
                 <div className="pt-4 border-t border-gray-200">
                   <h4 className="font-semibold text-gray-800 mb-3">Download Options</h4>
                   <div className="flex flex-wrap gap-2">
-                    <button className="px-4 py-2 bg-primary-600 text-white rounded-lg text-sm hover:bg-primary-700 transition-colors">
-                      MP3 Format
+                    <button 
+                      disabled
+                      className="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg text-sm cursor-not-allowed"
+                    >
+                      MP3 Format (Coming Soon)
                     </button>
                     
-                    <button className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition-colors">
+                    <button 
+                      onClick={generateAnthemLyricsPDF}
+                      className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition-colors"
+                    >
                       Lyrics PDF
                     </button>
                   </div>

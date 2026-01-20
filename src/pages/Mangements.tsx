@@ -26,11 +26,13 @@ const Management: React.FC = () => {
       name: "Mr. Special Oladapo",
       position: "Chief Executive Officer",
       bio: "Mr. Special Oladapo is the visionary CEO of Positive Image Schools. With good experience in education and administration, His dedication to excellence has transformed the lives of hundreds of students.",
-      image:"/positive/ceo1.jpg",
+      image: "/ceo2.jpg",
       images: [
-        "/positive/ceo1.jpg",
-        "/positive/ceo.JPG",
-        "/positive/ceo2.JPG"
+        "/ceo2.jpg",
+        "/ceo4.JPG",
+        "/ceo32.jpg",
+        "/ceo.jpg",
+        "/fullstaff.JPG"
       ],
       email: "specialoladapo@gmail.com",
       phone: "+234 8165318587",
@@ -43,53 +45,8 @@ const Management: React.FC = () => {
       isCEO: true
     },
     {
-      id: 2,
-      name: "Mrs. Folake Adebayo",
-      position: "Vice Principal (Academic)",
-      bio: "Mrs. Folake Adebayo oversees all academic programs and curriculum development. With her Master's in Education and 18 years of teaching experience, she ensures our educational standards remain excellent and innovative.",
-      image: "/positive2/staffingcollections.jpg",
-      email: "vp.academic@positiveimage.edu.ng",
-      phone: "+234 803 123 4568",
-      achievements: [
-        "M.Ed. University of Lagos",
-        "18+ years teaching experience",
-        "Best Academic Coordinator 2021",
-        "Curriculum development specialist"
-      ]
-    },
-    {
-      id: 3,
-      name: "Mr. Johnson Olumide",
-      position: "Vice Principal (Administration)",
-      bio: "Mr. Johnson Olumide manages daily operations and administrative functions. His MBA in Management and 15 years of experience in educational administration ensure smooth school operations.",
-      image: "/positive2/staffs.jpg",
-      email: "vp.admin@positiveimage.edu.ng",
-      phone: "+234 803 123 4569",
-      achievements: [
-        "MBA in Management - UI",
-        "15+ years in educational admin",
-        "Administrative Excellence Award 2022",
-        "Operations management expert"
-      ]
-    },
-    {
-      id: 4,
-      name: "Mrs. Grace Ogundimu",
-      position: "Head of Teachers",
-      bio: "Mrs. Grace Ogundimu leads our teaching staff and coordinates professional development. With her extensive experience in pedagogy, she ensures our teachers deliver quality education.",
-      image: "/staffpositive2.jpg",
-      email: "head.teachers@positiveimage.edu.ng",
-      phone: "+234 803 123 4570",
-      achievements: [
-        "B.Ed. & M.Ed. University of Ibadan",
-        "20+ years teaching experience",
-        "Teacher Training Specialist",
-        "Best Head of Department 2020"
-      ]
-    },
-    {
       id: 5,
-      name: "Babatunde Bosede Janet",
+      name: "Miss Babatunde Bosede Janet",
       position: "Bursar",
       bio: "Miss Babatunde Bosede Janet manages the school's financial operations and ensures fiscal responsibility. Her expertise in accounting and finance is excellent.",
       image: "/staffpositive5.jpg",
@@ -97,21 +54,6 @@ const Management: React.FC = () => {
       phone: "",
       achievements: [
         "Economics and Social Studies (NCE)",
-      ]
-    },
-    {
-      id: 6,
-      name: "Mrs. Kemi Adeyemi",
-      position: "Head of Student Affairs",
-      bio: "Mrs. Kemi Adeyemi is dedicated to student welfare and development. Her background in guidance and counseling ensures every student receives proper support and guidance.",
-      image: "/positive2/staffing.JPG",
-      email: "student.affairs@positiveimage.edu.ng",
-      phone: "+234 803 123 4572",
-      achievements: [
-        "M.Ed. in Guidance & Counseling",
-        "15+ years in student affairs",
-        "Student Welfare Champion 2022",
-        "Certified School Counselor"
       ]
     }
   ];

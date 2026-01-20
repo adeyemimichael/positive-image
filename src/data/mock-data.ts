@@ -1,56 +1,56 @@
 import { Student, Teacher } from '../types';
 
-// Mock data for teachers - Updated with real school staff photos
+// Mock data for teachers - Real Positive Image Schools Staff
 export const teachers: Teacher[] = [
   {
     id: '1',
-    name: 'Dr. Adebayo Johnson',
-    photo: '/positive2/staffs.jpg',
-    subject: 'Mathematics',
-    experience: 15,
-    email: 'adebayo.johnson@positiveimage.edu.ng',
-    bio: 'Dr. Johnson has a PhD in Mathematics and has been teaching for 15 years. He specializes in advanced calculus and statistics.',
-    qualifications: ['PhD Mathematics', 'B.Sc Mathematics Education']
+    name: 'Mrs Adegoke Reginah Anuoluwapo',
+    photo: '/staffpositive2.jpg',
+    subject: 'B.tech in Biochemistry',
+    experience: 0,
+    email: 'info@positiveimgeschools.com',
+    bio: '',
+    qualifications: ['B.tech in Biochemistry']
   },
   {
     id: '2',
-    name: 'Mrs. Folake Adeniran',
-    photo: '/positive2/staffingcollections.jpg',
-    subject: 'English Language',
-    experience: 10,
-    email: 'folake.adeniran@positiveimage.edu.ng',
-    bio: 'Mrs. Adeniran is passionate about literature and creative writing. She has published several articles on language education.',
-    qualifications: ['M.A English Literature', 'B.A English']
+    name: 'Mrs Adesina Kemi',
+    photo: '/positive6.jpeg',
+    subject: 'Estate Management',
+    experience: 0,
+    email: 'info@positiveimgeschools.com',
+    bio: '',
+    qualifications: ['Estate Management']
   },
   {
     id: '3',
-    name: 'Mr. Chinedu Okafor',
-    photo: '/positive2/staffing.JPG',
-    subject: 'Physics',
-    experience: 8,
-    email: 'chinedu.okafor@positiveimage.edu.ng',
-    bio: 'Mr. Okafor brings practical experience to his physics classes, having worked in engineering before becoming a teacher.',
-    qualifications: ['M.Sc Physics', 'B.Eng Electrical Engineering']
+    name: 'Mrs Olajide Mary',
+    photo: '/staffpos.jpg',
+    subject: 'HND - Electrical Engineering',
+    experience: 0,
+    email: 'info@positiveimgeschools.com',
+    bio: '',
+    qualifications: ['HND - Electrical Engineering']
   },
   {
     id: '4',
-    name: 'Ms. Amina Bello',
-    photo: '/staffpositive.jpg',
-    subject: 'Biology',
-    experience: 7,
-    email: 'amina.bello@positiveimage.edu.ng',
-    bio: 'Ms. Bello specializes in molecular biology and makes complex concepts accessible through interactive learning.',
-    qualifications: ['M.Sc Biological Sciences', 'B.Sc Biology']
+    name: 'Miss Dada Oluwaseun Oluwanifemi',
+    photo: '/staffpostive3.jpg',
+    subject: 'Political Science',
+    experience: 0,
+    email: 'info@positiveimgeschools.com',
+    bio: '',
+    qualifications: ['Political Science']
   },
   {
     id: '5',
-    name: 'Mr. Oluwaseun Adeniyi',
-    photo: '/staffpositive2.jpg',
-    subject: 'Computer Science',
-    experience: 5,
-    email: 'oluwaseun.adeniyi@positiveimage.edu.ng',
-    bio: 'Mr. Adeniyi is a former software developer who now teaches programming and computer science fundamentals.',
-    qualifications: ['M.Sc Computer Science', 'B.Sc Computer Engineering']
+    name: 'Miss Babatunde Abosede Janet',
+    photo: '/staffpositive5.jpg',
+    subject: 'Economics and Social Studies',
+    experience: 0,
+    email: 'info@positiveimgeschools.com',
+    bio: '',
+    qualifications: ['Economics and Social Studies']
   }
 ];
 

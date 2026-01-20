@@ -764,14 +764,14 @@ const Home: React.FC = () => {
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-2 h-2 bg-[#D6261D] rounded-full"></div>
-                  <span className="text-sm text-gray-500">January 17, 2026</span>
+                  <span className="text-sm text-gray-500">Latest Update</span>
                 </div>
                 <h3 className="text-xl font-bold text-[#1B1464] mb-3">
                   2026 Academic Session Registration Now Open!
                 </h3>
                 <p className="text-gray-600 mb-4 leading-relaxed">
                   We are excited to announce that registration for the 2026 academic session is now open.
-                  Early bird discount of 15% available for registrations completed before February 28th, 2026.
+                  Early bird discount of 15% available for early registrations. Detailed information and deadlines will be sent to all interested parents via email and SMS.
                 </p>
                 <div className="flex items-center justify-between">
                   <Link to="/register">
@@ -803,9 +803,11 @@ const Home: React.FC = () => {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs text-gray-500">Dec 10, 2024</span>
                       <span className="bg-[#6FC1FF]/20 text-[#1B1464] px-2 py-1 rounded text-xs font-medium">
                         Academic
+                      </span>
+                      <span className="bg-[#FFF4B2] text-[#1B1464] px-2 py-1 rounded text-xs font-bold">
+                        COMING UP
                       </span>
                     </div>
                     <h4 className="font-semibold text-[#1B1464] mb-2">
@@ -813,7 +815,7 @@ const Home: React.FC = () => {
                     </h4>
                     <p className="text-gray-600 text-sm">
                       The mid-term examination timetable for all classes has been published.
-                      Students and parents can download it from our portal.
+                      Detailed information will be sent to students and parents via email and SMS.
                     </p>
                   </div>
                 </div>
@@ -829,17 +831,19 @@ const Home: React.FC = () => {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs text-gray-500">Dec 8, 2024</span>
                       <span className="bg-[#FFF4B2]/60 text-[#D6261D] px-2 py-1 rounded text-xs font-medium">
                         Event
                       </span>
+                      <span className="bg-[#FFF4B2] text-[#1B1464] px-2 py-1 rounded text-xs font-bold">
+                        COMING UP
+                      </span>
                     </div>
                     <h4 className="font-semibold text-[#1B1464] mb-2">
-                      Annual Cultural Day - December 20th
+                      Annual Cultural Day
                     </h4>
                     <p className="text-gray-600 text-sm">
                       Join us for our annual cultural celebration featuring performances,
-                      traditional displays, and cultural exhibitions by our talented students.
+                      traditional displays, and cultural exhibitions. Event details and date will be communicated to all parents and students soon.
                     </p>
                   </div>
                 </div>
@@ -855,17 +859,16 @@ const Home: React.FC = () => {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs text-gray-500">Dec 5, 2024</span>
                       <span className="bg-[#D6261D]/20 text-[#D6261D] px-2 py-1 rounded text-xs font-medium">
                         Achievement
                       </span>
                     </div>
                     <h4 className="font-semibold text-[#1B1464] mb-2">
-                      Students Win State Science Competition
+                      Something Big is Coming Up!
                     </h4>
                     <p className="text-gray-600 text-sm">
-                      Congratulations to our SS2 students who emerged winners in the
-                      Oyo State Science and Technology Competition 2024.
+                      Stay tuned for an exciting announcement! Positive Image Schools is preparing 
+                      something special that will elevate our students' learning experience. More information will be shared with our community soon.
                     </p>
                   </div>
                 </div>
@@ -881,17 +884,19 @@ const Home: React.FC = () => {
                   </div>
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className="text-xs text-gray-500">Dec 1, 2024</span>
                       <span className="bg-[#6FC1FF]/20 text-[#1B1464] px-2 py-1 rounded text-xs font-medium">
                         Notice
+                      </span>
+                      <span className="bg-[#FFF4B2] text-[#1B1464] px-2 py-1 rounded text-xs font-bold">
+                        COMING UP
                       </span>
                     </div>
                     <h4 className="font-semibold text-[#1B1464] mb-2">
                       Parent-Teacher Conference Scheduled
                     </h4>
                     <p className="text-gray-600 text-sm">
-                      The first term parent-teacher conference is scheduled for December 18th.
-                      Please confirm your attendance with your child's class teacher.
+                      The first term parent-teacher conference has been scheduled.
+                      Specific dates and times will be sent to parents via email and SMS. Please confirm your attendance with your child's class teacher.
                     </p>
                   </div>
                 </div>
