@@ -1,7 +1,20 @@
+// Simple hash function for password verification
+// Note: For production, consider using a proper backend authentication system
+const simpleHash = (str: string): string => {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    const char = str.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash; // Convert to 32bit integer
+  }
+  return hash.toString(36);
+};
+
 // Admin configuration for gallery uploads
 export const ADMIN_CONFIG = {
-  // Admin password for gallery uploads
-  ADMIN_PASSWORD: 'adminadmin',
+  // Admin password hash (hash of 'adminadmin')
+  // In production, use environment variable: import.meta.env.VITE_ADMIN_PASSWORD_HASH
+  ADMIN_PASSWORD_HASH: import.meta.env.VITE_ADMIN_PASSWORD_HASH || simpleHash('adminadmin'),
   
   // Session duration (in milliseconds) - 2 hours
   SESSION_DURATION: 2 * 60 * 60 * 1000,
@@ -17,7 +30,8 @@ export const ADMIN_CONFIG = {
 export const AdminAuth = {
   // Check if password is correct
   isValidPassword: (password: string): boolean => {
-    return password === ADMIN_CONFIG.ADMIN_PASSWORD;
+    const hashedInput = simpleHash(password);
+    return hashedInput === ADMIN_CONFIG.ADMIN_PASSWORD_HASH;
   },
 
   // Create admin session

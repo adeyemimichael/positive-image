@@ -4,8 +4,20 @@
 import https from 'https';
 
 export default async function handler(req, res) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // Set CORS headers - restrict to specific domains
+  const allowedOrigins = [
+    'https://positiveimgeschools.com',
+    'https://www.positiveimgeschools.com',
+    'http://localhost:5173',
+    'http://localhost:3000',
+    process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null
+  ].filter(Boolean);
+
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
@@ -24,6 +36,12 @@ export default async function handler(req, res) {
 
     if (!reference) {
       return res.status(400).json({ error: 'Payment reference is required' });
+    }
+
+    // Reference validation (alphanumeric, hyphens, and underscores only)
+    const refRegex = /^[A-Za-z0-9_-]+$/;
+    if (!refRegex.test(reference)) {
+      return res.status(400).json({ error: 'Invalid reference format' });
     }
 
     // Paystack secret key from environment variable

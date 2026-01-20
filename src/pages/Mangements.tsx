@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Phone, Linkedin, Award, Target, X, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { X, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ManagementMember {
   id: number;
@@ -219,23 +219,52 @@ const Management: React.FC = () => {
                     </div>
                     
                     {/* Contact Buttons */}
-                    <div className="flex gap-2">
-                      <a
-                        href={`mailto:${member.email}`}
-                        className="flex-1 text-center px-3 py-2 bg-gradient-to-r from-primary-800 to-primary-800  text-white rounded hover:bg-blue-700 text-sm"
-                      >
-                        Email
-                      </a>
-                      <a
-                        href={`tel:${member.phone}`}
-                        className="flex-1 text-center px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
-                      >
-                        Call
-                      </a>
-                    </div>
+                    {member.email && member.phone ? (
+                      <div className="flex gap-2">
+                        <a
+                          href={`mailto:${member.email}`}
+                          className="flex-1 text-center px-3 py-2 bg-gradient-to-r from-primary-800 to-primary-800  text-white rounded hover:bg-blue-700 text-sm"
+                        >
+                          Email
+                        </a>
+                        <a
+                          href={`tel:${member.phone}`}
+                          className="flex-1 text-center px-3 py-2 bg-green-600 text-white rounded hover:bg-green-700 text-sm"
+                        >
+                          Call
+                        </a>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
               ))}
+          </div>
+        </div>
+
+        {/* Full Staff Section */}
+        <div className="mt-20">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-bold text-black mb-4">
+              Our Complete Team
+            </h2>
+            <p className="text-lg text-gray-700 max-w-2xl mx-auto mb-6">
+              United in our mission to provide excellence in education and nurture future leaders
+            </p>
+            <div className="w-24 h-1 bg-gradient-to-r from-primary-800 to-primary-800 mx-auto"></div>
+          </div>
+          
+          <div className="max-w-5xl mx-auto">
+            <div className="relative overflow-hidden rounded-2xl shadow-2xl group">
+              <img 
+                src="/fullstaff.JPG" 
+                alt="Complete Staff Team - Positive Image Schools" 
+                className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-8">
+                <h3 className="text-white text-3xl font-bold mb-2 text-center">Positive Image Schools Team</h3>
+                <p className="text-white/90 text-lg text-center">Dedicated professionals committed to excellence in education</p>
+              </div>
+            </div>
           </div>
         </div>
 
