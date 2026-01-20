@@ -6,25 +6,34 @@ import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 
 const Home: React.FC = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  // Separate state for hero bubble slider
+  const [heroSlide, setHeroSlide] = useState(0);
+  
+  // Separate state for gallery section slider
+  const [gallerySlide, setGallerySlide] = useState(0);
+  
+  // State for lightbox/modal
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
-  const schoolContent = [
+  // Hero section content (for the bubble slider)
+  const heroContent = [
     {
-      url: '/positive2/ceoandstaff.jpg',
+      url: '/ceo2.jpg',
       caption: 'Dedicated Leadership & Staff',
       title: 'Welcome to Positive Image Schools',
       subtitle: 'Where Excellence Meets Innovation',
       description: 'Nurturing minds, building character, and creating future leaders in our state-of-the-art facilities.'
     },
     {
-      url: '/positive2/announcement.jpeg',
+      url: '/positive2/ceoandstaff.jpg',
       caption: 'Registration Now Open',
       title: 'Discover Knowledge at Positive Image Schools',
       subtitle: 'Your Gateway to Academic Excellence',
       description: 'Empowering students with world-class resources and innovative learning environments.'
     },
     {
-      url: '/positive2/practicals.jpeg',
+      url: '/outing3.jpg',
       caption: 'Science Practicals',
       title: 'Explore Science at Positive Image Schools',
       subtitle: 'Where Curiosity Meets Discovery',
@@ -39,21 +48,117 @@ const Home: React.FC = () => {
     }
   ];
 
+  // Gallery section content (for the slider below hero)
+  const galleryContent = [
+    {
+      url: '/positive2/announcement.jpeg',
+      caption: 'Registration Now Open - Join Us for 2026!'
+    },
+    {
+      url: '/positive2/pastevent.jpeg',
+      caption: 'Annual School Events & Celebrations'
+    },
+    {
+      url: '/positive2/pastevent2.jpeg',
+      caption: 'Student Achievement Awards Ceremony'
+    },
+    {
+      url: '/positive2/eventspast.jpeg',
+      caption: 'Past Events & Memorable Moments'
+    },
+    {
+      url: '/positive2/facility.jpeg',
+      caption: 'State-of-the-Art School Facilities'
+    },
+    {
+      url: '/positive2/practicals.jpeg',
+      caption: 'Hands-On Science Laboratory Sessions'
+    },
+    {
+      url: '/positive2/smallexcursion.jpeg',
+      caption: 'Educational Field Trips & Excursions'
+    },
+    {
+      url: '/positive2/studnetassembly.jpeg',
+      caption: 'Morning Assembly & Student Gatherings'
+    },
+    {
+      url: '/positive2/ceoandstudent.JPG',
+      caption: 'Leadership Engagement with Students'
+    },
+    {
+      url: '/positive2/primaryschool.jpeg',
+      caption: 'Primary School Learning Environment'
+    }
+  ];
+
+  // Hero slider auto-advance
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % schoolContent.length);
+      setHeroSlide((prev) => (prev + 1) % heroContent.length);
     }, 5000);
 
     return () => clearInterval(timer);
   }, []);
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % schoolContent.length);
+  // Gallery slider auto-advance
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setGallerySlide((prev) => (prev + 1) % galleryContent.length);
+    }, 6000); // Slightly different timing to keep them independent
+
+    return () => clearInterval(timer);
+  }, []);
+
+  const nextHeroSlide = () => {
+    setHeroSlide((prev) => (prev + 1) % heroContent.length);
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + schoolContent.length) % schoolContent.length);
+  const prevHeroSlide = () => {
+    setHeroSlide((prev) => (prev - 1 + heroContent.length) % heroContent.length);
   };
+
+  const nextGallerySlide = () => {
+    setGallerySlide((prev) => (prev + 1) % galleryContent.length);
+  };
+
+  const prevGallerySlide = () => {
+    setGallerySlide((prev) => (prev - 1 + galleryContent.length) % galleryContent.length);
+  };
+
+  // Lightbox functions
+  const openLightbox = (index: number) => {
+    setLightboxIndex(index);
+    setIsLightboxOpen(true);
+    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+  };
+
+  const closeLightbox = () => {
+    setIsLightboxOpen(false);
+    document.body.style.overflow = 'unset';
+  };
+
+  const nextLightboxImage = () => {
+    setLightboxIndex((prev) => (prev + 1) % galleryContent.length);
+  };
+
+  const prevLightboxImage = () => {
+    setLightboxIndex((prev) => (prev - 1 + galleryContent.length) % galleryContent.length);
+  };
+
+  // Handle keyboard navigation in lightbox
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (!isLightboxOpen) return;
+      
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowRight') nextLightboxImage();
+      if (e.key === 'ArrowLeft') prevLightboxImage();
+    };
+
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [isLightboxOpen]);
 
   // Animation variants
   const fadeInUp = {
@@ -90,16 +195,16 @@ const Home: React.FC = () => {
               {/* Animated Title */}
               <div className="overflow-hidden mb-4">
                 <motion.h1
-                  key={`title-${currentSlide}`}
+                  key={`title-${heroSlide}`}
                   initial={{ y: 100, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -100, opacity: 0 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
                   className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white"
                 >
-                  {schoolContent[currentSlide].title.split(' ').slice(0, -3).join(' ')}{' '}
+                  {heroContent[heroSlide].title.split(' ').slice(0, -3).join(' ')}{' '}
                   <span className="text-[#FFF4B2]">
-                    {schoolContent[currentSlide].title.split(' ').slice(-3).join(' ')}
+                    {heroContent[heroSlide].title.split(' ').slice(-3).join(' ')}
                   </span>
                 </motion.h1>
               </div>
@@ -107,28 +212,28 @@ const Home: React.FC = () => {
               {/* Animated Subtitle */}
               <div className="overflow-hidden mb-2">
                 <motion.h2
-                  key={`subtitle-${currentSlide}`}
+                  key={`subtitle-${heroSlide}`}
                   initial={{ y: 50, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -50, opacity: 0 }}
                   transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
                   className="text-2xl md:text-3xl font-heading font-semibold text-[#6FC1FF] mb-4"
                 >
-                  {schoolContent[currentSlide].subtitle}
+                  {heroContent[heroSlide].subtitle}
                 </motion.h2>
               </div>
 
               {/* Animated Description */}
               <div className="overflow-hidden mb-8">
                 <motion.p
-                  key={`description-${currentSlide}`}
+                  key={`description-${heroSlide}`}
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -30, opacity: 0 }}
                   transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
                   className="text-xl text-white/90"
                 >
-                  {schoolContent[currentSlide].description}
+                  {heroContent[heroSlide].description}
                 </motion.p>
               </div>
               {/* Static Call-to-Action Buttons */}
@@ -183,14 +288,14 @@ const Home: React.FC = () => {
                   ></div>
                   {/* Synced Image Slider */}
                   <div className="relative w-full h-full">
-                    {schoolContent.map((content, index) => (
+                    {heroContent.map((content, index) => (
                       <motion.div
                         key={index}
                         initial={{ opacity: 0 }}
                         animate={{
-                          opacity: currentSlide === index ? 1 : 0,
-                          scale: currentSlide === index ? 1 : 1.1,
-                          rotate: currentSlide === index ? 0 : 2
+                          opacity: heroSlide === index ? 1 : 0,
+                          scale: heroSlide === index ? 1 : 1.1,
+                          rotate: heroSlide === index ? 0 : 2
                         }}
                         transition={{ duration: 0.8, ease: "easeInOut" }}
                         className="absolute inset-0"
@@ -212,11 +317,11 @@ const Home: React.FC = () => {
 
                   {/* Enhanced Navigation Dots with Brand Colors */}
                   <div className="absolute -bottom-16 left-1/2 transform -translate-x-1/2 flex gap-4">
-                    {schoolContent.map((_, index) => (
+                    {heroContent.map((_, index) => (
                       <button
                         key={index}
-                        onClick={() => setCurrentSlide(index)}
-                        className={`rounded-full transition-all duration-500 shadow-lg ${currentSlide === index
+                        onClick={() => setHeroSlide(index)}
+                        className={`rounded-full transition-all duration-500 shadow-lg ${heroSlide === index
                           ? 'w-12 h-4 bg-gradient-to-r from-[#FFF4B2] to-[#6FC1FF] shadow-[#FFF4B2]/50'
                           : 'w-4 h-4 bg-white/60 hover:bg-[#6FC1FF]/80 hover:scale-110'
                           }`}
@@ -343,41 +448,54 @@ const Home: React.FC = () => {
             variants={fadeInUp}
             className="relative max-w-5xl mx-auto"
           >
-            <div className="relative h-[400px] md:h-[500px] overflow-hidden rounded-xl shadow-xl">
+            <div 
+              className="relative h-[400px] md:h-[500px] overflow-hidden rounded-xl shadow-xl cursor-pointer group"
+              onClick={() => openLightbox(gallerySlide)}
+            >
               <motion.img
-                key={currentSlide}
+                key={gallerySlide}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
-                src={schoolContent[currentSlide].url}
-                alt={schoolContent[currentSlide].caption}
-                className="w-full h-full object-cover"
+                src={galleryContent[gallerySlide].url}
+                alt={galleryContent[gallerySlide].caption}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#1B1464]/70 to-transparent p-6">
-                <p className="text-[#FFF4B2] text-xl font-heading">{schoolContent[currentSlide].caption}</p>
+                <p className="text-[#FFF4B2] text-xl font-heading">{galleryContent[gallerySlide].caption}</p>
+              </div>
+              {/* Click to expand hint */}
+              <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-sm text-[#1B1464] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                Click to expand
               </div>
             </div>
 
             <button
-              onClick={prevSlide}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all"
+              onClick={(e) => {
+                e.stopPropagation();
+                prevGallerySlide();
+              }}
+              className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all z-10"
             >
               <ChevronLeft size={24} className="text-primary-700" />
             </button>
             <button
-              onClick={nextSlide}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all"
+              onClick={(e) => {
+                e.stopPropagation();
+                nextGallerySlide();
+              }}
+              className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all z-10"
             >
               <ChevronRight size={24} className="text-primary-700" />
             </button>
 
             <div className="flex justify-center mt-4 gap-2">
-              {schoolContent.map((_, index) => (
+              {galleryContent.map((_, index) => (
                 <button
                   key={index}
-                  onClick={() => setCurrentSlide(index)}
-                  className={`w-3 h-3 rounded-full transition-all ${currentSlide === index ? 'bg-[#1B1464] w-6' : 'bg-gray-300'
+                  onClick={() => setGallerySlide(index)}
+                  className={`w-3 h-3 rounded-full transition-all ${gallerySlide === index ? 'bg-[#1B1464] w-6' : 'bg-gray-300'
                     }`}
                 />
               ))}
@@ -853,6 +971,81 @@ const Home: React.FC = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Lightbox Modal */}
+      {isLightboxOpen && (
+        <div 
+          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center"
+          onClick={closeLightbox}
+        >
+          {/* Close button */}
+          <button
+            onClick={closeLightbox}
+            className="absolute top-4 right-4 text-white hover:text-[#FFF4B2] transition-colors z-50"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          {/* Image counter */}
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-white text-lg font-semibold bg-black/50 px-4 py-2 rounded-full">
+            {lightboxIndex + 1} / {galleryContent.length}
+          </div>
+
+          {/* Previous button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              prevLightboxImage();
+            }}
+            className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 rounded-full transition-all z-50"
+          >
+            <ChevronLeft size={32} className="text-white" />
+          </button>
+
+          {/* Next button */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              nextLightboxImage();
+            }}
+            className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/20 hover:bg-white/30 backdrop-blur-sm p-3 rounded-full transition-all z-50"
+          >
+            <ChevronRight size={32} className="text-white" />
+          </button>
+
+          {/* Main image */}
+          <div 
+            className="relative max-w-7xl max-h-[90vh] mx-4"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <motion.img
+              key={lightboxIndex}
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3 }}
+              src={galleryContent[lightboxIndex].url}
+              alt={galleryContent[lightboxIndex].caption}
+              className="max-w-full max-h-[90vh] object-contain rounded-lg shadow-2xl"
+            />
+            
+            {/* Caption */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 rounded-b-lg">
+              <p className="text-white text-xl font-heading text-center">
+                {galleryContent[lightboxIndex].caption}
+              </p>
+            </div>
+          </div>
+
+          {/* Keyboard hints */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white/60 text-sm flex gap-4">
+            <span>← → Navigate</span>
+            <span>ESC Close</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
