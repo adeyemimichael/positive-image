@@ -14,7 +14,7 @@ const Footer: React.FC = () => {
               <span className="font-heading font-bold text-xl">Positive Image Schools</span>
             </Link>
             <p className="mb-4">
-              Providing quality education and character development for future leaders since 2005.
+              Providing quality education and character development for future leaders since 2003.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="hover:text-secondary-400 transition-colors">
@@ -59,6 +59,10 @@ const Footer: React.FC = () => {
               Contact Us
             </h3>
             <ul className="space-y-3">
+              <li className="flex items-start">
+                <MapPin size={20} className="text-secondary-500 mr-2 mt-1 flex-shrink-0" />
+                <span>13 Sangogade Street Akoyoyo Area Amuloko, Ibadan</span>
+              </li>
               <li className="flex items-start">
                 <MapPin size={20} className="text-secondary-500 mr-2 mt-1 flex-shrink-0" />
                 <span>13 Sangogade Street Akoyoyo Area Amuloko, Ibadan</span>
