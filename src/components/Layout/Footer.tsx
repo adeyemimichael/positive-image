@@ -65,7 +65,13 @@ const Footer: React.FC = () => {
               </li>
               <li className="flex items-start">
                 <MapPin size={20} className="text-secondary-500 mr-2 mt-1 flex-shrink-0" />
-                <span>13 Sangogade Street Akoyoyo Area Amuloko, Ibadan</span>
+                <span>Elebolo Junction,
+
+Opposite Petrocam Gas Station Odeyale
+
+Ajia, Ibadan, Oyo State
+
+Nigeria</span>
               </li>
               <li className="flex items-center">
                 <Phone size={20} className="text-secondary-500 mr-2 flex-shrink-0" />
@@ -103,6 +109,9 @@ const Footer: React.FC = () => {
         <div className="mt-12 pt-6 border-t border-blue-800 text-center">
           <p>
             &copy; {new Date().getFullYear()} Positive Image Schools. All rights reserved.
+          </p>
+          <p className="mt-2 text-sm text-white/60">
+            <Link to="/admin" className="hover:text-secondary-400 transition-colors">Admin</Link>
           </p>
         </div>
       </div>

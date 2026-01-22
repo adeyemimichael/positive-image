@@ -117,7 +117,7 @@ const Header: React.FC = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3 }}
-          className="md:hidden bg-white shadow-lg"
+          className="md:hidden bg-white/95 backdrop-blur-md shadow-lg"
         >
           <div className="container mx-auto px-4 py-4">
             <nav className="flex flex-col space-y-4">

@@ -16,6 +16,62 @@ const Home: React.FC = () => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState(0);
 
+  // State for admin announcements - THIS IS STATE MANAGEMENT
+  const [adminAnnouncements, setAdminAnnouncements] = useState<any[]>([]);
+
+  // Load admin announcements from localStorage - THIS IS DATA PERSISTENCE
+  useEffect(() => {
+    const loadAnnouncements = () => {
+      const savedAnnouncements = localStorage.getItem('admin_announcements');
+      if (savedAnnouncements) {
+        try {
+          const parsed = JSON.parse(savedAnnouncements);
+          setAdminAnnouncements(parsed);
+        } catch (error) {
+          console.error('Error loading announcements:', error);
+        }
+      }
+    };
+
+    loadAnnouncements();
+
+    // Listen for storage changes (when admin creates new announcement)
+    // THIS IS EVENT-DRIVEN PROGRAMMING
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'admin_announcements') {
+        loadAnnouncements();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also check for updates every 5 seconds (polling)
+    const interval = setInterval(loadAnnouncements, 5000);
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      clearInterval(interval);
+    };
+  }, []);
+
+  // Preload critical images for better performance
+  useEffect(() => {
+    const criticalImages = [
+      '/ceo2.jpg',
+      '/positive2/ceoandstaff.jpg',
+      '/outing3.jpg',
+      '/positive2/smallexcursion.jpeg',
+      '/positive2/announcement.jpeg',
+      '/positive2/facility.jpeg',
+      '/positive2/practicals.jpeg'
+    ];
+
+    criticalImages.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
+
   // Hero section content (for the bubble slider)
   const heroContent = [
     {
@@ -740,7 +796,7 @@ const Home: React.FC = () => {
           </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-8 max-w-6xl mx-auto">
-            {/* Featured Announcement */}
+            {/* Featured Announcement - DYNAMIC: Shows latest admin announcement or default */}
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -750,13 +806,23 @@ const Home: React.FC = () => {
             >
               <div className="relative h-64 overflow-hidden">
                 <img
-                  src="/positive2/announcement.jpeg"
+                  src={adminAnnouncements.length > 0 && adminAnnouncements[0].imageUrl 
+                    ? adminAnnouncements[0].imageUrl 
+                    : "/positive2/announcement.jpeg"}
                   alt="School Registration Announcement"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute top-4 left-4">
-                  <span className="bg-[#D6261D] text-white px-3 py-1 rounded-full text-sm font-semibold">
-                    URGENT
+                  <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
+                    adminAnnouncements.length > 0 && adminAnnouncements[0].priority === 'urgent'
+                      ? 'bg-[#D6261D] text-white'
+                      : adminAnnouncements.length > 0 && adminAnnouncements[0].priority === 'normal'
+                      ? 'bg-[#6FC1FF] text-white'
+                      : 'bg-[#D6261D] text-white'
+                  }`}>
+                    {adminAnnouncements.length > 0 
+                      ? adminAnnouncements[0].priority.toUpperCase() 
+                      : 'URGENT'}
                   </span>
                 </div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
@@ -764,14 +830,21 @@ const Home: React.FC = () => {
               <div className="p-6">
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-2 h-2 bg-[#D6261D] rounded-full"></div>
-                  <span className="text-sm text-gray-500">Latest Update</span>
+                  <span className="text-sm text-gray-500">
+                    {adminAnnouncements.length > 0 
+                      ? new Date(adminAnnouncements[0].uploadDate).toLocaleDateString()
+                      : 'Latest Update'}
+                  </span>
                 </div>
                 <h3 className="text-xl font-bold text-[#1B1464] mb-3">
-                  2026 Academic Session Registration Now Open!
+                  {adminAnnouncements.length > 0 
+                    ? adminAnnouncements[0].title 
+                    : 'Second Term 2026 Registration Now Open!'}
                 </h3>
                 <p className="text-gray-600 mb-4 leading-relaxed">
-                  We are excited to announce that registration for the 2026 academic session is now open.
-                  Early bird discount of 15% available for early registrations. Detailed information and deadlines will be sent to all interested parents via email and SMS.
+                  {adminAnnouncements.length > 0 
+                    ? adminAnnouncements[0].description 
+                    : 'We are excited to announce that registration for the Second Term 2026 academic session is now open. Early bird discount of 15% available for early registrations. Detailed information and deadlines will be sent to all interested parents via email and SMS.'}
                 </p>
                 <div className="flex items-center justify-between">
                   <Link to="/register">
@@ -779,12 +852,16 @@ const Home: React.FC = () => {
                       Register Now
                     </button>
                   </Link>
-                  <span className="text-sm text-[#6FC1FF] font-medium">Limited Spaces</span>
+                  <span className="text-sm text-[#6FC1FF] font-medium">
+                    {adminAnnouncements.length > 0 
+                      ? adminAnnouncements[0].category 
+                      : 'Limited Spaces'}
+                  </span>
                 </div>
               </div>
             </motion.div>
 
-            {/* Announcements List */}
+            {/* Announcements List - DYNAMIC: Shows admin announcements */}
             <motion.div
               initial="hidden"
               whileInView="visible"
@@ -792,115 +869,179 @@ const Home: React.FC = () => {
               variants={staggerContainer}
               className="space-y-6"
             >
-              {/* Individual Announcement Cards */}
-              <motion.div
-                variants={fadeInUp}
-                className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#6FC1FF] hover:shadow-xl transition-shadow duration-300"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#6FC1FF]/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <BookOpen size={20} className="text-[#1B1464]" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="bg-[#6FC1FF]/20 text-[#1B1464] px-2 py-1 rounded text-xs font-medium">
-                        Academic
-                      </span>
-                      <span className="bg-[#FFF4B2] text-[#1B1464] px-2 py-1 rounded text-xs font-bold">
-                        COMING UP
-                      </span>
-                    </div>
-                    <h4 className="font-semibold text-[#1B1464] mb-2">
-                      Mid-Term Examination Schedule Released
-                    </h4>
-                    <p className="text-gray-600 text-sm">
-                      The mid-term examination timetable for all classes has been published.
-                      Detailed information will be sent to students and parents via email and SMS.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
+              {/* Show admin announcements (skip first one as it's featured) */}
+              {adminAnnouncements.slice(1, 5).map((announcement, index) => {
+                const getCategoryIcon = (category: string) => {
+                  switch (category.toLowerCase()) {
+                    case 'academic': return <BookOpen size={20} className="text-[#1B1464]" />;
+                    case 'event': return <Users size={20} className="text-[#D6261D]" />;
+                    case 'achievement': return <Award size={20} className="text-[#D6261D]" />;
+                    case 'notice': return <UserPlus size={20} className="text-[#1B1464]" />;
+                    default: return <BookOpen size={20} className="text-[#1B1464]" />;
+                  }
+                };
 
-              <motion.div
-                variants={fadeInUp}
-                className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#FFF4B2] hover:shadow-xl transition-shadow duration-300"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#FFF4B2]/60 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Users size={20} className="text-[#D6261D]" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="bg-[#FFF4B2]/60 text-[#D6261D] px-2 py-1 rounded text-xs font-medium">
-                        Event
-                      </span>
-                      <span className="bg-[#FFF4B2] text-[#1B1464] px-2 py-1 rounded text-xs font-bold">
-                        COMING UP
-                      </span>
-                    </div>
-                    <h4 className="font-semibold text-[#1B1464] mb-2">
-                      Annual Cultural Day
-                    </h4>
-                    <p className="text-gray-600 text-sm">
-                      Join us for our annual cultural celebration featuring performances,
-                      traditional displays, and cultural exhibitions. Event details and date will be communicated to all parents and students soon.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
+                const getCategoryColor = (category: string) => {
+                  switch (category.toLowerCase()) {
+                    case 'academic': return { border: 'border-[#6FC1FF]', bg: 'bg-[#6FC1FF]/20', text: 'text-[#1B1464]' };
+                    case 'event': return { border: 'border-[#FFF4B2]', bg: 'bg-[#FFF4B2]/60', text: 'text-[#D6261D]' };
+                    case 'achievement': return { border: 'border-[#D6261D]', bg: 'bg-[#D6261D]/20', text: 'text-[#D6261D]' };
+                    case 'notice': return { border: 'border-[#6FC1FF]', bg: 'bg-[#6FC1FF]/20', text: 'text-[#1B1464]' };
+                    default: return { border: 'border-[#6FC1FF]', bg: 'bg-[#6FC1FF]/20', text: 'text-[#1B1464]' };
+                  }
+                };
 
-              <motion.div
-                variants={fadeInUp}
-                className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#D6261D] hover:shadow-xl transition-shadow duration-300"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#D6261D]/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <Award size={20} className="text-[#D6261D]" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="bg-[#D6261D]/20 text-[#D6261D] px-2 py-1 rounded text-xs font-medium">
-                        Achievement
-                      </span>
-                    </div>
-                    <h4 className="font-semibold text-[#1B1464] mb-2">
-                      Something Big is Coming Up!
-                    </h4>
-                    <p className="text-gray-600 text-sm">
-                      Stay tuned for an exciting announcement! Positive Image Schools is preparing 
-                      something special that will elevate our students' learning experience. More information will be shared with our community soon.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
+                const colors = getCategoryColor(announcement.category);
 
-              <motion.div
-                variants={fadeInUp}
-                className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#6FC1FF] hover:shadow-xl transition-shadow duration-300"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-[#6FC1FF]/20 rounded-full flex items-center justify-center flex-shrink-0">
-                    <UserPlus size={20} className="text-[#1B1464]" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <span className="bg-[#6FC1FF]/20 text-[#1B1464] px-2 py-1 rounded text-xs font-medium">
-                        Notice
-                      </span>
-                      <span className="bg-[#FFF4B2] text-[#1B1464] px-2 py-1 rounded text-xs font-bold">
-                        COMING UP
-                      </span>
+                return (
+                  <motion.div
+                    key={announcement.id}
+                    variants={fadeInUp}
+                    className={`bg-white rounded-xl shadow-lg p-6 border-l-4 ${colors.border} hover:shadow-xl transition-shadow duration-300`}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className={`w-12 h-12 ${colors.bg} rounded-full flex items-center justify-center flex-shrink-0`}>
+                        {getCategoryIcon(announcement.category)}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className={`${colors.bg} ${colors.text} px-2 py-1 rounded text-xs font-medium`}>
+                            {announcement.category}
+                          </span>
+                          {announcement.priority === 'urgent' && (
+                            <span className="bg-[#D6261D] text-white px-2 py-1 rounded text-xs font-bold">
+                              URGENT
+                            </span>
+                          )}
+                        </div>
+                        <h4 className="font-semibold text-[#1B1464] mb-2">
+                          {announcement.title}
+                        </h4>
+                        <p className="text-gray-600 text-sm">
+                          {announcement.description}
+                        </p>
+                        <p className="text-xs text-gray-400 mt-2">
+                          {new Date(announcement.uploadDate).toLocaleDateString()}
+                        </p>
+                      </div>
                     </div>
-                    <h4 className="font-semibold text-[#1B1464] mb-2">
-                      Parent-Teacher Conference Scheduled
-                    </h4>
-                    <p className="text-gray-600 text-sm">
-                      The first term parent-teacher conference has been scheduled.
-                      Specific dates and times will be sent to parents via email and SMS. Please confirm your attendance with your child's class teacher.
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
+                  </motion.div>
+                );
+              })}
+
+              {/* Show default announcements if no admin announcements */}
+              {adminAnnouncements.length <= 1 && (
+                <>
+                  <motion.div
+                    variants={fadeInUp}
+                    className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#6FC1FF] hover:shadow-xl transition-shadow duration-300"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-[#6FC1FF]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                        <BookOpen size={20} className="text-[#1B1464]" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="bg-[#6FC1FF]/20 text-[#1B1464] px-2 py-1 rounded text-xs font-medium">
+                            Academic
+                          </span>
+                          <span className="bg-[#FFF4B2] text-[#1B1464] px-2 py-1 rounded text-xs font-bold">
+                            COMING UP
+                          </span>
+                        </div>
+                        <h4 className="font-semibold text-[#1B1464] mb-2">
+                          Mid-Term Examination Schedule Released
+                        </h4>
+                        <p className="text-gray-600 text-sm">
+                          The mid-term examination timetable for all classes has been published.
+                          Detailed information will be sent to students and parents via email and SMS.
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    variants={fadeInUp}
+                    className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#FFF4B2] hover:shadow-xl transition-shadow duration-300"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-[#FFF4B2]/60 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Users size={20} className="text-[#D6261D]" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="bg-[#FFF4B2]/60 text-[#D6261D] px-2 py-1 rounded text-xs font-medium">
+                            Event
+                          </span>
+                          <span className="bg-[#FFF4B2] text-[#1B1464] px-2 py-1 rounded text-xs font-bold">
+                            COMING UP
+                          </span>
+                        </div>
+                        <h4 className="font-semibold text-[#1B1464] mb-2">
+                          Annual Cultural Day
+                        </h4>
+                        <p className="text-gray-600 text-sm">
+                          Join us for our annual cultural celebration featuring performances,
+                          traditional displays, and cultural exhibitions. Event details and date will be communicated to all parents and students soon.
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    variants={fadeInUp}
+                    className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#D6261D] hover:shadow-xl transition-shadow duration-300"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-[#D6261D]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                        <Award size={20} className="text-[#D6261D]" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="bg-[#D6261D]/20 text-[#D6261D] px-2 py-1 rounded text-xs font-medium">
+                            Achievement
+                          </span>
+                        </div>
+                        <h4 className="font-semibold text-[#1B1464] mb-2">
+                          Something Big is Coming Up!
+                        </h4>
+                        <p className="text-gray-600 text-sm">
+                          Stay tuned for an exciting announcement! Positive Image Schools is preparing 
+                          something special that will elevate our students' learning experience. More information will be shared with our community soon.
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  <motion.div
+                    variants={fadeInUp}
+                    className="bg-white rounded-xl shadow-lg p-6 border-l-4 border-[#6FC1FF] hover:shadow-xl transition-shadow duration-300"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 bg-[#6FC1FF]/20 rounded-full flex items-center justify-center flex-shrink-0">
+                        <UserPlus size={20} className="text-[#1B1464]" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="bg-[#6FC1FF]/20 text-[#1B1464] px-2 py-1 rounded text-xs font-medium">
+                            Notice
+                          </span>
+                          <span className="bg-[#FFF4B2] text-[#1B1464] px-2 py-1 rounded text-xs font-bold">
+                            COMING UP
+                          </span>
+                        </div>
+                        <h4 className="font-semibold text-[#1B1464] mb-2">
+                          Parent-Teacher Conference Scheduled
+                        </h4>
+                        <p className="text-gray-600 text-sm">
+                          The second term parent-teacher conference has been scheduled.
+                          Specific dates and times will be sent to parents via email and SMS. Please confirm your attendance with your child's class teacher.
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                </>
+              )}
 
               {/* View All Button */}
               <motion.div

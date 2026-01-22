@@ -11,6 +11,7 @@ import Gallery from './pages/Gallery';
 import Payment from './pages/Payment';
 import PaymentCallback from './pages/PaymentCallback';
 import RegistrationSuccess from './pages/RegistrationSuccess';
+import AdminPanel from './pages/AdminPanel';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
           <Route path="/payment" element={<Payment />} />
           <Route path="/payment-callback" element={<PaymentCallback />} />
           <Route path="/registration-success" element={<RegistrationSuccess />} />
+          <Route path="/admin" element={<AdminPanel />} />
         </Routes>
       </Layout>
     </Router>
