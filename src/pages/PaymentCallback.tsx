@@ -50,13 +50,16 @@ const PaymentCallback: React.FC = () => {
             localStorage.setItem('completedRegistration', JSON.stringify(completedRegistration));
             localStorage.removeItem('pendingRegistration');
 
-            // Redirect to success page immediately
-            navigate('/registration-success', {
-              state: {
-                registrationData: completedRegistration,
-                paymentReference: reference
-              }
-            });
+            // Wait 2 seconds to show success message, then redirect
+            setTimeout(() => {
+              navigate('/registration-success', {
+                state: {
+                  registrationData: completedRegistration,
+                  paymentReference: reference
+                },
+                replace: true // Replace history entry to prevent back button issues
+              });
+            }, 2000);
           }
         } else {
           setStatus('failed');

@@ -84,12 +84,25 @@ export default async function handler(req, res) {
     }
 
     // Prepare Paystack request
+    // Determine callback URL based on environment
+    let callbackUrl;
+    if (process.env.VERCEL_URL) {
+      // Production: Use Vercel URL
+      callbackUrl = `https://${process.env.VERCEL_URL}/payment-callback`;
+    } else if (process.env.VITE_APP_URL) {
+      // Development: Use VITE_APP_URL from .env
+      callbackUrl = `${process.env.VITE_APP_URL}/payment-callback`;
+    } else {
+      // Fallback: Use localhost with correct port
+      callbackUrl = 'http://localhost:5173/payment-callback';
+    }
+
     const paystackData = JSON.stringify({
       email,
       amount: amount * 100, // Paystack expects amount in kobo (multiply by 100)
       reference,
       metadata: metadata || {},
-      callback_url: `${process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000'}/payment-callback`
+      callback_url: callbackUrl
     });
 
     const options = {

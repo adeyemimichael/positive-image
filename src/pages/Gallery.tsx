@@ -358,7 +358,13 @@ const Gallery: React.FC = () => {
               <img
                 src={image.url}
                 alt={image.title}
+                loading="lazy"
                 className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
+                onError={(e) => {
+                  // Fallback for broken images
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/logo.jpg'; // Fallback to school logo
+                }}
               />
               
               {/* Overlay */}
@@ -493,7 +499,12 @@ const Gallery: React.FC = () => {
               <img
                 src={selectedImage.url}
                 alt={selectedImage.title}
+                loading="lazy"
                 className="w-full h-auto max-h-[70vh] object-contain bg-gray-100"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/logo.jpg';
+                }}
               />
 
               {/* Image info */}

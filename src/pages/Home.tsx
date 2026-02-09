@@ -359,7 +359,12 @@ const Home: React.FC = () => {
                         <img
                           src={content.url}
                           alt={content.caption}
+                          loading="lazy"
                           className="w-full h-full object-cover"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = '/logo.jpg';
+                          }}
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-[#1B1464]/60 via-transparent to-transparent"></div>
                         <div className="absolute bottom-8 left-8 right-8">
@@ -516,7 +521,12 @@ const Home: React.FC = () => {
                 transition={{ duration: 0.5 }}
                 src={galleryContent[gallerySlide].url}
                 alt={galleryContent[gallerySlide].caption}
+                loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.src = '/logo.jpg';
+                }}
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#1B1464]/70 to-transparent p-6">
                 <p className="text-[#FFF4B2] text-xl font-heading">{galleryContent[gallerySlide].caption}</p>
@@ -585,7 +595,12 @@ const Home: React.FC = () => {
                 <img
                   src="/positive2/facility.jpeg"
                   alt="School Facilities"
+                  loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/logo.jpg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -602,7 +617,12 @@ const Home: React.FC = () => {
                 <img
                   src="/positive2/practicals.jpeg"
                   alt="Science Practicals"
+                  loading="lazy"
                   className="w-full h-32 md:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/logo.jpg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-2 left-2 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -617,7 +637,12 @@ const Home: React.FC = () => {
                 <img
                   src="/positive2/practice.jpeg"
                   alt="Practical Learning"
+                  loading="lazy"
                   className="w-full h-32 md:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/logo.jpg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-2 left-2 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -632,7 +657,12 @@ const Home: React.FC = () => {
                 <img
                   src="/positive2/smallexcursion.jpeg"
                   alt="School Excursion"
+                  loading="lazy"
                   className="w-full h-32 md:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/logo.jpg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-2 left-2 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -647,7 +677,12 @@ const Home: React.FC = () => {
                 <img
                   src="/positive2/primaryschool.jpeg"
                   alt="Primary School"
+                  loading="lazy"
                   className="w-full h-32 md:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/logo.jpg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-2 left-2 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -663,7 +698,12 @@ const Home: React.FC = () => {
                 <img
                   src="/positive2/studnetassembly.jpeg"
                   alt="Student Assembly"
+                  loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/logo.jpg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-4 left-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -679,7 +719,12 @@ const Home: React.FC = () => {
                 <img
                   src="/positive2/ceoandstudent.JPG"
                   alt="CEO with Students"
+                  loading="lazy"
                   className="w-full h-32 md:h-40 object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => {
+                    const target = e.target as HTMLImageElement;
+                    target.src = '/logo.jpg';
+                  }}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="absolute bottom-2 left-2 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">

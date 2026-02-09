@@ -44,10 +44,6 @@ class PaystackService {
 
   constructor() {
     // Use Vercel API routes
-    // In production, use relative /api path
-    // In development, you need to either:
-    // 1. Deploy to Vercel and test there, OR
-    // 2. Run a local backend server on port 3000
     this.baseUrl = '/api';
   }
 
