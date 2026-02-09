@@ -28,7 +28,7 @@ export const generateReceiptPDF = (
   
   doc.setFontSize(12);
   doc.setFont('helvetica', 'normal');
-  doc.text('Excellence in Education', 105, 30, { align: 'center' });
+  doc.text('The Real Image Maker', 105, 30, { align: 'center' });
   
   // Receipt title
   doc.setTextColor(0, 0, 0);
