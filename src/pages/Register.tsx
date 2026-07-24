@@ -168,7 +168,7 @@ const Register: React.FC = () => {
 
   const getRegistrationFee = (className: string) => {
     const classInfo = classOptions.find(option => option.value === className);
-    return classInfo?.category === 'secondary' ? 5000 : 3000;
+    return classInfo?.category === 'secondary' ? 5000 : 3500;
   };
 
   const nigerianStates = [
