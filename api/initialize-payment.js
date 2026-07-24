@@ -86,16 +86,21 @@ export default async function handler(req, res) {
     // Prepare Paystack request
     // Determine callback URL based on environment
     let callbackUrl;
-    if (process.env.VERCEL_URL) {
-      // Production: Use Vercel URL
-      callbackUrl = `https://${process.env.VERCEL_URL}/payment-callback`;
-    } else if (process.env.VITE_APP_URL) {
-      // Development: Use VITE_APP_URL from .env
+    
+    // Priority 1: Use VITE_APP_URL if set (recommended for both dev and prod)
+    if (process.env.VITE_APP_URL) {
       callbackUrl = `${process.env.VITE_APP_URL}/payment-callback`;
-    } else {
-      // Fallback: Use localhost with correct port
+    }
+    // Priority 2: Use VERCEL_URL for Vercel deployments
+    else if (process.env.VERCEL_URL) {
+      callbackUrl = `https://${process.env.VERCEL_URL}/payment-callback`;
+    }
+    // Fallback: localhost for local development
+    else {
       callbackUrl = 'http://localhost:5173/payment-callback';
     }
+
+    console.log('Payment callback URL:', callbackUrl); // For debugging
 
     const paystackData = JSON.stringify({
       email,

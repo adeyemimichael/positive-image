@@ -235,6 +235,13 @@ const AdminPanel: React.FC = () => {
                           </div>
                           <div className="flex gap-2 ml-4">
                             <button
+                              onClick={() => window.open('/', '_blank')}
+                              className="p-2 text-[#1B1464] hover:bg-[#6FC1FF]/10 rounded-lg transition-colors"
+                              title="View on Homepage"
+                            >
+                              <Eye size={20} />
+                            </button>
+                            <button
                               onClick={() => handleDeleteAnnouncement(announcement.id)}
                               className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                               title="Delete"
