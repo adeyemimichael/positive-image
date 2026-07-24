@@ -239,24 +239,24 @@ const Home: React.FC = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative h-screen bg-[#1B1464] to-[#D6261D] flex items-center overflow-hidden md:my-0 mt-24">
+      <section className="relative h-screen bg-[#1B1464] to-[#D6261D] flex items-center overflow-hidden pt-44 sm:pt-36 md:pt-0">
         <div className="absolute inset-0 overflow-hidden ">
           <div className="absolute inset-0 bg-[url('/asa.jpg')] bg-cover bg-center opacity-20"></div>
         </div>
 
         <div className="container mx-auto px-4 z-10 ">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
             {/* Left Content - Animated Text */}
             <div className="max-w-2xl">
               {/* Animated Title */}
-              <div className="overflow-hidden mb-4">
+              <div className="overflow-hidden mb-3 md:mb-4">
                 <motion.h1
                   key={`title-${heroSlide}`}
                   initial={{ y: 100, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -100, opacity: 0 }}
                   transition={{ duration: 0.8, ease: "easeOut" }}
-                  className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white"
+                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white"
                 >
                   {heroContent[heroSlide].title.split(' ').slice(0, -3).join(' ')}{' '}
                   <span className="text-[#FFF4B2]">
@@ -273,27 +273,27 @@ const Home: React.FC = () => {
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -50, opacity: 0 }}
                   transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                  className="text-2xl md:text-3xl font-heading font-semibold text-[#6FC1FF] mb-4"
+                  className="text-xl sm:text-2xl md:text-3xl font-heading font-semibold text-[#6FC1FF] mb-3 md:mb-4"
                 >
                   {heroContent[heroSlide].subtitle}
                 </motion.h2>
               </div>
 
               {/* Animated Description */}
-              <div className="overflow-hidden mb-8">
+              <div className="overflow-hidden mb-6 md:mb-8">
                 <motion.p
                   key={`description-${heroSlide}`}
                   initial={{ y: 30, opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: -30, opacity: 0 }}
                   transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
-                  className="text-xl text-white/90"
+                  className="text-base sm:text-lg md:text-xl text-white/90"
                 >
                   {heroContent[heroSlide].description}
                 </motion.p>
               </div>
               {/* Static Call-to-Action Buttons */}
-              <div className="flex flex-col sm:flex-row gap-4 mt-8">
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 mt-6 md:mt-8">
                 <Link to="/register">
                   <button className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-[#FFF4B2] text-[#1B1464] rounded-full font-bold text-base sm:text-lg hover:bg-[#FFF4B2]/90 transition-all duration-300 shadow-lg transform hover:scale-105">
                     Enroll Now
@@ -1106,7 +1106,7 @@ const Home: React.FC = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={fadeInUp}
-            className="mt-16 bg-gradient-to-r from-[#1B1464] to-[#D6261D] rounded-2xl p-8 text-white"
+            className="mt-16 bg-[#1B1464] rounded-2xl p-8 text-white"
           >
             <div className="text-center mb-8">
               <h3 className="text-2xl font-bold mb-2">Stay Connected</h3>

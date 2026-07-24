@@ -1,9 +1,13 @@
 // Local development server to run Vercel API routes
 // This allows testing payment integration on localhost
 
-const express = require('express');
-const cors = require('cors');
-const https = require('https');
+import express from 'express';
+import cors from 'cors';
+import https from 'https';
+import dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config();
 
 const app = express();
 const PORT = 3000;
@@ -11,9 +15,6 @@ const PORT = 3000;
 // Middleware
 app.use(cors());
 app.use(express.json());
-
-// Load environment variables
-require('dotenv').config();
 
 // Initialize Payment Route
 app.post('/api/initialize-payment', async (req, res) => {

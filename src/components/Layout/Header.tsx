@@ -43,20 +43,22 @@ const Header: React.FC = () => {
 
   return (
     <header
-      className={`fixed w-full z-50 transition-all duration-300 ${scrolled
-        ? 'bg-white shadow-md py-4'
-        : 'bg-transparent py-12'
-        }`}
+      className={`fixed w-full z-50 transition-all duration-300 ${
+        scrolled
+          ? 'bg-white shadow-md py-3 md:py-4'
+          : 'bg-transparent py-4 md:py-12'
+      }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <Link to="/" className="flex items-center group">
+        <Link to="/" className="flex items-center gap-2 md:gap-3 group">
           {/* Logo Image */}
-          <div className="relative">
+          <div className="relative flex-shrink-0">
             <img
               src={Logo}
               alt="Positive Image Schools Logo"
-              className={`transition-all duration-300 ${scrolled ? 'h-20 w-28' : 'h-20 w-32'
-                } object-contain group-hover:scale-105`}
+              className={`transition-all duration-300 ${
+                scrolled ? 'h-12 w-12 sm:h-16 sm:w-16' : 'h-14 w-14 sm:h-20 sm:w-20'
+              } object-contain group-hover:scale-105`}
               onError={(e) => {
                 // Fallback to icon if image fails to load
                 e.currentTarget.style.display = 'none';
@@ -65,9 +67,17 @@ const Header: React.FC = () => {
             />
             {/* Fallback Icon (hidden by default) */}
             <GraduationCap
-              size={scrolled ? 56 : 64}
+              size={scrolled ? 40 : 48}
               className={`hidden ${scrolled ? 'text-[#1B1464]' : 'text-gray-700'} group-hover:scale-105 transition-all duration-300`}
             />
+          </div>
+          {/* School Name - Hidden on very small screens, visible on sm and up */}
+          <div className="hidden sm:block">
+            <h1 className={`font-bold leading-tight transition-all duration-300 ${
+              scrolled ? 'text-base md:text-xl text-[#1B1464]' : 'text-lg md:text-2xl text-white'
+            }`}>
+              Positive Image<br className="md:hidden" /> Schools
+            </h1>
           </div>
         </Link>
 
