@@ -35,14 +35,29 @@ const PaymentCallback: React.FC = () => {
           if (pendingRegistration) {
             const registrationData = JSON.parse(pendingRegistration);
             
-            // Update with payment info
+            // Update payment status in Supabase
+            try {
+              const { updateStudentPayment } = await import('../services/studentService');
+              await updateStudentPayment(reference, {
+                payment_status: 'completed',
+                payment_amount: response.data.amount / 100,
+                payment_date: response.data.paid_at,
+                payment_method: 'paystack'
+              });
+              console.log('Payment status updated in Supabase');
+            } catch (error) {
+              console.error('Failed to update payment in Supabase:', error);
+              // Continue anyway - payment was successful
+            }
+            
+            // Update with payment info for display
             const completedRegistration = {
               ...registrationData,
               paymentReference: reference,
               paymentStatus: 'completed',
               paymentMethod: 'paystack',
               paymentDate: response.data.paid_at,
-              paymentAmount: response.data.amount / 100, // Convert from kobo
+              paymentAmount: response.data.amount / 100,
               paystackData: response.data
             };
 
@@ -57,7 +72,7 @@ const PaymentCallback: React.FC = () => {
                   registrationData: completedRegistration,
                   paymentReference: reference
                 },
-                replace: true // Replace history entry to prevent back button issues
+                replace: true
               });
             }, 2000);
           }

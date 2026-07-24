@@ -46,15 +46,29 @@ const AdminPanel: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const savedAnnouncements = localStorage.getItem('admin_announcements');
-    if (savedAnnouncements) {
+    const loadAnnouncements = async () => {
       try {
-        setAnnouncements(JSON.parse(savedAnnouncements));
+        const { getAnnouncements } = await import('../services/announcementService');
+        const data = await getAnnouncements();
+        setAnnouncements(data);
       } catch (error) {
         console.error('Error loading announcements:', error);
+        // Fallback to localStorage
+        const savedAnnouncements = localStorage.getItem('admin_announcements');
+        if (savedAnnouncements) {
+          try {
+            setAnnouncements(JSON.parse(savedAnnouncements));
+          } catch (e) {
+            console.error('Error parsing announcements:', e);
+          }
+        }
       }
+    };
+
+    if (isAuthenticated) {
+      loadAnnouncements();
     }
-  }, []);
+  }, [isAuthenticated]);
 
   const handleLoginSuccess = () => {
     setIsAuthenticated(true);
@@ -68,18 +82,61 @@ const AdminPanel: React.FC = () => {
     navigate('/');
   };
 
-  const handleAnnouncementUpload = (announcementData: Announcement) => {
-    const updatedAnnouncements = [announcementData, ...announcements];
-    setAnnouncements(updatedAnnouncements);
-    localStorage.setItem('admin_announcements', JSON.stringify(updatedAnnouncements));
-    setShowAnnouncementUpload(false);
+  const handleAnnouncementUpload = async (announcementData: any) => {
+    try {
+      const { createAnnouncement, uploadAnnouncementImage } = await import('../services/announcementService');
+      
+      // Upload image if provided
+      let imageUrl = announcementData.imageUrl;
+      if (announcementData.imageFile) {
+        try {
+          const tempId = `announcement-${Date.now()}`;
+          imageUrl = await uploadAnnouncementImage(announcementData.imageFile, tempId);
+        } catch (error) {
+          console.error('Image upload failed, using base64:', error);
+          // Keep base64 if upload fails
+        }
+      }
+      
+      // Create announcement in Supabase
+      const newAnnouncement = await createAnnouncement({
+        title: announcementData.title,
+        category: announcementData.category,
+        description: announcementData.description,
+        priority: announcementData.priority,
+        image_url: imageUrl,
+        status: 'active'
+      });
+      
+      // Update local state
+      setAnnouncements([newAnnouncement, ...announcements]);
+      setShowAnnouncementUpload(false);
+      
+      // Also update localStorage for backward compatibility
+      const updatedList = [newAnnouncement, ...announcements];
+      localStorage.setItem('admin_announcements', JSON.stringify(updatedList));
+    } catch (error) {
+      console.error('Error creating announcement:', error);
+      alert('Failed to create announcement. Please try again.');
+    }
   };
 
-  const handleDeleteAnnouncement = (id: number) => {
+  const handleDeleteAnnouncement = async (id: number | string) => {
     if (window.confirm('Are you sure you want to delete this announcement?')) {
-      const updatedAnnouncements = announcements.filter(a => a.id !== id);
-      setAnnouncements(updatedAnnouncements);
-      localStorage.setItem('admin_announcements', JSON.stringify(updatedAnnouncements));
+      try {
+        const { deleteAnnouncement } = await import('../services/announcementService');
+        await deleteAnnouncement(id.toString());
+        
+        // Update local state
+        const updatedAnnouncements = announcements.filter(a => a.id !== id);
+        setAnnouncements(updatedAnnouncements);
+        
+        // Update localStorage for backward compatibility
+        localStorage.setItem('admin_announcements', JSON.stringify(updatedAnnouncements));
+      } catch (error) {
+        console.error('Error deleting announcement:', error);
+        alert('Failed to delete announcement. Please try again.');
+      }
     }
   };
 

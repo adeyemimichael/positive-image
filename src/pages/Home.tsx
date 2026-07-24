@@ -19,37 +19,34 @@ const Home: React.FC = () => {
   // State for admin announcements - THIS IS STATE MANAGEMENT
   const [adminAnnouncements, setAdminAnnouncements] = useState<any[]>([]);
 
-  // Load admin announcements from localStorage - THIS IS DATA PERSISTENCE
+  // Load admin announcements from Supabase - THIS IS DATA PERSISTENCE
   useEffect(() => {
-    const loadAnnouncements = () => {
-      const savedAnnouncements = localStorage.getItem('admin_announcements');
-      if (savedAnnouncements) {
-        try {
-          const parsed = JSON.parse(savedAnnouncements);
-          setAdminAnnouncements(parsed);
-        } catch (error) {
-          console.error('Error loading announcements:', error);
+    const loadAnnouncements = async () => {
+      try {
+        // Import dynamically to avoid build issues
+        const { getAnnouncements } = await import('../services/announcementService');
+        const announcements = await getAnnouncements();
+        setAdminAnnouncements(announcements);
+      } catch (error) {
+        console.error('Error loading announcements:', error);
+        // Fallback to localStorage for backward compatibility
+        const savedAnnouncements = localStorage.getItem('admin_announcements');
+        if (savedAnnouncements) {
+          try {
+            setAdminAnnouncements(JSON.parse(savedAnnouncements));
+          } catch (e) {
+            console.error('Error parsing localStorage announcements:', e);
+          }
         }
       }
     };
 
     loadAnnouncements();
 
-    // Listen for storage changes (when admin creates new announcement)
-    // THIS IS EVENT-DRIVEN PROGRAMMING
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'admin_announcements') {
-        loadAnnouncements();
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    
-    // Also check for updates every 5 seconds (polling)
-    const interval = setInterval(loadAnnouncements, 5000);
+    // Refresh announcements every 30 seconds
+    const interval = setInterval(loadAnnouncements, 30000);
 
     return () => {
-      window.removeEventListener('storage', handleStorageChange);
       clearInterval(interval);
     };
   }, []);

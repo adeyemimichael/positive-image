@@ -184,19 +184,86 @@ const Register: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      // Store registration data in localStorage for payment page
-      const registrationData = {
-        ...data,
-        id: generateId(),
-        registrationDate: new Date().toISOString().split('T')[0],
-        registrationFee: getRegistrationFee(data.classApplyingFor),
-        campus: selectedCampus
+      // Generate payment reference
+      const paymentReference = `PIS-${Date.now()}-${Math.random().toString(36).substring(2, 7).toUpperCase()}`;
+      
+      // Prepare student data for Supabase
+      const studentData = {
+        campus: selectedCampus,
+        full_name: data.fullName,
+        date_of_birth: data.dateOfBirth,
+        gender: data.gender,
+        state_of_origin: data.stateOfOrigin,
+        local_government: data.localGovernment,
+        nationality: data.nationality || 'Nigerian',
+        religion: data.religion,
+        blood_group: data.bloodGroup,
+        medical_conditions: data.medicalConditions,
+        class_applying_for: data.classApplyingFor,
+        previous_school: data.previousSchool,
+        previous_class: data.previousClass,
+        reason_for_leaving: data.reasonForLeaving,
+        father_name: data.fatherName,
+        father_occupation: data.fatherOccupation,
+        father_phone: data.fatherPhone,
+        father_email: data.fatherEmail,
+        mother_name: data.motherName,
+        mother_occupation: data.motherOccupation,
+        mother_phone: data.motherPhone,
+        mother_email: data.motherEmail,
+        guardian_name: data.guardianName,
+        guardian_relationship: data.guardianRelationship,
+        guardian_phone: data.guardianPhone,
+        guardian_email: data.guardianEmail,
+        home_address: data.homeAddress,
+        city: data.city,
+        state: data.state,
+        postal_code: data.postalCode,
+        emergency_contact_name: data.emergencyContactName,
+        emergency_contact_phone: data.emergencyContactPhone,
+        emergency_contact_relationship: data.emergencyContactRelationship,
+        special_needs: data.specialNeeds,
+        extracurricular_interests: data.extracurricularInterests,
+        how_did_you_hear: data.howDidYouHearAboutUs,
+        additional_comments: data.additionalComments,
+        payment_reference: paymentReference,
+        payment_status: 'pending',
+        payment_amount: getRegistrationFee(data.classApplyingFor),
+        registration_status: 'pending'
       };
 
-      console.log('Registration data prepared:', registrationData);
-      localStorage.setItem('pendingRegistration', JSON.stringify(registrationData));
+      // Save to Supabase
+      let studentRecord;
+      try {
+        const { createStudentRegistration } = await import('../services/studentService');
+        studentRecord = await createStudentRegistration(studentData);
+        console.log('Student saved to Supabase:', studentRecord);
+      } catch (error) {
+        console.error('Supabase save failed, using fallback:', error);
+        // Fallback to localStorage if Supabase fails
+        const fallbackData = {
+          ...data,
+          id: generateId(),
+          registrationDate: new Date().toISOString().split('T')[0],
+          registrationFee: getRegistrationFee(data.classApplyingFor),
+          campus: selectedCampus,
+          paymentReference
+        };
+        localStorage.setItem('pendingRegistration', JSON.stringify(fallbackData));
+        studentRecord = fallbackData;
+      }
 
-      // Send email to admin
+      // Also keep in localStorage for payment page
+      localStorage.setItem('pendingRegistration', JSON.stringify({
+        ...data,
+        id: studentRecord.id || generateId(),
+        registrationDate: new Date().toISOString().split('T')[0],
+        registrationFee: getRegistrationFee(data.classApplyingFor),
+        campus: selectedCampus,
+        paymentReference
+      }));
+
+      // Send email notification to admin
       const emailData = {
         studentName: data.fullName,
         campus: campusOptions.find(c => c.value === selectedCampus)?.label || selectedCampus,
@@ -204,34 +271,29 @@ const Register: React.FC = () => {
         registrationFee: getRegistrationFee(data.classApplyingFor),
         parentEmail: data.fatherEmail || data.motherEmail || 'Not provided',
         parentPhone: data.fatherPhone || data.motherPhone || 'Not provided',
-        registrationData
+        registrationData: studentRecord
       };
 
-      // Send email notification to admin
-      // Choose one of these methods:
-      
-      // Method 1: EmailJS (requires EmailJS setup)
-      const emailSent = await sendRegistrationEmail(emailData);
-      
-      // Method 2: Formspree (simpler, uncomment to use)
-      // const emailSent = await sendRegistrationWithFormspree(registrationData);
-      
-      if (!emailSent) {
-        console.warn('Failed to send email notification to admin');
-        // Don't show alert - registration is still successful
-        // The admin can check registrations from the system
-      } else {
-        console.log('Email notification sent successfully to admin');
+      try {
+        const emailSent = await sendRegistrationEmail(emailData);
+        if (emailSent) {
+          console.log('Email notification sent successfully');
+        }
+      } catch (emailError) {
+        console.warn('Email notification failed:', emailError);
+        // Don't block registration if email fails
       }
+
       // Navigate to payment page
       console.log('Navigating to payment page...');
       navigate('/payment', {
         state: {
-          registrationData,
+          registrationData: studentRecord,
           fee: getRegistrationFee(data.classApplyingFor),
           studentName: data.fullName,
           className: data.classApplyingFor,
-          campus: campusOptions.find(c => c.value === selectedCampus)?.label
+          campus: campusOptions.find(c => c.value === selectedCampus)?.label,
+          paymentReference
         }
       });
     } catch (error) {

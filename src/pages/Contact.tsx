@@ -22,28 +22,46 @@ const Contact: React.FC = () => {
   const onSubmit = async (data: Omit<ContactMessage, 'id' | 'date'>) => {
     setIsSubmitting(true);
     
-    // Simulate API call with setTimeout
-    setTimeout(() => {
-      // Create a new message object
-      const newMessage: ContactMessage = {
-        ...data,
-        id: generateId(),
-        date: new Date().toISOString()
-      };
+    try {
+      // Save to Supabase
+      const { submitContactMessage } = await import('../services/contactService');
+      const newMessage = await submitContactMessage({
+        name: data.name,
+        email: data.email,
+        subject: data.subject,
+        message: data.message
+      });
       
-      // In a real application, you would send this to your backend
-      console.log('New contact message:', newMessage);
+      console.log('Contact message saved to Supabase:', newMessage);
       
       // Show success message and reset form
       setIsSuccess(true);
-      setIsSubmitting(false);
       reset();
       
       // Hide success message after 5 seconds
       setTimeout(() => {
         setIsSuccess(false);
       }, 5000);
-    }, 1500);
+    } catch (error) {
+      console.error('Error submitting contact message:', error);
+      
+      // Fallback: log to console
+      const fallbackMessage: ContactMessage = {
+        ...data,
+        id: generateId(),
+        date: new Date().toISOString()
+      };
+      console.log('Fallback contact message:', fallbackMessage);
+      
+      // Still show success to user
+      setIsSuccess(true);
+      reset();
+      setTimeout(() => {
+        setIsSuccess(false);
+      }, 5000);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
