@@ -12,9 +12,9 @@ const simpleHash = (str: string): string => {
 
 // Admin configuration for gallery uploads
 export const ADMIN_CONFIG = {
-  // Admin password hash (hash of 'adminadmin')
-  // In production, use environment variable: import.meta.env.VITE_ADMIN_PASSWORD_HASH
-  ADMIN_PASSWORD_HASH: import.meta.env.VITE_ADMIN_PASSWORD_HASH || simpleHash('adminadmin'),
+  // Admin password
+  // Set VITE_ADMIN_PASSWORD in your .env file
+  ADMIN_PASSWORD: import.meta.env.VITE_ADMIN_PASSWORD || 'adminadmin',
   
   // Session duration (in milliseconds) - 2 hours
   SESSION_DURATION: 2 * 60 * 60 * 1000,
@@ -30,8 +30,7 @@ export const ADMIN_CONFIG = {
 export const AdminAuth = {
   // Check if password is correct
   isValidPassword: (password: string): boolean => {
-    const hashedInput = simpleHash(password);
-    return hashedInput === ADMIN_CONFIG.ADMIN_PASSWORD_HASH;
+    return password === ADMIN_CONFIG.ADMIN_PASSWORD;
   },
 
   // Create admin session

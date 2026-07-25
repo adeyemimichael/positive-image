@@ -22,16 +22,18 @@ const Payment: React.FC = () => {
 
   const { registrationData, fee, studentName, className } = location.state as PaymentProps || {};
 
+  const stateRef = (location.state as any)?.paymentReference || registrationData?.payment_reference || registrationData?.paymentReference;
+
   useEffect(() => {
-    // Generate payment reference
-    const reference = `PIS${Date.now()}${Math.random().toString(36).substr(2, 5).toUpperCase()}`;
+    // Set payment reference from state or generate a fallback
+    const reference = stateRef || `PIS${Date.now()}${Math.random().toString(36).substr(2, 5).toUpperCase()}`;
     setPaymentReference(reference);
 
     // If no registration data, redirect back to registration
     if (!registrationData) {
       navigate('/register');
     }
-  }, [registrationData, navigate]);
+  }, [registrationData, navigate, stateRef]);
 
   const bankDetails = {
     bankName: 'First Bank of Nigeria',

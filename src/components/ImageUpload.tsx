@@ -59,21 +59,23 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload }) 
     setMessage(null);
 
     try {
-      // Simulate upload process
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Import the service dynamically or at the top
+      const { uploadGalleryImage, createGalleryImage } = await import('../services/galleryService');
+      
+      // Upload the file to Supabase Storage
+      const imageUrl = await uploadGalleryImage(formData.file);
 
-      // Create image data object
-      const imageData = {
-        id: Date.now(), // Simple ID generation
-        url: preview, // In real app, this would be the uploaded image URL
+      // Create the record in Supabase Database
+      const newImage = await createGalleryImage({
         title: formData.title,
         category: formData.category,
         description: formData.description,
-        uploadDate: new Date().toISOString()
-      };
+        image_url: imageUrl,
+        status: 'active'
+      });
 
-      // Call the upload handler
-      onUpload(imageData);
+      // Call the upload handler to update UI state
+      onUpload(newImage);
 
       setMessage({ type: 'success', text: 'Image uploaded successfully!' });
       
@@ -83,6 +85,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload }) 
       }, 1500);
 
     } catch (error) {
+      console.error('Upload error:', error);
       setMessage({ type: 'error', text: 'Upload failed. Please try again.' });
     } finally {
       setIsUploading(false);

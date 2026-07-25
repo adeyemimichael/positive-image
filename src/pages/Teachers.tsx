@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, ZoomIn } from 'lucide-react';
-import { teachers } from '../data/mock-data';
+import { teachers as mockTeachers } from '../data/mock-data';
+import { getTeachers } from '../services/teacherService';
+import { Teacher } from '../lib/supabase';
 import Card from '../components/ui/Card';
 import Input from '../components/ui/Input';
 
@@ -9,6 +11,40 @@ const Teachers: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSubject, setSelectedSubject] = useState<string>('');
   const [selectedImage, setSelectedImage] = useState<{ url: string; subject: string } | null>(null);
+
+  const [teachers, setTeachers] = useState<Teacher[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch teachers from Supabase
+  useEffect(() => {
+    const fetchTeachers = async () => {
+      try {
+        const fetchedTeachers = await getTeachers();
+        if (fetchedTeachers.length > 0) {
+          setTeachers(fetchedTeachers);
+        } else {
+          // Fallback to mock data if DB is empty
+          const formattedMock: Teacher[] = mockTeachers.map((t: any) => ({
+            ...t,
+            photo_url: t.photo
+          }));
+          setTeachers(formattedMock);
+        }
+      } catch (error) {
+        console.error('Error fetching teachers:', error);
+        // Fallback to mock data
+        const formattedMock: Teacher[] = mockTeachers.map((t: any) => ({
+          ...t,
+          photo_url: t.photo
+        }));
+        setTeachers(formattedMock);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTeachers();
+  }, []);
 
   // Get unique subjects for filter
   const subjects = [...new Set(teachers.map(teacher => teacher.subject))];
@@ -149,12 +185,17 @@ const Teachers: React.FC = () => {
           </div>
 
           {/* Teachers Grid */}
-          <motion.div 
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
-          >
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600"></div>
+            </div>
+          ) : (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
             {filteredTeachers.length > 0 ? (
               filteredTeachers.map((teacher, index) => (
                 <motion.div
@@ -165,15 +206,19 @@ const Teachers: React.FC = () => {
                 >
                   <Card className="h-full overflow-hidden group hover:shadow-xl transition-all duration-300">
                     {/* Image takes most of the card */}
-                    <div 
-                      className="h-96 overflow-hidden relative cursor-pointer"
-                      onClick={() => setSelectedImage({ url: teacher.photo, subject: teacher.name })}
-                    >
-                      <img 
-                        src={teacher.photo} 
-                        alt={teacher.name} 
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      />
+                      <div 
+                        className="h-96 overflow-hidden relative cursor-pointer bg-gray-100"
+                        onClick={() => setSelectedImage({ url: teacher.photo_url || '', subject: teacher.name })}
+                      >
+                        <img 
+                          src={teacher.photo_url} 
+                          alt={teacher.name} 
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = '/logo.jpg';
+                          }}
+                        />
                       {/* Overlay gradient for better text readability */}
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       
@@ -206,7 +251,8 @@ const Teachers: React.FC = () => {
                 </p>
               </div>
             )}
-          </motion.div>
+            </motion.div>
+          )}
         </div>
       </section>
 

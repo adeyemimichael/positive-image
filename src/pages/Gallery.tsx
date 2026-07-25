@@ -5,15 +5,8 @@ import { Link } from 'react-router-dom';
 import AdminLogin from '../components/AdminLogin';
 import ImageUpload from '../components/ImageUpload';
 import { AdminAuth } from '../config/admin';
-
-interface GalleryImage {
-  id: number;
-  url: string;
-  title: string;
-  category: string;
-  description: string;
-  uploadDate?: string;
-}
+import { GalleryImage } from '../lib/supabase';
+import { getGalleryImages, deleteGalleryImage } from '../services/galleryService';
 
 const Gallery: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
@@ -42,23 +35,37 @@ const Gallery: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  // Load images from localStorage or use default images
+  // Load images from Supabase
   useEffect(() => {
-    const savedImages = localStorage.getItem('gallery_images');
-    if (savedImages) {
+    const fetchImages = async () => {
       try {
-        const parsedImages = JSON.parse(savedImages);
-        setImages([...defaultGalleryImages, ...parsedImages]);
+        const fetchedImages = await getGalleryImages();
+        
+        // Convert default images to the new format to append them if needed
+        const formattedDefaults: GalleryImage[] = defaultGalleryImages.map((img: any) => ({
+          ...img,
+          image_url: img.url,
+          id: img.id.toString()
+        }));
+
+        setImages([...formattedDefaults, ...fetchedImages]);
       } catch (error) {
-        console.error('Error loading saved images:', error);
-        setImages(defaultGalleryImages);
+        console.error('Error loading images:', error);
+        
+        // Fallback to defaults
+        const formattedDefaults: GalleryImage[] = defaultGalleryImages.map((img: any) => ({
+          ...img,
+          image_url: img.url,
+          id: img.id.toString()
+        }));
+        setImages(formattedDefaults);
       }
-    } else {
-      setImages(defaultGalleryImages);
-    }
+    };
+    
+    fetchImages();
   }, []);
 
-  const defaultGalleryImages: GalleryImage[] = [
+  const defaultGalleryImages: any[] = [
     {
       id: 1,
       url: '/positive2/facility.jpeg',
@@ -250,14 +257,8 @@ const Gallery: React.FC = () => {
     setSessionTimeRemaining(0);
   };
 
-  const handleImageUpload = (imageData: any) => {
-    const newImages = [...images, imageData];
-    setImages(newImages);
-    
-    // Save to localStorage (in real app, this would be saved to database)
-    const uploadedImages = newImages.filter(img => img.uploadDate);
-    localStorage.setItem('gallery_images', JSON.stringify(uploadedImages));
-    
+  const handleImageUpload = (imageData: GalleryImage) => {
+    setImages(prev => [...prev, imageData]);
     setShowImageUpload(false);
   };
 
@@ -278,17 +279,27 @@ const Gallery: React.FC = () => {
     setSelectedImage(filteredImages[prevIndex]);
   };
 
-  const handleDeleteImage = (imageId: number) => {
-    // Filter out the deleted image
-    const updatedImages = images.filter(img => img.id !== imageId);
-    setImages(updatedImages);
-    
-    // Update localStorage
-    const uploadedImages = updatedImages.filter(img => img.uploadDate);
-    localStorage.setItem('gallery_images', JSON.stringify(uploadedImages));
-    
-    // Close the modal
-    setSelectedImage(null);
+  const handleDeleteImage = async (imageId: string, imageUrl: string) => {
+    try {
+      // If it's a default image (short numeric string or not a uuid), we might just remove from state
+      if (imageId.length < 10) {
+        setImages(images.filter(img => img.id !== imageId));
+        setSelectedImage(null);
+        return;
+      }
+
+      await deleteGalleryImage(imageId, imageUrl);
+      
+      // Update state
+      const updatedImages = images.filter(img => img.id !== imageId);
+      setImages(updatedImages);
+      
+      // Close the modal
+      setSelectedImage(null);
+    } catch (error) {
+      console.error('Failed to delete image', error);
+      alert('Failed to delete image');
+    }
   };
 
   return (
@@ -356,7 +367,7 @@ const Gallery: React.FC = () => {
               onClick={() => openImageModal(image)}
             >
               <img
-                src={image.url}
+                src={image.image_url}
                 alt={image.title}
                 loading="lazy"
                 className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-500"
@@ -497,7 +508,7 @@ const Gallery: React.FC = () => {
 
               {/* Image */}
               <img
-                src={selectedImage.url}
+                src={selectedImage.image_url}
                 alt={selectedImage.title}
                 loading="lazy"
                 className="w-full h-auto max-h-[70vh] object-contain bg-gray-100"
@@ -520,7 +531,7 @@ const Gallery: React.FC = () => {
                       <button
                         onClick={() => {
                           if (window.confirm('Are you sure you want to delete this image?')) {
-                            handleDeleteImage(selectedImage.id);
+                            handleDeleteImage(selectedImage.id, selectedImage.image_url);
                           }
                         }}
                         className="px-3 py-1 bg-red-100 text-red-600 rounded-full text-sm font-semibold hover:bg-red-200 transition-colors flex items-center gap-1"

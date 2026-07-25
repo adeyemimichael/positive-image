@@ -29,30 +29,25 @@ const PaymentCallback: React.FC = () => {
           setStatus('success');
           setMessage('Payment verified successfully!');
 
-          // Get registration data from localStorage
-          const pendingRegistration = localStorage.getItem('pendingRegistration');
-          
-          if (pendingRegistration) {
-            const registrationData = JSON.parse(pendingRegistration);
+          // Update payment status and fetch student record from Supabase
+          try {
+            const { updateStudentPayment, getStudentByPaymentReference } = await import('../services/studentService');
             
-            // Update payment status in Supabase
-            try {
-              const { updateStudentPayment } = await import('../services/studentService');
-              await updateStudentPayment(reference, {
-                payment_status: 'completed',
-                payment_amount: response.data.amount / 100,
-                payment_date: response.data.paid_at,
-                payment_method: 'paystack'
-              });
-              console.log('Payment status updated in Supabase');
-            } catch (error) {
-              console.error('Failed to update payment in Supabase:', error);
-              // Continue anyway - payment was successful
-            }
-            
-            // Update with payment info for display
+            await updateStudentPayment(reference, {
+              payment_status: 'completed',
+              payment_amount: response.data.amount / 100,
+              payment_date: response.data.paid_at,
+              payment_method: 'paystack'
+            });
+
+            const fetchedStudent = await getStudentByPaymentReference(reference);
+
+            const pendingRegistration = localStorage.getItem('pendingRegistration');
+            const localData = pendingRegistration ? JSON.parse(pendingRegistration) : {};
+
             const completedRegistration = {
-              ...registrationData,
+              ...localData,
+              ...fetchedStudent,
               paymentReference: reference,
               paymentStatus: 'completed',
               paymentMethod: 'paystack',
@@ -61,7 +56,7 @@ const PaymentCallback: React.FC = () => {
               paystackData: response.data
             };
 
-            // Store completed registration
+            // Store completed registration for fallback display
             localStorage.setItem('completedRegistration', JSON.stringify(completedRegistration));
             localStorage.removeItem('pendingRegistration');
 
@@ -72,6 +67,15 @@ const PaymentCallback: React.FC = () => {
                   registrationData: completedRegistration,
                   paymentReference: reference
                 },
+                replace: true
+              });
+            }, 2000);
+          } catch (error) {
+            console.error('Failed to handle payment completion:', error);
+            // Fallback navigation
+            setTimeout(() => {
+              navigate('/registration-success', {
+                state: { paymentReference: reference },
                 replace: true
               });
             }, 2000);
