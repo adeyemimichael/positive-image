@@ -20,6 +20,23 @@ export const createStudentRegistration = async (
       .single();
 
     if (error) throw error;
+
+    // Record initial pending payment in payments table
+    if (data?.id && studentData.payment_reference) {
+      await supabase
+        .from('payments')
+        .upsert([{
+          student_id: data.id,
+          reference: studentData.payment_reference,
+          amount: studentData.payment_amount || 0,
+          currency: 'NGN',
+          payment_type: 'registration_fee',
+          status: studentData.payment_status || 'pending',
+          payment_method: 'pending'
+        }], { onConflict: 'reference' })
+        .catch(e => console.warn('Payment record notice:', e));
+    }
+
     return data;
   } catch (error) {
     console.error('Error creating student registration:', error);
@@ -126,7 +143,7 @@ export const updateStudent = async (
 };
 
 /**
- * Update student payment information
+ * Update student payment information & record transaction in backend
  */
 export const updateStudentPayment = async (
   paymentReference: string,
@@ -138,6 +155,7 @@ export const updateStudentPayment = async (
   }
 ): Promise<Student> => {
   try {
+    // 1. Update students table
     const { data, error } = await supabase
       .from('students')
       .update({
@@ -149,6 +167,24 @@ export const updateStudentPayment = async (
       .single();
 
     if (error) throw error;
+
+    // 2. Record/Update in payments table in Supabase
+    if (data) {
+      await supabase
+        .from('payments')
+        .upsert([{
+          student_id: data.id,
+          reference: paymentReference,
+          amount: paymentData.payment_amount || data.payment_amount || 0,
+          currency: 'NGN',
+          payment_type: 'registration_fee',
+          status: paymentData.payment_status,
+          payment_method: paymentData.payment_method || 'paystack',
+          paid_at: paymentData.payment_date || new Date().toISOString()
+        }], { onConflict: 'reference' })
+        .catch(payErr => console.warn('Payment table sync notice:', payErr));
+    }
+
     return data;
   } catch (error) {
     console.error('Error updating student payment:', error);

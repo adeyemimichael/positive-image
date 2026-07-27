@@ -60,14 +60,20 @@ class PaystackService {
         body: JSON.stringify(paymentData)
       });
 
-      const data = await response.json();
+      const responseText = await response.text();
+      let data: any = {};
+      try {
+        data = JSON.parse(responseText);
+      } catch (e) {
+        throw new Error(`Payment server error (${response.status}). Please check local API server or connection.`);
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to initialize payment');
+        throw new Error(data.error || data.message || 'Failed to initialize payment');
       }
 
       return data;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Payment initialization error:', error);
       throw error;
     }
@@ -85,14 +91,20 @@ class PaystackService {
         }
       });
 
-      const data = await response.json();
+      const responseText = await response.text();
+      let data: any = {};
+      try {
+        data = JSON.parse(responseText);
+      } catch (e) {
+        throw new Error(`Verification server error (${response.status}).`);
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || 'Failed to verify payment');
+        throw new Error(data.error || data.message || 'Failed to verify payment');
       }
 
       return data;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Payment verification error:', error);
       throw error;
     }

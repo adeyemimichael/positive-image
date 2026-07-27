@@ -238,6 +238,19 @@ const Register: React.FC = () => {
         const { createStudentRegistration } = await import('../services/studentService');
         studentRecord = await createStudentRegistration(studentData);
         console.log('Student saved to Supabase:', studentRecord);
+
+        // Upload passport photo if selected
+        if (passportFile && studentRecord?.id) {
+          try {
+            const { uploadStudentPhoto, updateStudent } = await import('../services/studentService');
+            const photoUrl = await uploadStudentPhoto(passportFile, studentRecord.id);
+            await updateStudent(studentRecord.id, { passport_photo_url: photoUrl });
+            studentRecord.passport_photo_url = photoUrl;
+            studentRecord.passportPhotoUrl = photoUrl;
+          } catch (photoErr) {
+            console.warn('Passport photo upload failed:', photoErr);
+          }
+        }
       } catch (error) {
         console.error('Supabase save failed, using fallback:', error);
         // Fallback to localStorage if Supabase fails

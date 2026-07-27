@@ -70,6 +70,26 @@ export const createGalleryImage = async (
   }
 };
 
+export const updateGalleryImage = async (
+  id: string,
+  updates: Partial<GalleryImage>
+): Promise<GalleryImage> => {
+  try {
+    const { data, error } = await supabase
+      .from('gallery_images')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error('Error updating gallery image:', error);
+    throw error;
+  }
+};
+
 export const deleteGalleryImage = async (id: string, imageUrl?: string): Promise<void> => {
   try {
     // Optional: Delete from storage if imageUrl is provided and belongs to storage

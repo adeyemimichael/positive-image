@@ -848,8 +848,8 @@ const Home: React.FC = () => {
             >
               <div className="relative h-64 overflow-hidden">
                 <img
-                  src={adminAnnouncements.length > 0 && adminAnnouncements[0].imageUrl 
-                    ? adminAnnouncements[0].imageUrl 
+                  src={adminAnnouncements.length > 0 && (adminAnnouncements[0].image_url || adminAnnouncements[0].imageUrl)
+                    ? (adminAnnouncements[0].image_url || adminAnnouncements[0].imageUrl)
                     : "/positive2/announcement.jpeg"}
                   alt="School Registration Announcement"
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
@@ -863,7 +863,7 @@ const Home: React.FC = () => {
                       : 'bg-[#D6261D] text-white'
                   }`}>
                     {adminAnnouncements.length > 0 
-                      ? adminAnnouncements[0].priority.toUpperCase() 
+                      ? (adminAnnouncements[0].priority || 'normal').toUpperCase() 
                       : 'URGENT'}
                   </span>
                 </div>
@@ -873,8 +873,8 @@ const Home: React.FC = () => {
                 <div className="flex items-center gap-2 mb-3">
                   <div className="w-2 h-2 bg-[#D6261D] rounded-full"></div>
                   <span className="text-sm text-gray-500">
-                    {adminAnnouncements.length > 0 
-                      ? new Date(adminAnnouncements[0].uploadDate).toLocaleDateString()
+                    {adminAnnouncements.length > 0 && (adminAnnouncements[0].upload_date || adminAnnouncements[0].uploadDate || adminAnnouncements[0].created_at)
+                      ? new Date(adminAnnouncements[0].upload_date || adminAnnouncements[0].uploadDate || adminAnnouncements[0].created_at).toLocaleDateString()
                       : 'Latest Update'}
                   </span>
                 </div>
@@ -913,8 +913,10 @@ const Home: React.FC = () => {
             >
               {/* Show admin announcements (skip first one as it's featured) */}
               {adminAnnouncements.slice(1, 5).map((announcement, index) => {
+                const dateStr = announcement.upload_date || announcement.uploadDate || announcement.created_at;
+
                 const getCategoryIcon = (category: string) => {
-                  switch (category.toLowerCase()) {
+                  switch ((category || '').toLowerCase()) {
                     case 'academic': return <BookOpen size={20} className="text-[#1B1464]" />;
                     case 'event': return <Users size={20} className="text-[#D6261D]" />;
                     case 'achievement': return <Award size={20} className="text-[#D6261D]" />;
@@ -924,7 +926,7 @@ const Home: React.FC = () => {
                 };
 
                 const getCategoryColor = (category: string) => {
-                  switch (category.toLowerCase()) {
+                  switch ((category || '').toLowerCase()) {
                     case 'academic': return { border: 'border-[#6FC1FF]', bg: 'bg-[#6FC1FF]/20', text: 'text-[#1B1464]' };
                     case 'event': return { border: 'border-[#FFF4B2]', bg: 'bg-[#FFF4B2]/60', text: 'text-[#D6261D]' };
                     case 'achievement': return { border: 'border-[#D6261D]', bg: 'bg-[#D6261D]/20', text: 'text-[#D6261D]' };
@@ -963,7 +965,7 @@ const Home: React.FC = () => {
                           {announcement.description}
                         </p>
                         <p className="text-xs text-gray-400 mt-2">
-                          {new Date(announcement.uploadDate).toLocaleDateString()}
+                          {dateStr ? new Date(dateStr).toLocaleDateString() : ''}
                         </p>
                       </div>
                     </div>

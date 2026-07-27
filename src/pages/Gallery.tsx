@@ -41,14 +41,17 @@ const Gallery: React.FC = () => {
       try {
         const fetchedImages = await getGalleryImages();
         
-        // Convert default images to the new format to append them if needed
-        const formattedDefaults: GalleryImage[] = defaultGalleryImages.map((img: any) => ({
-          ...img,
-          image_url: img.url,
-          id: img.id.toString()
-        }));
-
-        setImages([...formattedDefaults, ...fetchedImages]);
+        if (fetchedImages && fetchedImages.length > 0) {
+          setImages(fetchedImages);
+        } else {
+          // Convert default images to the new format if database is empty
+          const formattedDefaults: GalleryImage[] = defaultGalleryImages.map((img: any) => ({
+            ...img,
+            image_url: img.url,
+            id: img.id.toString()
+          }));
+          setImages(formattedDefaults);
+        }
       } catch (error) {
         console.error('Error loading images:', error);
         

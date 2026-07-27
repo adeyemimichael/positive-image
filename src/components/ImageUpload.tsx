@@ -6,9 +6,10 @@ interface ImageUploadProps {
   isOpen: boolean;
   onClose: () => void;
   onUpload: (imageData: any) => void;
+  initialData?: any;
 }
 
-const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload }) => {
+const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload, initialData }) => {
   const [formData, setFormData] = useState({
     title: '',
     category: 'Campus',
@@ -21,16 +22,29 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload }) 
 
   const categories = ['Campus', 'Facilities', 'Student Life', 'Sports', 'Events'];
 
+  // Populate form when initialData changes
+  React.useEffect(() => {
+    if (initialData) {
+      setFormData({
+        title: initialData.title || '',
+        category: initialData.category || 'Campus',
+        description: initialData.description || '',
+        file: null
+      });
+      setPreview(initialData.image_url || initialData.url || null);
+    } else {
+      handleReset();
+    }
+  }, [initialData, isOpen]);
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Validate file type
       if (!file.type.startsWith('image/')) {
         setMessage({ type: 'error', text: 'Please select an image file' });
         return;
       }
 
-      // Validate file size (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         setMessage({ type: 'error', text: 'File size must be less than 5MB' });
         return;
@@ -39,7 +53,6 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload }) 
       setFormData({ ...formData, file });
       setMessage(null);
 
-      // Create preview
       const reader = new FileReader();
       reader.onload = (e) => {
         setPreview(e.target?.result as string);
@@ -50,8 +63,8 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload }) 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.file) {
-      setMessage({ type: 'error', text: 'Please select an image to upload' });
+    if (!initialData && !formData.file && !preview) {
+      setMessage({ type: 'error', text: 'Please select an image' });
       return;
     }
 
@@ -59,37 +72,57 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload }) 
     setMessage(null);
 
     try {
-      // Import the service dynamically or at the top
-      const { uploadGalleryImage, createGalleryImage } = await import('../services/galleryService');
+      const { uploadGalleryImage, createGalleryImage, updateGalleryImage } = await import('../services/galleryService');
       
-      // Upload the file to Supabase Storage
-      const imageUrl = await uploadGalleryImage(formData.file);
+      let imageUrl = preview || '';
+      if (formData.file) {
+        imageUrl = await uploadGalleryImage(formData.file);
+      }
 
-      // Create the record in Supabase Database
-      const newImage = await createGalleryImage({
-        title: formData.title,
-        category: formData.category,
-        description: formData.description,
-        image_url: imageUrl,
-        status: 'active'
-      });
+      if (initialData) {
+        // Edit mode
+        const updated = await updateGalleryImage(initialData.id, {
+          title: formData.title,
+          category: formData.category,
+          description: formData.description,
+          image_url: imageUrl
+        });
+        onUpload(updated);
+        setMessage({ type: 'success', text: 'Image updated successfully!' });
+      } else {
+        // Create mode
+        const newImage = await createGalleryImage({
+          title: formData.title,
+          category: formData.category,
+          description: formData.description,
+          image_url: imageUrl,
+          status: 'active'
+        });
+        onUpload(newImage);
+        setMessage({ type: 'success', text: 'Image uploaded successfully!' });
+      }
 
-      // Call the upload handler to update UI state
-      onUpload(newImage);
-
-      setMessage({ type: 'success', text: 'Image uploaded successfully!' });
-      
-      // Reset form after success
       setTimeout(() => {
         handleClose();
-      }, 1500);
+      }, 1200);
 
     } catch (error) {
-      console.error('Upload error:', error);
-      setMessage({ type: 'error', text: 'Upload failed. Please try again.' });
+      console.error('Save error:', error);
+      setMessage({ type: 'error', text: 'Failed to save image. Please try again.' });
     } finally {
       setIsUploading(false);
     }
+  };
+
+  const handleReset = () => {
+    setFormData({
+      title: '',
+      category: 'Campus',
+      description: '',
+      file: null
+    });
+    setPreview(null);
+    setMessage(null);
   };
 
   const handleClose = () => {
@@ -127,7 +160,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload }) 
             <div className="bg-[#6FC1FF] rounded-full p-3 mr-3">
               <ImageIcon size={24} className="text-white" />
             </div>
-            <h2 className="text-2xl font-bold text-[#1B1464]">Upload Image</h2>
+            <h2 className="text-2xl font-bold text-[#1B1464]">{initialData ? 'Edit Gallery Image' : 'Upload Image'}</h2>
           </div>
           <button
             onClick={handleClose}
@@ -142,7 +175,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload }) 
           {/* File Upload */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Select Image
+              Select Image {initialData && '(Leave unchanged to keep existing image)'}
             </label>
             <div className="relative">
               <input
@@ -159,7 +192,7 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload }) 
               >
                 <Upload size={32} className="text-[#6FC1FF] mb-2" />
                 <span className="text-sm text-gray-600 text-center">
-                  Click to upload image<br />
+                  Click to upload new image<br />
                   <span className="text-xs text-gray-500">Max size: 5MB, Format: JPG, PNG</span>
                 </span>
               </label>
@@ -268,16 +301,16 @@ const ImageUpload: React.FC<ImageUploadProps> = ({ isOpen, onClose, onUpload }) 
             </button>
             <button
               type="submit"
-              disabled={isUploading || !formData.file || !formData.title}
+              disabled={isUploading || (!initialData && !formData.file && !preview) || !formData.title}
               className="flex-1 bg-gradient-to-r from-[#1B1464] to-[#6B46C1] text-white py-3 rounded-lg font-semibold hover:shadow-lg transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {isUploading ? (
                 <>
                   <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                  Uploading...
+                  {initialData ? 'Saving Changes...' : 'Uploading...'}
                 </>
               ) : (
-                'Upload Image'
+                initialData ? 'Update Image' : 'Upload Image'
               )}
             </button>
           </div>

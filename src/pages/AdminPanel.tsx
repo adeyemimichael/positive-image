@@ -23,9 +23,12 @@ const AdminPanel: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
   const [showAnnouncementUpload, setShowAnnouncementUpload] = useState(false);
+  const [editingAnnouncement, setEditingAnnouncement] = useState<any | null>(null);
   const [showImageUpload, setShowImageUpload] = useState(false);
+  const [editingGalleryImage, setEditingGalleryImage] = useState<any | null>(null);
   const [sessionTimeRemaining, setSessionTimeRemaining] = useState(0);
-  const [announcements, setAnnouncements] = useState<Announcement[]>([]);
+  const [announcements, setAnnouncements] = useState<any[]>([]);
+  const [galleryImages, setGalleryImages] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<'announcements' | 'gallery'>('announcements');
 
   useEffect(() => {
@@ -45,28 +48,26 @@ const AdminPanel: React.FC = () => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect(() => {
-    const loadAnnouncements = async () => {
-      try {
-        const { getAnnouncements } = await import('../services/announcementService');
-        const data = await getAnnouncements();
-        setAnnouncements(data);
-      } catch (error) {
-        console.error('Error loading announcements:', error);
-        // Fallback to localStorage
-        const savedAnnouncements = localStorage.getItem('admin_announcements');
-        if (savedAnnouncements) {
-          try {
-            setAnnouncements(JSON.parse(savedAnnouncements));
-          } catch (e) {
-            console.error('Error parsing announcements:', e);
-          }
-        }
-      }
-    };
+  const loadData = async () => {
+    try {
+      const { getAnnouncements } = await import('../services/announcementService');
+      const { getGalleryImages } = await import('../services/galleryService');
+      
+      const [announcementsData, galleryData] = await Promise.all([
+        getAnnouncements().catch(() => []),
+        getGalleryImages().catch(() => [])
+      ]);
 
+      setAnnouncements(announcementsData);
+      setGalleryImages(galleryData);
+    } catch (error) {
+      console.error('Error loading admin data:', error);
+    }
+  };
+
+  useEffect(() => {
     if (isAuthenticated) {
-      loadAnnouncements();
+      loadData();
     }
   }, [isAuthenticated]);
 
@@ -82,42 +83,65 @@ const AdminPanel: React.FC = () => {
     navigate('/');
   };
 
+  const handleEditAnnouncement = (announcement: any) => {
+    setEditingAnnouncement(announcement);
+    setShowAnnouncementUpload(true);
+  };
+
+  const handleCreateNewAnnouncement = () => {
+    setEditingAnnouncement(null);
+    setShowAnnouncementUpload(true);
+  };
+
   const handleAnnouncementUpload = async (announcementData: any) => {
     try {
-      const { createAnnouncement, uploadAnnouncementImage } = await import('../services/announcementService');
+      const { createAnnouncement, updateAnnouncement, uploadAnnouncementImage } = await import('../services/announcementService');
       
       // Upload image if provided
-      let imageUrl = announcementData.imageUrl;
+      let imageUrl = announcementData.imageUrl || (editingAnnouncement ? (editingAnnouncement.image_url || editingAnnouncement.imageUrl) : null);
       if (announcementData.imageFile) {
         try {
-          const tempId = `announcement-${Date.now()}`;
+          const tempId = editingAnnouncement ? editingAnnouncement.id : `announcement-${Date.now()}`;
           imageUrl = await uploadAnnouncementImage(announcementData.imageFile, tempId);
         } catch (error) {
-          console.error('Image upload failed, using base64:', error);
-          // Keep base64 if upload fails
+          console.error('Image upload failed, using base64/previous:', error);
         }
       }
+
+      if (editingAnnouncement) {
+        // Update existing announcement in Supabase
+        const updated = await updateAnnouncement(editingAnnouncement.id, {
+          title: announcementData.title,
+          category: announcementData.category,
+          description: announcementData.description,
+          priority: announcementData.priority,
+          image_url: imageUrl
+        });
+
+        const updatedList = announcements.map(a => a.id === editingAnnouncement.id ? { ...a, ...updated, imageUrl: imageUrl } : a);
+        setAnnouncements(updatedList);
+        localStorage.setItem('admin_announcements', JSON.stringify(updatedList));
+      } else {
+        // Create new announcement in Supabase
+        const newAnnouncement = await createAnnouncement({
+          title: announcementData.title,
+          category: announcementData.category,
+          description: announcementData.description,
+          priority: announcementData.priority,
+          image_url: imageUrl,
+          status: 'active'
+        });
+        
+        const updatedList = [newAnnouncement, ...announcements];
+        setAnnouncements(updatedList);
+        localStorage.setItem('admin_announcements', JSON.stringify(updatedList));
+      }
       
-      // Create announcement in Supabase
-      const newAnnouncement = await createAnnouncement({
-        title: announcementData.title,
-        category: announcementData.category,
-        description: announcementData.description,
-        priority: announcementData.priority,
-        image_url: imageUrl,
-        status: 'active'
-      });
-      
-      // Update local state
-      setAnnouncements([newAnnouncement, ...announcements]);
       setShowAnnouncementUpload(false);
-      
-      // Also update localStorage for backward compatibility
-      const updatedList = [newAnnouncement, ...announcements];
-      localStorage.setItem('admin_announcements', JSON.stringify(updatedList));
+      setEditingAnnouncement(null);
     } catch (error) {
-      console.error('Error creating announcement:', error);
-      alert('Failed to create announcement. Please try again.');
+      console.error('Error saving announcement:', error);
+      alert('Failed to save announcement. Please try again.');
     }
   };
 
@@ -138,6 +162,35 @@ const AdminPanel: React.FC = () => {
         alert('Failed to delete announcement. Please try again.');
       }
     }
+  };
+
+  const handleEditGalleryImage = (image: any) => {
+    setEditingGalleryImage(image);
+    setShowImageUpload(true);
+  };
+
+  const handleCreateGalleryImage = () => {
+    setEditingGalleryImage(null);
+    setShowImageUpload(true);
+  };
+
+  const handleDeleteGalleryImage = async (id: string, imageUrl?: string) => {
+    if (window.confirm('Are you sure you want to delete this gallery image?')) {
+      try {
+        const { deleteGalleryImage } = await import('../services/galleryService');
+        await deleteGalleryImage(id, imageUrl);
+        setGalleryImages(galleryImages.filter(img => img.id !== id));
+      } catch (error) {
+        console.error('Error deleting gallery image:', error);
+        alert('Failed to delete image. Please try again.');
+      }
+    }
+  };
+
+  const handleGalleryUploadSuccess = () => {
+    setShowImageUpload(false);
+    setEditingGalleryImage(null);
+    loadData();
   };
 
   const getPriorityColor = (priority: string) => {
@@ -232,7 +285,7 @@ const AdminPanel: React.FC = () => {
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-[#1B1464]">Manage Announcements</h2>
               <button
-                onClick={() => setShowAnnouncementUpload(true)}
+                onClick={handleCreateNewAnnouncement}
                 className="bg-gradient-to-r from-[#1B1464] to-[#D6261D] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-2"
               >
                 <Upload size={18} />
@@ -246,7 +299,7 @@ const AdminPanel: React.FC = () => {
                 <h3 className="text-xl font-semibold text-gray-600 mb-2">No Announcements Yet</h3>
                 <p className="text-gray-500 mb-6">Create your first announcement to get started</p>
                 <button
-                  onClick={() => setShowAnnouncementUpload(true)}
+                  onClick={handleCreateNewAnnouncement}
                   className="bg-[#1B1464] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#1B1464]/90 transition-colors"
                 >
                   Create Announcement
@@ -254,63 +307,75 @@ const AdminPanel: React.FC = () => {
               </div>
             ) : (
               <div className="grid gap-6">
-                {announcements.map((announcement) => (
-                  <motion.div
-                    key={announcement.id}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="bg-white rounded-2xl shadow-lg overflow-hidden"
-                  >
-                    <div className="flex">
-                      {announcement.imageUrl && (
-                        <div className="w-48 h-48 flex-shrink-0">
-                          <img
-                            src={announcement.imageUrl}
-                            alt={announcement.title}
-                            className="w-full h-full object-cover"
-                          />
-                        </div>
-                      )}
-                      <div className="flex-1 p-6">
-                        <div className="flex items-start justify-between mb-3">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2 mb-2">
-                              <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getPriorityColor(announcement.priority)}`}>
-                                {announcement.priority.toUpperCase()}
-                              </span>
-                              <span className="px-3 py-1 bg-[#6FC1FF]/20 text-[#1B1464] rounded-full text-xs font-medium">
-                                {announcement.category}
-                              </span>
-                            </div>
-                            <h3 className="text-xl font-bold text-[#1B1464] mb-2">
-                              {announcement.title}
-                            </h3>
-                            <p className="text-gray-600 mb-3">{announcement.description}</p>
-                            <p className="text-sm text-gray-500">
-                              Published: {new Date(announcement.uploadDate).toLocaleDateString()}
-                            </p>
+                {announcements.map((announcement) => {
+                  const img = announcement.image_url || announcement.imageUrl;
+                  const dateStr = announcement.upload_date || announcement.uploadDate || announcement.created_at;
+
+                  return (
+                    <motion.div
+                      key={announcement.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="bg-white rounded-2xl shadow-lg overflow-hidden"
+                    >
+                      <div className="flex">
+                        {img && (
+                          <div className="w-48 h-48 flex-shrink-0">
+                            <img
+                              src={img}
+                              alt={announcement.title}
+                              className="w-full h-full object-cover"
+                            />
                           </div>
-                          <div className="flex gap-2 ml-4">
-                            <button
-                              onClick={() => window.open('/', '_blank')}
-                              className="p-2 text-[#1B1464] hover:bg-[#6FC1FF]/10 rounded-lg transition-colors"
-                              title="View on Homepage"
-                            >
-                              <Eye size={20} />
-                            </button>
-                            <button
-                              onClick={() => handleDeleteAnnouncement(announcement.id)}
-                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                              title="Delete"
-                            >
-                              <Trash2 size={20} />
-                            </button>
+                        )}
+                        <div className="flex-1 p-6">
+                          <div className="flex items-start justify-between mb-3">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2 mb-2">
+                                <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getPriorityColor(announcement.priority)}`}>
+                                  {(announcement.priority || 'normal').toUpperCase()}
+                                </span>
+                                <span className="px-3 py-1 bg-[#6FC1FF]/20 text-[#1B1464] rounded-full text-xs font-medium">
+                                  {announcement.category}
+                                </span>
+                              </div>
+                              <h3 className="text-xl font-bold text-[#1B1464] mb-2">
+                                {announcement.title}
+                              </h3>
+                              <p className="text-gray-600 mb-3">{announcement.description}</p>
+                              <p className="text-sm text-gray-500">
+                                Published: {dateStr ? new Date(dateStr).toLocaleDateString() : 'Just now'}
+                              </p>
+                            </div>
+                            <div className="flex gap-2 ml-4">
+                              <button
+                                onClick={() => handleEditAnnouncement(announcement)}
+                                className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                title="Edit Announcement"
+                              >
+                                <Edit size={20} />
+                              </button>
+                              <button
+                                onClick={() => window.open('/', '_blank')}
+                                className="p-2 text-[#1B1464] hover:bg-[#6FC1FF]/10 rounded-lg transition-colors"
+                                title="View on Homepage"
+                              >
+                                <Eye size={20} />
+                              </button>
+                              <button
+                                onClick={() => handleDeleteAnnouncement(announcement.id)}
+                                className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                                title="Delete"
+                              >
+                                <Trash2 size={20} />
+                              </button>
+                            </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
+                    </motion.div>
+                  );
+                })}
               </div>
             )}
           </div>
@@ -322,7 +387,7 @@ const AdminPanel: React.FC = () => {
             <div className="flex justify-between items-center mb-6">
               <h2 className="text-2xl font-bold text-[#1B1464]">Manage Gallery</h2>
               <button
-                onClick={() => setShowImageUpload(true)}
+                onClick={handleCreateGalleryImage}
                 className="bg-gradient-to-r from-[#1B1464] to-[#D6261D] text-white px-6 py-3 rounded-lg font-semibold hover:shadow-xl hover:scale-105 transition-all duration-300 flex items-center gap-2"
               >
                 <Upload size={18} />
@@ -330,13 +395,77 @@ const AdminPanel: React.FC = () => {
               </button>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-              <ImageIcon size={48} className="mx-auto text-gray-300 mb-4" />
-              <h3 className="text-xl font-semibold text-gray-600 mb-2">Gallery Management</h3>
-              <p className="text-gray-500 mb-6">
-                Go to the <a href="/gallery" className="text-[#1B1464] font-semibold hover:underline">Gallery page</a> to manage images
-              </p>
-            </div>
+            {galleryImages.length === 0 ? (
+              <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
+                <ImageIcon size={48} className="mx-auto text-gray-300 mb-4" />
+                <h3 className="text-xl font-semibold text-gray-600 mb-2">No Gallery Images in Database</h3>
+                <p className="text-gray-500 mb-6">Upload an image or seed the default gallery images to get started</p>
+                <button
+                  onClick={handleCreateGalleryImage}
+                  className="bg-[#1B1464] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#1B1464]/90 transition-colors"
+                >
+                  Upload Image
+                </button>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {galleryImages.map((img) => {
+                  const imageUrl = img.image_url || img.url;
+                  return (
+                    <motion.div
+                      key={img.id}
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 flex flex-col"
+                    >
+                      <div className="relative h-48 overflow-hidden bg-gray-100">
+                        <img
+                          src={imageUrl}
+                          alt={img.title}
+                          className="w-full h-full object-cover"
+                        />
+                        <span className="absolute top-3 left-3 bg-[#1B1464]/80 text-white px-3 py-1 rounded-full text-xs font-semibold backdrop-blur-sm">
+                          {img.category}
+                        </span>
+                      </div>
+                      <div className="p-4 flex-1 flex flex-col justify-between">
+                        <div>
+                          <h4 className="font-bold text-[#1B1464] text-lg mb-1">{img.title}</h4>
+                          {img.description && (
+                            <p className="text-gray-600 text-sm line-clamp-2 mb-3">{img.description}</p>
+                          )}
+                        </div>
+                        <div className="flex items-center justify-between pt-3 border-t border-gray-100 mt-2">
+                          <button
+                            onClick={() => window.open(imageUrl, '_blank')}
+                            className="p-2 text-[#1B1464] hover:bg-[#6FC1FF]/10 rounded-lg transition-colors text-xs font-medium flex items-center gap-1"
+                            title="View full image"
+                          >
+                            <Eye size={16} /> View
+                          </button>
+                          <div className="flex gap-1">
+                            <button
+                              onClick={() => handleEditGalleryImage(img)}
+                              className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                              title="Edit Image"
+                            >
+                              <Edit size={18} />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteGalleryImage(img.id, imageUrl)}
+                              className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                              title="Delete Image"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -344,17 +473,22 @@ const AdminPanel: React.FC = () => {
       {/* Modals */}
       <AnnouncementUpload
         isOpen={showAnnouncementUpload}
-        onClose={() => setShowAnnouncementUpload(false)}
+        onClose={() => {
+          setShowAnnouncementUpload(false);
+          setEditingAnnouncement(null);
+        }}
         onUpload={handleAnnouncementUpload}
+        initialData={editingAnnouncement}
       />
 
       <ImageUpload
         isOpen={showImageUpload}
-        onClose={() => setShowImageUpload(false)}
-        onUpload={() => {
+        onClose={() => {
           setShowImageUpload(false);
-          alert('Image uploaded! View it in the Gallery page.');
+          setEditingGalleryImage(null);
         }}
+        onUpload={handleGalleryUploadSuccess}
+        initialData={editingGalleryImage}
       />
     </div>
   );

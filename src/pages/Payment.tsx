@@ -52,75 +52,148 @@ const Payment: React.FC = () => {
     setIsSubmitting(true);
     
     try {
-      // Initialize payment with Paystack via backend
-      const paymentData = {
-        email: registrationData.fatherEmail || registrationData.motherEmail || 'parent@example.com',
-        amount: fee || 0,
-        reference: paymentReference,
+      // Primary: Use Paystack Pop-up Modal for instant frontend payment
+      const PaystackPop = (await import('@paystack/inline-js')).default;
+      const popup = new PaystackPop();
+
+      const parentEmail = registrationData.fatherEmail || registrationData.motherEmail || registrationData.guardianEmail || 'parent@example.com';
+      const amountInKobo = (fee || 0) * 100;
+
+      popup.newTransaction({
+        key: PAYSTACK_CONFIG.PUBLIC_KEY,
+        email: parentEmail,
+        amount: amountInKobo,
+        ref: paymentReference,
         metadata: {
-          studentName: studentName || '',
-          className: className || '',
-          campus: registrationData.campus || '',
-          registrationId: registrationData.id || '',
-          registrationDate: registrationData.registrationDate || ''
+          custom_fields: [
+            { display_name: 'Student Name', variable_name: 'student_name', value: studentName || '' },
+            { display_name: 'Class', variable_name: 'class_name', value: className || '' }
+          ]
+        },
+        onSuccess: async (transaction: any) => {
+          console.log('Paystack payment successful:', transaction);
+          try {
+            const { updateStudentPayment, getStudentByPaymentReference } = await import('../services/studentService');
+            
+            await updateStudentPayment(paymentReference, {
+              payment_status: 'completed',
+              payment_amount: fee,
+              payment_date: new Date().toISOString(),
+              payment_method: 'paystack'
+            }).catch(e => console.warn('Supabase status update note:', e));
+
+            const fetchedStudent = await getStudentByPaymentReference(paymentReference).catch(() => null);
+
+            const completedRegistration = {
+              ...registrationData,
+              ...(fetchedStudent || {}),
+              paymentReference,
+              paymentStatus: 'completed',
+              paymentMethod: 'paystack',
+              paymentDate: new Date().toISOString(),
+              paymentAmount: fee
+            };
+
+            localStorage.setItem('completedRegistration', JSON.stringify(completedRegistration));
+            localStorage.removeItem('pendingRegistration');
+
+            navigate('/registration-success', {
+              state: {
+                registrationData: completedRegistration,
+                paymentReference
+              }
+            });
+          } catch (err) {
+            console.error('Error post-payment process:', err);
+            // Fallback navigation
+            navigate('/registration-success', {
+              state: {
+                registrationData: { ...registrationData, paymentReference, paymentAmount: fee },
+                paymentReference
+              }
+            });
+          }
+        },
+        onCancel: () => {
+          setIsSubmitting(false);
         }
-      };
+      });
+    } catch (popupError) {
+      console.warn('Paystack inline popup failed, attempting backend fallback:', popupError);
+      
+      // Fallback: Backend initialization route
+      try {
+        const paymentData = {
+          email: registrationData.fatherEmail || registrationData.motherEmail || 'parent@example.com',
+          amount: fee || 0,
+          reference: paymentReference,
+          metadata: {
+            studentName: studentName || '',
+            className: className || '',
+            campus: registrationData.campus || ''
+          }
+        };
 
-      const response = await paystackService.initializePayment(paymentData);
+        const response = await paystackService.initializePayment(paymentData);
 
-      if (response.status && response.data?.authorization_url) {
-        // Redirect to Paystack payment page
-        window.location.href = response.data.authorization_url;
-      } else {
-        throw new Error('Failed to initialize payment');
+        if (response.status && response.data?.authorization_url) {
+          window.location.href = response.data.authorization_url;
+        } else {
+          throw new Error('Failed to initialize payment');
+        }
+      } catch (backendError: any) {
+        console.error('Payment error:', backendError);
+        alert(backendError.message || 'Failed to initialize payment. Please try again or use Bank Transfer.');
+        setIsSubmitting(false);
       }
-    } catch (error) {
-      console.error('Payment error:', error);
-      alert('Failed to initialize payment. Please try again.');
-      setIsSubmitting(false);
     }
   };
 
   const handlePaymentConfirmation = async () => {
     setIsSubmitting(true);
     
-    // Simulate payment verification process for bank transfer
-    setTimeout(async () => {
+    try {
+      // Update Supabase for bank transfer
       try {
-        const completedRegistration = {
-          ...registrationData,
-          paymentReference,
-          paymentStatus: 'pending_verification',
-          paymentMethod: 'bank_transfer',
-          paymentDate: new Date().toISOString(),
-          paymentAmount: fee
-        };
-
-        // Store completed registration
-        localStorage.setItem('completedRegistration', JSON.stringify(completedRegistration));
-        localStorage.removeItem('pendingRegistration');
-
-        // Send email notifications
-        await sendEmailNotifications(completedRegistration);
-
-        setPaymentStatus('completed');
-        setIsSubmitting(false);
-
-        // Redirect to success page after 3 seconds
-        setTimeout(() => {
-          navigate('/registration-success', { 
-            state: { 
-              registrationData: completedRegistration,
-              paymentReference 
-            } 
-          });
-        }, 3000);
-
-      } catch (error) {
-        setPaymentStatus('failed');
-        setIsSubmitting(false);
+        const { updateStudentPayment } = await import('../services/studentService');
+        await updateStudentPayment(paymentReference, {
+          payment_status: 'pending_verification',
+          payment_amount: fee,
+          payment_date: new Date().toISOString(),
+          payment_method: 'bank_transfer'
+        });
+      } catch (err) {
+        console.warn('Supabase bank transfer update note:', err);
       }
-    }, 2000);
+
+      const completedRegistration = {
+        ...registrationData,
+        paymentReference,
+        paymentStatus: 'pending_verification',
+        paymentMethod: 'bank_transfer',
+        paymentDate: new Date().toISOString(),
+        paymentAmount: fee
+      };
+
+      // Store completed registration in localStorage
+      localStorage.setItem('completedRegistration', JSON.stringify(completedRegistration));
+      localStorage.removeItem('pendingRegistration');
+
+      setPaymentStatus('completed');
+      setIsSubmitting(false);
+
+      // Redirect immediately to receipt page
+      navigate('/registration-success', { 
+        state: { 
+          registrationData: completedRegistration,
+          paymentReference 
+        } 
+      });
+
+    } catch (error) {
+      setPaymentStatus('failed');
+      setIsSubmitting(false);
+    }
   };
 
   const sendEmailNotifications = async (registrationData: any) => {

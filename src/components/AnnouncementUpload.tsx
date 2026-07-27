@@ -6,9 +6,10 @@ interface AnnouncementUploadProps {
   isOpen: boolean;
   onClose: () => void;
   onUpload: (announcementData: any) => void;
+  initialData?: any;
 }
 
-const AnnouncementUpload: React.FC<AnnouncementUploadProps> = ({ isOpen, onClose, onUpload }) => {
+const AnnouncementUpload: React.FC<AnnouncementUploadProps> = ({ isOpen, onClose, onUpload, initialData }) => {
   const [title, setTitle] = useState('');
   const [category, setCategory] = useState('Academic');
   const [description, setDescription] = useState('');
@@ -17,6 +18,19 @@ const AnnouncementUpload: React.FC<AnnouncementUploadProps> = ({ isOpen, onClose
   const [preview, setPreview] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+
+  // Populate form when initialData changes (Edit Mode)
+  React.useEffect(() => {
+    if (initialData) {
+      setTitle(initialData.title || '');
+      setCategory(initialData.category || 'Academic');
+      setDescription(initialData.description || '');
+      setPriority(initialData.priority || 'normal');
+      setPreview(initialData.image_url || initialData.imageUrl || null);
+    } else {
+      resetForm();
+    }
+  }, [initialData, isOpen]);
 
   const categories = ['Academic', 'Event', 'Notice', 'Achievement', 'General'];
   const priorities = [
@@ -137,7 +151,7 @@ const AnnouncementUpload: React.FC<AnnouncementUploadProps> = ({ isOpen, onClose
           <div className="sticky top-0 bg-gradient-to-r from-[#1B1464] to-[#D6261D] text-white p-6 rounded-t-2xl flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Bell size={24} />
-              <h2 className="text-2xl font-bold">Upload Announcement</h2>
+              <h2 className="text-2xl font-bold">{initialData ? 'Edit Announcement' : 'Upload Announcement'}</h2>
             </div>
             <button
               onClick={handleClose}
@@ -310,12 +324,12 @@ const AnnouncementUpload: React.FC<AnnouncementUploadProps> = ({ isOpen, onClose
                 {isUploading ? (
                   <>
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    Uploading...
+                    {initialData ? 'Saving Changes...' : 'Uploading...'}
                   </>
                 ) : (
                   <>
                     <Upload size={20} />
-                    Upload Announcement
+                    {initialData ? 'Update Announcement' : 'Upload Announcement'}
                   </>
                 )}
               </button>
