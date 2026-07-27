@@ -1,183 +1,258 @@
 -- ============================================================================
--- SEED DEFAULT GALLERY IMAGES INTO SUPABASE DATABASE
+-- SEED GALLERY IMAGES AND VIDEOS INTO SUPABASE DATABASE
 -- Run this script in your Supabase SQL Editor:
 -- https://supabase.com/dashboard/project/_/sql
 -- ============================================================================
 
-INSERT INTO gallery_images (title, category, description, image_url, status)
+-- Step 1: Ensure columns exist
+ALTER TABLE gallery_images ADD COLUMN IF NOT EXISTS media_type TEXT DEFAULT 'image';
+ALTER TABLE gallery_images ADD COLUMN IF NOT EXISTS video_url TEXT;
+
+-- Step 2: Clear old default images if re-seeding (optional - comment out if preserving custom uploads)
+-- DELETE FROM gallery_images WHERE status = 'active';
+
+-- Step 3: Insert Curated Gallery Media (Photos & Videos)
+INSERT INTO gallery_images (title, category, description, image_url, video_url, media_type, thumbnail_url, status, display_order, is_featured)
 VALUES
+-- PHOTO 1
 (
   'School Facilities',
   'Facilities',
   'Our modern facilities provide excellent learning environment for students',
   '/positive2/facility.jpeg',
-  'active'
+  NULL,
+  'image',
+  '/positive2/facility.jpeg',
+  'active',
+  1,
+  true
 ),
+-- PHOTO 2
 (
   'Primary School Section',
   'Campus',
   'Dedicated primary school section with age-appropriate facilities',
   '/positive2/primaryschool.jpeg',
-  'active'
+  NULL,
+  'image',
+  '/positive2/primaryschool.jpeg',
+  'active',
+  2,
+  true
 ),
+-- PHOTO 3
 (
   'Science Practicals',
   'Facilities',
   'Students engaged in hands-on science experiments and practicals',
   '/positive2/practicals.jpeg',
-  'active'
+  NULL,
+  'image',
+  '/positive2/practicals.jpeg',
+  'active',
+  3,
+  true
 ),
+-- PHOTO 4
 (
-  'Practical Learning',
-  'Student Life',
-  'Interactive learning sessions with practical demonstrations',
-  '/positive2/practice.jpeg',
-  'active'
-),
-(
-  'Laboratory Sessions',
-  'Facilities',
-  'Well-equipped laboratories for chemistry, physics, and biology',
-  '/positive2/schoolpractical.jpeg',
-  'active'
-),
-(
-  'Morning Assembly',
-  'Student Life',
-  'Daily morning assembly fostering unity and school spirit',
-  '/positive2/studnetassembly.jpeg',
-  'active'
-),
-(
-  'CEO with Students',
-  'Student Life',
-  'Our CEO engaging with students, fostering mentorship and guidance',
-  '/positive2/ceoandstudent.JPG',
-  'active'
-),
-(
-  'Leadership & Students',
-  'Student Life',
-  'Building strong relationships between leadership and students',
-  '/positive2/ceoandpupils.jpeg',
-  'active'
-),
-(
-  'Student Engagement',
-  'Student Life',
-  'Active student participation in school activities',
-  '/positive2/ceoandstud.jpg',
-  'active'
-),
-(
-  'Academic Excellence',
-  'Student Life',
-  'Celebrating academic achievements and student success',
-  '/positive2/ceoandstud3.jpg',
-  'active'
-),
-(
-  'School Events',
+  'Cultural Day Celebration',
   'Events',
-  'Memorable moments from our school events and celebrations',
-  '/positive2/pastevent.jpeg',
-  'active'
+  'Vibrant cultural heritage performance and celebration by Positive Image pupils',
+  '/culture.jpg',
+  NULL,
+  'image',
+  '/culture.jpg',
+  'active',
+  4,
+  true
 ),
-(
-  'Past Events Highlights',
-  'Events',
-  'Highlights from previous school events and activities',
-  '/positive2/pastevent2.jpeg',
-  'active'
-),
-(
-  'Event Celebrations',
-  'Events',
-  'Students and staff celebrating special occasions together',
-  '/positive2/eventspast.jpeg',
-  'active'
-),
-(
-  'Educational Excursion',
-  'Events',
-  'Students on educational field trips and excursions',
-  '/positive2/smallexcursion.jpeg',
-  'active'
-),
-(
-  'Leadership Team',
-  'Campus',
-  'Our dedicated CEO and staff working together for excellence',
-  '/positive2/ceoandstaff.jpg',
-  'active'
-),
-(
-  'Teaching Staff',
-  'Campus',
-  'Our experienced and qualified teaching staff',
-  '/positive2/staffs.jpg',
-  'active'
-),
-(
-  'Staff Team',
-  'Campus',
-  'Dedicated staff members committed to student success',
-  '/positive2/staffing.JPG',
-  'active'
-),
-(
-  'Staff Collection',
-  'Campus',
-  'Our diverse and talented team of educators',
-  '/positive2/staffingcollections.jpg',
-  'active'
-),
+-- PHOTO 5
 (
   'Full Staff Assembly',
   'Campus',
-  'Complete staff team photo showcasing our educational family',
+  'Complete staff team photo showcasing our dedicated educational family',
   '/fullstaff.JPG',
-  'active'
+  NULL,
+  'image',
+  '/fullstaff.JPG',
+  'active',
+  5,
+  true
 ),
+-- PHOTO 6
 (
-  'Staff Group Photo',
-  'Campus',
-  'Our positive and enthusiastic teaching staff',
-  '/staffpositive.jpg',
-  'active'
-),
-(
-  'School Outing',
+  'Educational Excursion',
   'Events',
-  'Fun and educational school outings for students',
-  '/outing1.jpg',
-  'active'
+  'Students on exciting educational field trips and excursions',
+  '/positive2/smallexcursion.jpeg',
+  NULL,
+  'image',
+  '/positive2/smallexcursion.jpeg',
+  'active',
+  6,
+  false
 ),
+-- PHOTO 7
 (
-  'Outdoor Activities',
+  'Asa Culture Showcase',
   'Events',
-  'Students enjoying outdoor learning experiences',
-  '/outing2.jpg',
-  'active'
+  'Rich traditional cultural display showcasing students talent and heritage',
+  '/asa.jpg',
+  NULL,
+  'image',
+  '/asa.jpg',
+  'active',
+  7,
+  false
 ),
+-- PHOTO 8
 (
-  'Field Trip',
-  'Events',
-  'Educational field trips enhancing classroom learning',
-  '/outing3.jpg',
-  'active'
-),
-(
-  'Our Students',
+  'Interactive Learning',
   'Student Life',
-  'Bright and enthusiastic students of Positive Image Schools',
-  '/students.jpg',
-  'active'
+  'Students enjoying engaging classroom activities and mentorship',
+  '/poitive%20folder/WhatsApp%20Image%202026-07-24%20at%2022.54.30.jpeg',
+  NULL,
+  'image',
+  '/poitive%20folder/WhatsApp%20Image%202026-07-24%20at%2022.54.30.jpeg',
+  'active',
+  8,
+  false
+),
+-- PHOTO 9
+(
+  'Executive Leadership & CEO',
+  'Campus',
+  'Our school executive management leading with vision and excellence',
+  '/ceo4.JPG',
+  NULL,
+  'image',
+  '/ceo4.JPG',
+  'active',
+  9,
+  false
+),
+-- PHOTO 10
+(
+  'School Outing & Field Trip',
+  'Events',
+  'Memorable outdoor learning and recreational field trips',
+  '/outinge.jpg',
+  NULL,
+  'image',
+  '/outinge.jpg',
+  'active',
+  10,
+  false
+),
+-- PHOTO 11
+(
+  'Teaching Staff Team',
+  'Campus',
+  'Our qualified and passionate educators dedicated to student growth',
+  '/staff.jpg',
+  NULL,
+  'image',
+  '/staff.jpg',
+  'active',
+  11,
+  false
+),
+-- PHOTO 12
+(
+  'Classroom Science Experiments',
+  'Facilities',
+  'Hands-on practical experiments building real-world knowledge',
+  '/poitive%20folder/WhatsApp%20Image%202026-07-24%20at%2022.49.13.jpeg',
+  NULL,
+  'image',
+  '/poitive%20folder/WhatsApp%20Image%202026-07-24%20at%2022.49.13.jpeg',
+  'active',
+  12,
+  false
+),
+
+-- VIDEO 1
+(
+  'Student Science Practicals (Video)',
+  'Facilities',
+  'Watch our students in action during interactive laboratory practicals',
+  '/positive2/practicals.jpeg',
+  '/positive2/studentspracitcalvideo.mp4',
+  'video',
+  '/positive2/practicals.jpeg',
+  'active',
+  13,
+  true
+),
+-- VIDEO 2
+(
+  'Educational Field Trip (Video)',
+  'Events',
+  'Video highlights from our memorable student educational excursion',
+  '/positive2/smallexcursion.jpeg',
+  '/positive2/excursionvideo.mp4',
+  'video',
+  '/positive2/smallexcursion.jpeg',
+  'active',
+  14,
+  true
+),
+-- VIDEO 3
+(
+  'School Cultural Event (Video)',
+  'Events',
+  'Highlights from Positive Image Schools annual cultural festival',
+  '/culture.jpg',
+  '/poitive%20folder/WhatsApp%20Video%202026-07-24%20at%2022.57.22.mp4',
+  'video',
+  '/culture.jpg',
+  'active',
+  15,
+  true
+),
+-- VIDEO 4
+(
+  'Student Activities Showcase (Video)',
+  'Student Life',
+  'A glimpse into vibrant daily student life and extracurricular activities',
+  '/asa.jpg',
+  '/poitive%20folder/WhatsApp%20Video%202026-07-24%20at%2022.57.24.mp4',
+  'video',
+  '/asa.jpg',
+  'active',
+  16,
+  false
+),
+-- VIDEO 5
+(
+  'Campus Life & Morning Assembly (Video)',
+  'Campus',
+  'Watch our morning assembly, unity chants, and school spirit',
+  '/positive2/primaryschool.jpeg',
+  '/poitive%20folder/WhatsApp%20Video%202026-07-24%20at%2022.51.26.mp4',
+  'video',
+  '/positive2/primaryschool.jpeg',
+  'active',
+  17,
+  false
+),
+-- VIDEO 6
+(
+  'Creative Practical Learning (Video)',
+  'Facilities',
+  'Student practical demonstrations and creative arts showcases',
+  '/outinge.jpg',
+  '/poitive%20folder/WhatsApp%20Video%202026-07-24%20at%2022.57.35%20(2).mp4',
+  'video',
+  '/outinge.jpg',
+  'active',
+  18,
+  false
 );
 
--- Show success notice
+-- Step 4: Output confirmation notice
 DO $$
 BEGIN
-  RAISE NOTICE '✅ Seeded 24 gallery images into Supabase successfully!';
-  RAISE NOTICE '🖼️ You can now view, edit, and delete them in your Admin Panel (/admin) and Gallery page (/gallery).';
+  RAISE NOTICE '✅ Seeded photos and videos into Supabase successfully!';
+  RAISE NOTICE '🖼️ Media is now live in Gallery and Admin Panel!';
 END $$;

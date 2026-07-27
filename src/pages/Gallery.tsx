@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ZoomIn, ChevronLeft, ChevronRight, Upload, LogOut, Clock, Trash2 } from 'lucide-react';
+import { X, ZoomIn, ChevronLeft, ChevronRight, Upload, LogOut, Clock, Trash2, Play, Video, Image as ImageIcon } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import AdminLogin from '../components/AdminLogin';
 import ImageUpload from '../components/ImageUpload';
@@ -10,6 +10,7 @@ import { getGalleryImages, deleteGalleryImage } from '../services/galleryService
 
 const Gallery: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
+  const [mediaTypeFilter, setMediaTypeFilter] = useState<'all' | 'image' | 'video'>('all');
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showAdminLogin, setShowAdminLogin] = useState(false);

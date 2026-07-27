@@ -111,6 +111,8 @@ export interface GalleryImage {
   description?: string;
   category: string;
   image_url: string;
+  video_url?: string;
+  media_type?: 'image' | 'video';
   thumbnail_url?: string;
   campus?: string;
   display_order?: number;

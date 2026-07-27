@@ -1,9 +1,59 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Book, Clock, MapPin, Goal } from 'lucide-react';
+import { Book, Clock, MapPin, Goal, Play, Pause, Volume2, VolumeX, Download, Music } from 'lucide-react';
 import { generateAnthemLyricsPDF } from '../utils/pdfGenerator';
 
 const About: React.FC = () => {
+  // Audio Player State
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const toggleMute = () => {
+    if (!audioRef.current) return;
+    audioRef.current.muted = !isMuted;
+    setIsMuted(!isMuted);
+  };
+
+  const handleTimeUpdate = () => {
+    if (audioRef.current) {
+      setCurrentTime(audioRef.current.currentTime);
+    }
+  };
+
+  const handleLoadedMetadata = () => {
+    if (audioRef.current) {
+      setDuration(audioRef.current.duration);
+    }
+  };
+
+  const handleSeek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const time = parseFloat(e.target.value);
+    if (audioRef.current) {
+      audioRef.current.currentTime = time;
+      setCurrentTime(time);
+    }
+  };
+
+  const formatTime = (seconds: number) => {
+    if (isNaN(seconds) || seconds === 0) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+  };
+
   const fadeIn = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
@@ -227,95 +277,120 @@ const About: React.FC = () => {
                   <h3 className="text-2xl font-heading font-bold text-primary-700">
                     Listen to Our Anthem
                   </h3>
-                  <span className="bg-[#FFF4B2] text-[#1B1464] px-3 py-1 rounded-full text-xs font-bold">
-                    COMING SOON
+                  <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                    OFFICIAL RECORDING
                   </span>
                 </div>
-                <p className="text-gray-600">Experience the spirit of Positive Image Schools</p>
+                <p className="text-gray-600">Experience the inspiring official recording of Positive Image Schools Anthem</p>
               </div>
 
               {/* Custom Audio Player */}
-              <div className="bg-gradient-to-br from-primary-600 to-primary-700 rounded-2xl p-6 text-white mb-6 relative">
-                {/* Coming Soon Overlay */}
-                <div className="absolute inset-0 bg-gray-900/50 backdrop-blur-sm rounded-2xl flex items-center justify-center z-10">
-                  <div className="text-center">
-                    <div className="text-4xl mb-3">🎵</div>
-                    <p className="text-xl font-bold mb-2">Audio Coming Soon</p>
-                    <p className="text-sm text-gray-200">We're preparing a special recording for you</p>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between mb-4">
-                  <div>
-                    <h4 className="font-semibold text-lg">Positive Image Anthem</h4>
-                    <p className="text-primary-200 text-sm">School Choir Performance</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-primary-200 text-sm">Duration</p>
-                    <p className="font-semibold">3:45</p>
-                  </div>
-                </div>
-
+              <div className="bg-gradient-to-br from-primary-700 via-primary-800 to-indigo-900 rounded-2xl p-6 text-white mb-6 shadow-lg border border-primary-600/30">
                 {/* Audio Element */}
                 <audio 
-                  controls 
-                  className="w-full mb-4"
-                  style={{
-                    filter: 'invert(1) hue-rotate(180deg)',
-                    borderRadius: '8px'
-                  }}
-                >
-                  <source src="/audio/school-anthem.mp3" type="audio/mpeg" />
-                  <source src="/audio/school-anthem.ogg" type="audio/ogg" />
-                  Your browser does not support the audio element.
-                </audio>
+                  ref={audioRef}
+                  src="/anthem.mp3"
+                  onTimeUpdate={handleTimeUpdate}
+                  onLoadedMetadata={handleLoadedMetadata}
+                  onEnded={() => setIsPlaying(false)}
+                  preload="metadata"
+                />
 
-                <div className="flex items-center justify-between text-sm text-primary-200">
-                  <span>🎵 Recorded: 2023</span>
-                  <span>🎤 School Choir</span>
-                  <span>🎼 Live Performance</span>
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-xl bg-white/10 backdrop-blur-md flex items-center justify-center border border-white/20">
+                      <Music className="text-secondary-300 animate-bounce" size={24} />
+                    </div>
+                    <div>
+                      <h4 className="font-semibold text-lg leading-tight text-white">Positive Image Anthem</h4>
+                      <p className="text-primary-200 text-xs mt-1 flex items-center gap-1">
+                        <span>Official Anthem Recording</span>
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-xs text-primary-200 bg-white/10 px-2.5 py-1 rounded-full border border-white/10">
+                      {formatTime(currentTime)} / {formatTime(duration)}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Progress Bar Slider */}
+                <div className="mb-6">
+                  <input
+                    type="range"
+                    min="0"
+                    max={duration || 100}
+                    value={currentTime}
+                    onChange={handleSeek}
+                    className="w-full h-2 bg-primary-900/80 rounded-lg appearance-none cursor-pointer accent-secondary-400 hover:accent-secondary-300 transition-all"
+                  />
+                  <div className="flex justify-between text-xs text-primary-200 mt-1">
+                    <span>{formatTime(currentTime)}</span>
+                    <span>{formatTime(duration)}</span>
+                  </div>
+                </div>
+
+                {/* Controls */}
+                <div className="flex items-center justify-between pt-2 border-t border-white/10">
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={togglePlay}
+                      className="w-12 h-12 rounded-full bg-secondary-500 hover:bg-secondary-400 text-primary-950 font-bold flex items-center justify-center shadow-lg transition-transform transform active:scale-95"
+                      title={isPlaying ? "Pause Anthem" : "Play Anthem"}
+                    >
+                      {isPlaying ? <Pause size={22} className="fill-current" /> : <Play size={22} className="fill-current ml-0.5" />}
+                    </button>
+                    <div>
+                      <p className="text-xs font-semibold text-white">
+                        {isPlaying ? "Playing Anthem..." : "Click to Play"}
+                      </p>
+                      <p className="text-[11px] text-primary-200">Positive Image Schools</p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={toggleMute}
+                    className="p-2.5 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-colors"
+                    title={isMuted ? "Unmute" : "Mute"}
+                  >
+                    {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+                  </button>
                 </div>
               </div>
 
               {/* Additional Info */}
               <div className="space-y-4">
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h4 className="font-semibold text-gray-800 mb-2">About This Recording</h4>
-                  <p className="text-gray-600 text-sm">
-                    We are currently working on a beautiful rendition to be performed by our school choir. 
-                    The audio will be available soon for everyone to enjoy.
+                <div className="bg-gray-50 rounded-xl p-4 border border-gray-100">
+                  <h4 className="font-semibold text-gray-800 mb-1 text-sm flex items-center gap-2">
+                    <Music size={16} className="text-primary-600" />
+                    School Anthem Information
+                  </h4>
+                  <p className="text-gray-600 text-xs leading-relaxed">
+                    This official audio recording represents the spirit, faith, and dedication of Positive Image Schools. 
+                    Listen and sing along with the lyrics provided on the left.
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="bg-primary-50 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-primary-600">15</div>
-                    <div className="text-sm text-gray-600">Choir Members</div>
-                  </div>
-                  <div className="bg-secondary-50 rounded-lg p-4 text-center">
-                    <div className="text-2xl font-bold text-secondary-600">20+</div>
-                    <div className="text-sm text-gray-600">Years Sung</div>
-                  </div>
-                </div>
-
                 {/* Download Options */}
-                <div className="pt-4 border-t border-gray-200">
-                  <h4 className="font-semibold text-gray-800 mb-3">Download Options</h4>
-                  <div className="flex flex-wrap gap-2">
-                    <button 
-                      disabled
-                      className="px-4 py-2 bg-gray-300 text-gray-500 rounded-lg text-sm cursor-not-allowed"
-                    >
-                      MP3 Format (Coming Soon)
-                    </button>
-                    
-                    <button 
-                      onClick={generateAnthemLyricsPDF}
-                      className="px-4 py-2 bg-green-600 text-white rounded-lg text-sm hover:bg-green-700 transition-colors"
-                    >
-                      Lyrics PDF
-                    </button>
-                  </div>
+                <div className="pt-2 border-t border-gray-200 flex flex-wrap items-center justify-between gap-3">
+                  <a
+                    href="/anthem.mp3"
+                    download="Positive_Image_Schools_Anthem.mp3"
+                    className="flex-1 min-w-[140px] px-4 py-2.5 bg-primary-700 hover:bg-primary-800 text-white rounded-xl text-xs font-medium flex items-center justify-center gap-2 transition-colors shadow-sm"
+                  >
+                    <Download size={14} />
+                    Download Anthem Audio (MP3)
+                  </a>
+                  
+                  <button 
+                    onClick={generateAnthemLyricsPDF}
+                    className="flex-1 min-w-[140px] px-4 py-2.5 bg-secondary-600 hover:bg-secondary-700 text-white rounded-xl text-xs font-medium flex items-center justify-center gap-2 transition-colors shadow-sm"
+                  >
+                    <Download size={14} />
+                    Download Anthem Lyrics (PDF)
+                  </button>
                 </div>
               </div>
             </motion.div>

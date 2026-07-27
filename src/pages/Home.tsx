@@ -72,32 +72,39 @@ const Home: React.FC = () => {
   // Hero section content (for the bubble slider)
   const heroContent = [
     {
-      url: '/ceo2.jpg',
-      caption: 'Dedicated Leadership & Staff',
+      url: '/culture.jpg',
+      caption: 'Vibrant Cultural Heritage',
       title: 'Welcome to Positive Image Schools',
-      subtitle: 'Where Excellence Meets Innovation',
-      description: 'Nurturing minds, building character, and creating future leaders in our state-of-the-art facilities.'
+      subtitle: 'Where Excellence Meets Cultural Pride & Innovation',
+      description: 'Nurturing bright minds, building character, and developing tomorrow leaders in an inspiring learning environment.'
+    },
+    {
+      url: '/fullstaff.JPG',
+      caption: 'Dedicated Educator Team',
+      title: 'Discover Excellence at Positive Image Schools',
+      subtitle: 'Your Gateway to Academic & Moral Distinction',
+      description: 'Empowering students with passionate teachers, world-class resources, and character-building values.'
+    },
+    {
+      url: '/asa.jpg',
+      caption: 'Talent & Cultural Showcase',
+      title: 'Unlocking Every Child Potential',
+      subtitle: 'Where Curiosity Meets Creativity & Discovery',
+      description: 'Inspiring the next generation of leaders, innovators, and creative minds.'
+    },
+    {
+      url: '/outinge.jpg',
+      caption: 'Interactive Outings & Field Trips',
+      title: 'Achieve Greatness at Positive Image Schools',
+      subtitle: 'Building Champions In & Beyond the Classroom',
+      description: 'Developing well-rounded individuals through academic rigor, practical learning, and exciting excursions.'
     },
     {
       url: '/positive2/ceoandstaff.jpg',
-      caption: 'Registration Now Open',
-      title: 'Discover Knowledge at Positive Image Schools',
-      subtitle: 'Your Gateway to Academic Excellence',
-      description: 'Empowering students with world-class resources and innovative learning environments.'
-    },
-    {
-      url: '/outing3.jpg',
-      caption: 'Science Practicals',
-      title: 'Explore Science at Positive Image Schools',
-      subtitle: 'Where Curiosity Meets Discovery',
-      description: 'Inspiring the next generation of scientists, innovators, and critical thinkers.'
-    },
-    {
-      url: '/positive2/smallexcursion.jpeg',
-      caption: 'Educational Excursions',
-      title: 'Achieve Greatness at Positive Image Schools',
-      subtitle: 'Building Champions in Every Field',
-      description: 'Developing well-rounded individuals through academic excellence and athletic achievement.'
+      caption: 'Executive Leadership & Vision',
+      title: 'Empowering Future Generations',
+      subtitle: 'Standard & Qualitative Education for All',
+      description: 'Committed to societal transformation through qualitative teaching and academic excellence.'
     }
   ];
 
